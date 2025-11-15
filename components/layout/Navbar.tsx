@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { JSX, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
@@ -337,7 +337,9 @@ export default function Navbar(): JSX.Element {
       scale: 0.98,
       duration: 0.2,
       ease: "power2.in",
-      onComplete: () => (el.style.display = "none"),
+      onComplete: () => {
+        el.style.display = "none";
+      },
     });
   };
 
@@ -406,7 +408,9 @@ export default function Navbar(): JSX.Element {
           {hasChildren(item) ? (
             <div
               id={`panel-${itemId}`}
-              ref={(el) => (accordionRefs.current[itemId] = el)}
+              ref={(el) => {
+                accordionRefs.current[itemId] = el;
+              }}
               style={{
                 height: isOpen(itemId) ? "auto" : 0,
                 overflow: "hidden",
@@ -475,7 +479,9 @@ export default function Navbar(): JSX.Element {
           </button>
 
           <div
-            ref={(el) => (desktopDropdownRefs.current[item.id] = el)}
+            ref={(el) => {
+              desktopDropdownRefs.current[item.id] = el;
+            }}
             className="absolute left-0 top-full mt-3 z-50 w-[34rem] origin-top-left rounded-lg border border-bg-700 bg-white/60 dark:bg-[#071219]/70 p-4 shadow-2xl backdrop-blur-lg"
             style={{ display: "none" }}
           >
@@ -527,7 +533,9 @@ export default function Navbar(): JSX.Element {
   return (
     <header className="sticky left-0 right-0 top-0 z-50 w-full">
       <nav
-        ref={(el) => (navRef.current = el)}
+        ref={(el) => {
+          navRef.current = el;
+        }}
         className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 rounded-full px-5 py-3 transition-colors"
         style={{ backgroundColor: "transparent" }}
         aria-label="Primary navigation"
