@@ -1,72 +1,236 @@
 "use client";
-import React from "react";
-import { Menu, X, Sparkles } from "lucide-react";
-import { ModeToggle } from "@/components/ui/Darkmode-toggle";
-import MobileMenu from "./MobileMenu";
 
-interface NavbarProps {
-  darkMode: boolean;
-  setDarkMode: (v: boolean) => void;
-}
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  ThemeAnimationType,
+  useModeAnimation,
+} from "react-theme-switch-animation";
 
-export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
-  const [open, setOpen] = React.useState(false);
+gsap.registerPlugin(ScrollTrigger);
+
+export default function Navbar() {
+  const navRef = useRef(null);
+  const pathname = usePathname();
+  const { ref, toggleSwitchTheme, isDarkMode } = useModeAnimation({
+    animationType: ThemeAnimationType.BLUR_CIRCLE,
+    blurAmount: 0,
+    duration: 700,
+  });
+
+  // Apply the theme class to the <html> element
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
+
+  // GSAP scroll animation
+  useEffect(() => {
+    const navElement = navRef.current;
+    if (!navElement) return;
+
+    const ctx = gsap.context(() => {
+      gsap.set(navElement, {
+        maxWidth: "1280px",
+        backgroundColor: "transparent",
+        backdropFilter: "none",
+        outline: "0px",
+      });
+
+      gsap.to(navElement, {
+        scrollTrigger: {
+          trigger: document.body,
+          start: "top top",
+          end: "+=150",
+          scrub: true,
+        },
+        maxWidth: 600,
+        backgroundColor: "var(--backdrop)",
+        backdropFilter: "blur(12px)",
+        outline: "1px solid var(--bg-700)",
+        ease: "linear",
+      });
+    });
+
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      ScrollTrigger.refresh();
+    };
+  }, [pathname]);
 
   return (
-    <nav
-      className={`fixed w-full z-50 backdrop-blur-xl shadow-lg ${
-        darkMode
-          ? "bg-[#102631]/80 border-b border-[#2596be]/30"
-          : "bg-white/80"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto h-16 px-6 flex justify-between items-center">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-[#2596be] to-[#4EA8DE] rounded-lg flex items-center justify-center">
-            <Sparkles className="text-white w-6 h-6" />
-          </div>
-          <span
-            className={`text-2xl font-bold ${
-              darkMode ? "text-white" : "text-[#2596be]"
-            }`}
-          >
-            Aspiring Engineers
-          </span>
-        </div>
-
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-10">
-          {["Features", "Exams", "Counselling"].map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className={`font-medium transition ${
-                darkMode
-                  ? "text-gray-300 hover:text-[#2596be]"
-                  : "text-gray-700 hover:text-[#2596be]"
+    <header className="pointer-events-none sticky left-0 right-0 top-0 z-50 w-full px-0 py-4 md:flex md:justify-center">
+      <nav
+        ref={navRef}
+        className="pointer-events-auto flex w-full items-center justify-between gap-6 rounded-full px-6 py-1 transition-colors sm:pr-4"
+        style={{
+          maxWidth: "1280px",
+          backgroundColor: "transparent",
+          backdropFilter: "none",
+          outline: "0px",
+          opacity: 1,
+          willChange: "max-width, background-color, backdrop-filter, outline",
+        }}
+      >
+        <Link
+          href="/"
+          className="font-clash text-2xl font-medium text-text-primary sm:text-xl"
+        >
+          AE
+        </Link>
+        <ul className="hidden gap-6 text-sm text-text-secondary sm:flex font-satoshi">
+          <li className="group relative">
+            <Link
+              href="/"
+              className={`flex items-center gap-2 ${
+                pathname === "/" ? "active-link" : ""
               }`}
             >
-              {item}
-            </a>
-          ))}
-          <ModeToggle />
-          <button className="h-9 px-6 rounded-md bg-[#4EA8DE] text-white font-medium shadow-lg hover:scale-105 transition">
-            Get Started
+              {pathname === "/" && (
+                <span className="w-2 h-2 bg-highlight rounded-full"></span>
+              )}
+              <span className="relative inline-flex overflow-hidden">
+                <div className="translate-y-0 skew-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
+                  Home
+                </div>
+                <div className="absolute translate-y-[110%] skew-y-12 transform-gpu text-text-primary transition-transform duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                  Home
+                </div>
+              </span>
+            </Link>
+          </li>
+          <li className="group relative">
+            <Link
+              href="/about"
+              className={`flex items-center gap-2 ${
+                pathname === "/about" ? "active-link" : ""
+              }`}
+            >
+              {pathname === "/about" && (
+                <span className="w-2 h-2 bg-highlight rounded-full"></span>
+              )}
+              <span className="relative inline-flex overflow-hidden">
+                <div className="translate-y-0 skew-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
+                  Exams
+                </div>
+                <div className="absolute translate-y-[110%] skew-y-12 transform-gpu text-text-primary transition-transform duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                  Exams
+                </div>
+              </span>
+            </Link>
+          </li>
+          <li className="group relative">
+            <Link
+              href="/projects"
+              className={`flex items-center gap-2 ${
+                pathname === "/projects" ? "active-link" : ""
+              }`}
+            >
+              {pathname === "/projects" && (
+                <span className="w-2 h-2 bg-highlight rounded-full"></span>
+              )}
+              <span className="relative inline-flex overflow-hidden">
+                <div className="translate-y-0 skew-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
+                  Tests
+                </div>
+                <div className="absolute translate-y-[110%] skew-y-12 transform-gpu text-text-primary transition-transform duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                  Tests
+                </div>
+              </span>
+            </Link>
+          </li>
+          <li className="group relative">
+            <Link
+              href="/contact"
+              className={`flex items-center gap-2 ${
+                pathname === "/contact" ? "active-link" : ""
+              }`}
+            >
+              {pathname === "/contact" && (
+                <span className="w-2 h-2 bg-highlight rounded-full"></span>
+              )}
+              <span className="relative inline-flex overflow-hidden">
+                <div className="translate-y-0 skew-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%] group-hover:skew-y-12">
+                  Counselling
+                </div>
+                <div className="absolute translate-y-[110%] skew-y-12 transform-gpu text-text-primary transition-transform duration-500 group-hover:translate-y-0 group-hover:skew-y-0">
+                  Counselling
+                </div>
+              </span>
+            </Link>
+          </li>
+        </ul>
+        <div className="flex items-center justify-center gap-4">
+          <button
+            ref={ref}
+            onClick={toggleSwitchTheme}
+            className="inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-11 w-11 relative rounded-full border border-bg-700 bg-backdrop text-text-primary backdrop-blur-md transition-all active:scale-90 sm:h-10 sm:w-10 sm:border-none sm:bg-transparent sm:shadow-none sm:backdrop-blur-none"
+          >
+            <div
+              className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
+              style={{
+                opacity: isDarkMode ? 0 : 1,
+                willChange: "opacity",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-sun"
+              >
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
+                <path d="m4.93 4.93 1.41 1.41"></path>
+                <path d="m17.66 17.66 1.41 1.41"></path>
+                <path d="M2 12h2"></path>
+                <path d="M20 12h2"></path>
+                <path d="m6.34 17.66-1.41 1.41"></path>
+                <path d="m19.07 4.93-1.41 1.41"></path>
+              </svg>
+            </div>
+            <div
+              className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
+              style={{
+                opacity: isDarkMode ? 1 : 0,
+                willChange: "opacity",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-moon"
+              >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+              </svg>
+            </div>
+            <span className="sr-only">Toggle theme</span>
           </button>
         </div>
-
-        {/* Mobile Menu Button */}
-        <button className="md:hidden" onClick={() => setOpen((prev) => !prev)}>
-          {open ? (
-            <X className={`${darkMode ? "text-white" : "text-gray-900"}`} />
-          ) : (
-            <Menu className={`${darkMode ? "text-white" : "text-gray-900"}`} />
-          )}
-        </button>
-      </div>
-
-      <MobileMenu open={open} darkMode={darkMode} />
-    </nav>
+      </nav>
+    </header>
   );
 }
