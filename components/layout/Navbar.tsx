@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Menu, X, Sparkles } from "lucide-react";
-import ThemeToggle from "./Themetoggle";
+import { ModeToggle } from "@/components/ui/Darkmode-toggle";
 import MobileMenu from "./MobileMenu";
 
 interface NavbarProps {
@@ -23,7 +23,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
       <div className="max-w-7xl mx-auto h-16 px-6 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-linear-to-br from-[#2596be] to-[#4EA8DE] rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-gradient-to-br from-[#2596be] to-[#4EA8DE] rounded-lg flex items-center justify-center">
             <Sparkles className="text-white w-6 h-6" />
           </div>
           <span
@@ -50,9 +50,7 @@ export default function Navbar({ darkMode, setDarkMode }: NavbarProps) {
               {item}
             </a>
           ))}
-
-          <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
-
+          <ModeToggle />
           <button className="h-9 px-6 rounded-md bg-[#4EA8DE] text-white font-medium shadow-lg hover:scale-105 transition">
             Get Started
           </button>
