@@ -13,10 +13,6 @@ import { Menu as MenuIcon, X as XIcon, ChevronDown } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/**
- * Data-driven menu so you can add / reorder items easily.
- * Keep strings and slugs consistent for routing.
- */
 type MenuItem = {
   id: string;
   label: string;
@@ -56,7 +52,7 @@ const MENU: MenuItem[] = [
             ],
           },
           {
-            id: "jee-adv",
+            id: "jee-advanced",
             label: "Advanced",
             children: [
               {
@@ -171,16 +167,6 @@ const MENU: MenuItem[] = [
       },
     ],
   },
-  {
-    id: "resources",
-    label: "Resources",
-    children: [
-      { id: "pdfs", label: "PDFs", href: "/resources/pdfs" },
-      { id: "notes", label: "Notes", href: "/resources/notes" },
-      { id: "formulas", label: "Formula Sheets", href: "/resources/formulas" },
-      { id: "strategy", label: "Strategy Guides", href: "/resources/strategy" },
-    ],
-  },
   { id: "contact", label: "Contact", href: "/contact" },
 ];
 
@@ -193,22 +179,20 @@ export default function Navbar(): JSX.Element {
     isDarkMode,
   } = useModeAnimation({
     animationType: ThemeAnimationType.BLUR_CIRCLE,
-    blurAmount: 0,
-    duration: 700,
+    blurAmount: 8,
+    duration: 650,
   });
 
-  // Mobile state
+  // mobile state
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // track which accordion paths are open on mobile: store ids path like ['exams','jee','jee-mains']
   const [openIds, setOpenIds] = useState<string[]>([]);
 
-  // Refs for GSAP animations
+  // refs
   const panelRef = useRef<HTMLDivElement | null>(null);
   const accordionRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const desktopDropdownRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // Apply theme class to html
+  // apply theme class
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
@@ -219,159 +203,63 @@ export default function Navbar(): JSX.Element {
     }
   }, [isDarkMode]);
 
-  // Scroll / sticky nav GSAP
+  // sticky nav
   useEffect(() => {
-    const navElement = navRef.current;
-    if (!navElement) return;
+    const el = navRef.current;
+    if (!el) return;
 
     const ctx = gsap.context(() => {
-      gsap.set(navElement, {
-        maxWidth: "1280px",
-        backgroundColor: "transparent",
-        backdropFilter: "none",
-        outline: "0px",
-      });
-
-      gsap.to(navElement, {
+      gsap.set(el, { backgroundColor: "transparent" });
+      gsap.to(el, {
         scrollTrigger: {
           trigger: document.body,
           start: "top top",
-          end: "+=150",
+          end: "+=140",
           scrub: true,
         },
-        maxWidth: 600,
-        backgroundColor: "var(--backdrop)",
-        backdropFilter: "blur(12px)",
-        outline: "1px solid var(--bg-700)",
-        ease: "linear",
+        backgroundColor: "var(--backdrop, rgba(255,255,255,0.6))",
+        backdropFilter: "blur(8px)",
+        duration: 0.3,
+        ease: "power1.out",
       });
     });
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      ScrollTrigger.refresh();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, [pathname]);
 
-  // Mobile panel open/close animation via GSAP
+  // mobile panel animations
   useEffect(() => {
     const el = panelRef.current;
     if (!el) return;
-
-    // kill existing tweens on panelRef
     gsap.killTweensOf(el);
 
     if (mobileOpen) {
-      gsap.set(el, { display: "block" });
+      el.style.display = "block";
+      el.style.pointerEvents = "auto";
       gsap.fromTo(
         el,
-        { y: "-5%", opacity: 0 },
-        {
-          y: "0%",
-          opacity: 1,
-          duration: 0.5,
-          ease: "power3.out",
-        }
+        { y: "-6%", opacity: 0 },
+        { y: "0%", opacity: 1, duration: 0.38, ease: "power3.out" }
       );
-      // optional: lock body scroll
       document.body.style.overflow = "hidden";
     } else {
       gsap.to(el, {
-        y: "-3%",
+        y: "-4%",
         opacity: 0,
-        duration: 0.3,
+        duration: 0.28,
         ease: "power2.in",
         onComplete: () => {
-          gsap.set(el, { display: "none" });
+          el.style.display = "none";
+          el.style.pointerEvents = "none";
         },
       });
       document.body.style.overflow = "";
     }
   }, [mobileOpen]);
 
-  // Helper to toggle accordion open on mobile.
-  const toggleAccordion = (id: string) => {
-    const already = openIds.includes(id);
-
-    // compute new openIds: if closing id, remove it and all children that start with id-
-    let next: string[];
-    if (already) {
-      next = openIds.filter((open) => !open.startsWith(id));
-    } else {
-      // open this id while keeping existing (so multiple accordions can be open)
-      next = [...openIds, id];
-    }
-    setOpenIds(next);
-
-    // animate the targeted region
-    const container = accordionRefs.current[id];
-    if (!container) return;
-
-    gsap.killTweensOf(container);
-    if (!already) {
-      // open: animate from height 0 to auto with bounce
-      const startHeight = 0;
-      const targetHeight = container.scrollHeight;
-      gsap.fromTo(
-        container,
-        { height: startHeight, opacity: 0 },
-        {
-          height: targetHeight,
-          opacity: 1,
-          duration: 0.55,
-          ease: "elastic.out(1, 0.6)",
-          onComplete: () => {
-            gsap.set(container, { height: "auto" });
-          },
-        }
-      );
-    } else {
-      // close
-      gsap.to(container, {
-        height: 0,
-        opacity: 0,
-        duration: 0.28,
-        ease: "power2.in",
-      });
-    }
-  };
-
-  // utility: recursively render desktop dropdowns using GSAP for enter/leave
-  const onDesktopEnter = (id: string) => {
-    const el = desktopDropdownRefs.current[id];
-    if (!el) return;
-    gsap.killTweensOf(el);
-    gsap.set(el, { display: "block" });
-    gsap.fromTo(
-      el,
-      { y: -8, opacity: 0, scale: 0.98 },
-      {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        duration: 0.35,
-        ease: "elastic.out(1, 0.6)",
-      }
-    );
-  };
-  const onDesktopLeave = (id: string) => {
-    const el = desktopDropdownRefs.current[id];
-    if (!el) return;
-    gsap.killTweensOf(el);
-    gsap.to(el, {
-      y: -6,
-      opacity: 0,
-      scale: 0.98,
-      duration: 0.22,
-      ease: "power2.in",
-      onComplete: () => {
-        gsap.set(el, { display: "none" });
-      },
-    });
-  };
-
-  // keyboard close mobile on Escape
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -383,25 +271,91 @@ export default function Navbar(): JSX.Element {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // small helpers
   const isOpen = (id: string) => openIds.includes(id);
   const hasChildren = (item: MenuItem) =>
     Array.isArray(item.children) && item.children.length > 0;
 
-  // Render helpers (mobile)
+  const toggleAccordion = (id: string) => {
+    const already = openIds.includes(id);
+    let next: string[];
+    if (already) {
+      next = openIds.filter(
+        (open) => open !== id && !open.startsWith(id + "-")
+      );
+    } else {
+      next = [...openIds, id];
+    }
+    setOpenIds(next);
+
+    const container = accordionRefs.current[id];
+    if (!container) return;
+    gsap.killTweensOf(container);
+    if (!already) {
+      const targetHeight = container.scrollHeight;
+      gsap.fromTo(
+        container,
+        { height: 0, opacity: 0 },
+        {
+          height: targetHeight,
+          opacity: 1,
+          duration: 0.36,
+          ease: "power2.out",
+          onComplete: () => {
+            container.style.height = "auto";
+          },
+        }
+      );
+    } else {
+      gsap.to(container, {
+        height: 0,
+        opacity: 0,
+        duration: 0.25,
+        ease: "power2.in",
+      });
+    }
+  };
+
+  // desktop dropdown animations
+  const onDesktopEnter = (id: string) => {
+    const el = desktopDropdownRefs.current[id];
+    if (!el) return;
+    gsap.killTweensOf(el);
+    el.style.display = "block";
+    gsap.fromTo(
+      el,
+      { y: -6, opacity: 0, scale: 0.98 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.28, ease: "power3.out" }
+    );
+  };
+  const onDesktopLeave = (id: string) => {
+    const el = desktopDropdownRefs.current[id];
+    if (!el) return;
+    gsap.killTweensOf(el);
+    gsap.to(el, {
+      y: -6,
+      opacity: 0,
+      scale: 0.98,
+      duration: 0.2,
+      ease: "power2.in",
+      onComplete: () => (el.style.display = "none"),
+    });
+  };
+
+  // renderers
   const renderMobileMenu = (items: MenuItem[], level = 0) => {
     return items.map((item) => {
       const itemId = item.id;
-      const depthClass = level > 0 ? "pl-4" : "";
       return (
         <div
           key={itemId}
-          className={`border-b border-bg-600 ${
+          className={`w-full border-b border-bg-700 ${
             level === 0 ? "" : "bg-transparent"
           }`}
         >
           <div
-            className={`flex items-center justify-between py-3 px-4 ${depthClass}`}
+            className={`flex items-center justify-between py-3 px-3 ${
+              level === 0 ? "" : "pl-6"
+            }`}
           >
             {item.href ? (
               <Link
@@ -458,7 +412,7 @@ export default function Navbar(): JSX.Element {
                 overflow: "hidden",
                 display: isOpen(itemId) ? "block" : "none",
               }}
-              className="pl-4"
+              className="pl-3"
             >
               <div className="flex flex-col">
                 {renderMobileMenu(item.children!, level + 1)}
@@ -470,7 +424,6 @@ export default function Navbar(): JSX.Element {
     });
   };
 
-  // Render helpers (desktop) — top-level rendered inline, dropdown panels absolutely positioned
   const renderDesktopMenu = (items: MenuItem[]) => {
     return items.map((item) => {
       if (!hasChildren(item)) {
@@ -478,18 +431,17 @@ export default function Navbar(): JSX.Element {
           <li key={item.id} className="relative">
             <Link
               href={item.href || "#"}
-              className={`flex items-center gap-2 ${
-                pathname === item.href ? "active-link" : ""
+              className={`flex items-center gap-2 px-2 py-1 rounded-md ${
+                pathname === item.href
+                  ? "font-semibold text-text-primary"
+                  : "text-text-secondary"
               }`}
             >
-              {pathname === item.href && (
-                <span className="w-2 h-2 bg-highlight rounded-full" />
-              )}
               <span className="relative inline-flex overflow-hidden group">
-                <div className="translate-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%]">
+                <div className="translate-y-0 transform-gpu transition-transform duration-300 group-hover:-translate-y-[110%]">
                   {item.label}
                 </div>
-                <div className="absolute translate-y-[110%] transform-gpu text-text-primary transition-transform duration-500 group-hover:translate-y-0">
+                <div className="absolute translate-y-[110%] transform-gpu text-text-primary transition-transform duration-300 group-hover:translate-y-0">
                   {item.label}
                 </div>
               </span>
@@ -498,62 +450,70 @@ export default function Navbar(): JSX.Element {
         );
       }
 
-      // dropdown wrapper
       return (
         <li
           key={item.id}
           className="group relative"
           onMouseEnter={() => onDesktopEnter(item.id)}
           onMouseLeave={() => onDesktopLeave(item.id)}
+          onFocus={() => onDesktopEnter(item.id)}
+          onBlur={() => onDesktopLeave(item.id)}
         >
           <button
-            className={`flex items-center gap-2`}
+            className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary`}
             aria-haspopup="true"
-            aria-expanded={false}
           >
             <span className="relative inline-flex overflow-hidden group">
-              <div className="translate-y-0 transform-gpu transition-transform duration-500 group-hover:-translate-y-[110%]">
+              <div className="translate-y-0 transform-gpu transition-transform duration-300 group-hover:-translate-y-[110%]">
                 {item.label}
               </div>
-              <div className="absolute translate-y-[110%] transform-gpu text-text-primary transition-transform duration-500 group-hover:translate-y-0">
+              <div className="absolute translate-y-[110%] transform-gpu text-text-primary transition-transform duration-300 group-hover:translate-y-0">
                 {item.label}
               </div>
             </span>
             <ChevronDown className="ml-1" size={14} />
           </button>
 
-          {/* Dropdown panel (positioned) */}
           <div
             ref={(el) => (desktopDropdownRefs.current[item.id] = el)}
-            className="absolute left-0 top-full mt-3 z-50 w-80 origin-top-left rounded-lg border border-bg-700 bg-popover/95 p-4 shadow-lg backdrop-blur"
+            className="absolute left-0 top-full mt-3 z-50 w-[34rem] origin-top-left rounded-lg border border-bg-700 bg-white/60 dark:bg-[#071219]/70 p-4 shadow-2xl backdrop-blur-lg"
             style={{ display: "none" }}
           >
-            <div className="grid grid-cols-1 gap-2">
-              {item.children!.map((col) => (
-                <div key={col.id} className="mb-2">
-                  <h4 className="font-semibold text-sm mb-2">{col.label}</h4>
+            <div className="grid grid-cols-2 gap-4">
+              {item.children!.map((section) => (
+                <div key={section.id}>
+                  <h4 className="font-semibold text-sm mb-2">
+                    {section.label}
+                  </h4>
                   <ul className="flex flex-col gap-2 text-sm">
-                    {col.children && col.children.length > 0 ? (
-                      col.children.map((sub) => (
-                        <li key={sub.id}>
+                    {section.children?.map((sub) => (
+                      <li key={sub.id}>
+                        {sub.children ? (
+                          <div>
+                            <span className="font-medium">{sub.label}</span>
+                            <ul className="ml-3 mt-2 flex flex-col gap-1">
+                              {sub.children.map((leaf) => (
+                                <li key={leaf.id}>
+                                  <Link
+                                    href={leaf.href || "#"}
+                                    className="block hover:underline py-1 text-sm"
+                                  >
+                                    {leaf.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : (
                           <Link
                             href={sub.href || "#"}
-                            className="block text-sm hover:underline"
+                            className="block hover:underline py-1"
                           >
                             {sub.label}
                           </Link>
-                        </li>
-                      ))
-                    ) : (
-                      <li>
-                        <Link
-                          href={col.href || "#"}
-                          className="block text-sm hover:underline"
-                        >
-                          {col.label}
-                        </Link>
+                        )}
                       </li>
-                    )}
+                    ))}
                   </ul>
                 </div>
               ))}
@@ -565,25 +525,18 @@ export default function Navbar(): JSX.Element {
   };
 
   return (
-    <header className="pointer-events-none sticky left-0 right-0 top-0 z-50 w-full px-0 py-4 md:flex md:justify-center">
+    <header className="sticky left-0 right-0 top-0 z-50 w-full">
       <nav
-        ref={(el) => {
-          navRef.current = el;
-        }}
-        className="pointer-events-auto flex w-full items-center justify-between gap-6 rounded-full px-6 py-1 transition-colors sm:pr-4"
-        style={{
-          maxWidth: "1280px",
-          backgroundColor: "transparent",
-          backdropFilter: "none",
-          outline: "0px",
-          opacity: 1,
-        }}
+        ref={(el) => (navRef.current = el)}
+        className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 rounded-full px-5 py-3 transition-colors"
+        style={{ backgroundColor: "transparent" }}
+        aria-label="Primary navigation"
       >
-        {/* Brand / Logo */}
+        {/* Brand */}
         <div className="flex items-center gap-4">
           <Link
             href="/"
-            className="font-clash text-2xl font-medium text-text-primary sm:text-xl"
+            className="font-clash text-2xl font-semibold text-text-primary"
           >
             AE
           </Link>
@@ -594,23 +547,31 @@ export default function Navbar(): JSX.Element {
           {renderDesktopMenu(MENU)}
         </ul>
 
-        {/* Right controls: theme + mobile hamburger */}
-        <div className="flex items-center justify-center gap-4">
+        {/* Controls */}
+        <div className="flex items-center gap-3">
           <button
             ref={themeRef}
             onClick={toggleSwitchTheme}
-            className="inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold h-11 w-11 rounded-full border border-bg-700 bg-backdrop text-text-primary backdrop-blur-md transition-all active:scale-90 sm:h-10 sm:w-10"
+            className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md"
             aria-label="Toggle theme"
           >
-            <div
-              className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
-              style={{
-                opacity: isDarkMode ? 0 : 1,
-                willChange: "opacity",
-              }}
-              aria-hidden
-            >
-              {/* sun icon */}
+            <span className="sr-only">Toggle theme</span>
+            {isDarkMode ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-moon"
+              >
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+              </svg>
+            ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"
@@ -626,60 +587,28 @@ export default function Navbar(): JSX.Element {
                 <circle cx="12" cy="12" r="4"></circle>
                 <path d="M12 2v2"></path>
                 <path d="M12 20v2"></path>
-                <path d="m4.93 4.93 1.41 1.41"></path>
-                <path d="m17.66 17.66 1.41 1.41"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-                <path d="m6.34 17.66-1.41 1.41"></path>
-                <path d="m19.07 4.93-1.41 1.41"></path>
               </svg>
-            </div>
-            <div
-              className="absolute inset-0 flex items-center justify-center transition-opacity duration-300"
-              style={{
-                opacity: isDarkMode ? 1 : 0,
-                willChange: "opacity",
-              }}
-              aria-hidden
-            >
-              {/* moon icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-moon"
-              >
-                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-              </svg>
-            </div>
-            <span className="sr-only">Toggle theme</span>
+            )}
           </button>
 
-          {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu-panel"
-            className="sm:hidden inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/80"
+            className="sm:hidden inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/70"
           >
-            {mobileOpen ? <XIcon size={20} /> : <MenuIcon size={20} />}
+            {mobileOpen ? <XIcon size={18} /> : <MenuIcon size={18} />}
           </button>
         </div>
       </nav>
 
-      {/* Mobile panel (full-screen modal style) */}
+      {/* Mobile panel */}
       <div
         id="mobile-menu-panel"
         ref={panelRef}
-        className="fixed left-0 top-0 z-50 w-full min-h-screen transform bg-popover/95 p-6 shadow-lg backdrop-blur-md sm:hidden"
-        style={{ display: "none" }}
+        className="fixed left-0 top-0 z-50 w-full min-h-screen transform bg-popover/98 p-6 shadow-lg backdrop-blur-md sm:hidden"
+        style={{ display: "none", pointerEvents: "none" }}
         role="dialog"
         aria-modal="true"
       >
@@ -687,16 +616,15 @@ export default function Navbar(): JSX.Element {
           <Link
             href="/"
             onClick={() => setMobileOpen(false)}
-            className="font-clash text-2xl font-medium"
+            className="font-clash text-2xl font-semibold"
           >
             AE
           </Link>
+
           <div className="flex items-center gap-3">
             <button
-              ref={themeRef}
-              onClick={toggleSwitchTheme}
-              className="inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/80"
-              aria-label="Toggle theme"
+              onClick={() => toggleSwitchTheme()}
+              className="inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/60"
             >
               {isDarkMode ? (
                 <svg
@@ -743,17 +671,11 @@ export default function Navbar(): JSX.Element {
           </div>
         </div>
 
-        <nav aria-label="Mobile menu" className="overflow-auto max-h-[80vh]">
+        <nav aria-label="Mobile menu" className="overflow-auto max-h-[78vh]">
           <div className="flex flex-col space-y-0">
             {renderMobileMenu(MENU)}
           </div>
         </nav>
-
-        <div className="mt-6 border-t border-bg-600 pt-4">
-          <div className="text-sm text-text-secondary">
-            © {new Date().getFullYear()} AE — All rights reserved
-          </div>
-        </div>
       </div>
     </header>
   );

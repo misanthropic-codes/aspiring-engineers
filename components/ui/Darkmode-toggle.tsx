@@ -45,7 +45,7 @@ export function ModeToggle() {
     <>
       {isTransitioning && (
         <div
-          className="fixed inset-0 z-[9999] pointer-events-none"
+          className="fixed inset-0 z-9999 pointer-events-none"
           style={{
             willChange: "transform, opacity",
             transform: "translateZ(0)",
