@@ -217,7 +217,9 @@ export default function Navbar(): JSX.Element {
           end: "+=140",
           scrub: true,
         },
-        backgroundColor: "var(--backdrop, rgba(255,255,255,0.6))",
+        backgroundColor: "var(--navbar-backdrop)",
+        borderColor: "var(--navbar-border)",
+
         backdropFilter: "blur(8px)",
         duration: 0.3,
         ease: "power1.out",

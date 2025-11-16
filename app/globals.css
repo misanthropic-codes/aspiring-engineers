@@ -47,6 +47,8 @@
 }
 
 :root {
+  --navbar-backdrop: rgba(255, 255, 255, 0.55);
+  --navbar-border: rgba(0, 0, 0, 0.08);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -82,6 +84,9 @@
 }
 
 .dark {
+  --navbar-backdrop: rgba(10, 15, 20, 0.58);
+  --navbar-border: rgba(255, 255, 255, 0.08);
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
