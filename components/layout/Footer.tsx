@@ -1,7 +1,16 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
-import { Sparkles } from "lucide-react";
+import {
+  Sparkles,
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Youtube,
+} from "lucide-react";
 
 export default function Footer() {
   const [darkMode, setDarkMode] = useState(false);
@@ -10,80 +19,378 @@ export default function Footer() {
     const updateTheme = () => {
       setDarkMode(document.documentElement.classList.contains("dark"));
     };
-
     updateTheme();
     const observer = new MutationObserver(updateTheme);
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
     });
-
     return () => observer.disconnect();
   }, []);
+
+  const footerLinks = {
+    jee: [
+      { label: "JEE PYQ with Solutions", href: "/jee-pyq" },
+      { label: "JEE Test Series", href: "/jee-test-series" },
+      { label: "JEE Advanced PYQ", href: "/jee-advanced-pyq" },
+      { label: "JEE Main PYQ", href: "/jee-main-pyq" },
+    ],
+    neet: [
+      { label: "NEET PYQ with Solutions", href: "/neet-pyq" },
+      { label: "NEET Test Series", href: "/neet-test-series" },
+      { label: "NEET Mock Tests", href: "/neet-mock-tests" },
+      { label: "NEET Study Material", href: "/neet-material" },
+    ],
+    boards: [
+      { label: "10th Board Support", href: "/10th-board" },
+      { label: "12th Board Support", href: "/12th-board" },
+      { label: "CBSE Resources", href: "/cbse-resources" },
+      { label: "State Board Support", href: "/state-board" },
+    ],
+    company: [
+      { label: "About Us", href: "/about" },
+      { label: "Contact Us", href: "/contact" },
+      { label: "Careers", href: "/careers" },
+      { label: "Blog", href: "/blog" },
+    ],
+    legal: [
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Refund Policy", href: "/refund-policy" },
+      { label: "Cancellation Policy", href: "/cancellation-policy" },
+    ],
+  };
+
+  const socialLinks = [
+    { icon: Facebook, href: "#", label: "Facebook" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Youtube, href: "#", label: "YouTube" },
+  ];
 
   return (
     <footer
       className={`
-        relative py-14 px-4 sm:px-6 lg:px-8 mt-20
-        border-t backdrop-blur-2xl transition-all
+        relative mt-20 border-t backdrop-blur-2xl transition-all
         ${
           darkMode
-            ? "bg-white/5 border-white/10"
+            ? "bg-gray-900/50 border-gray-800"
             : "bg-white/90 border-gray-200"
         }
       `}
     >
-      {/* BRAND LIGHT EFFECT */}
-      <div
-        className="
-          absolute inset-0 pointer-events-none
-          bg-linear-to-br from-[#2596be]/10 to-[#4EA8DE]/10
-          blur-3xl opacity-70
-        "
-      ></div>
+      {/* Background gradient blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+          className={`absolute -top-40 left-0 w-96 h-96 rounded-full blur-3xl transition-all
+            ${darkMode ? "bg-[#2596be]/5" : "bg-[#2596be]/10"}`}
+        />
+        <div
+          className={`absolute -bottom-40 right-0 w-96 h-96 rounded-full blur-3xl transition-all
+            ${darkMode ? "bg-[#4EA8DE]/5" : "bg-[#4EA8DE]/10"}`}
+        />
+      </div>
 
-      <div className="relative max-w-7xl mx-auto text-center">
-        {/* LOGO */}
-        <div className="flex items-center justify-center gap-3 mb-5">
-          <div
-            className="
-              w-12 h-12 rounded-xl
-              bg-linear-to-br from-[#2596be] to-[#4EA8DE]
-              flex items-center justify-center shadow-md
-            "
-          >
-            <Sparkles className="w-7 h-7 text-white" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Main Footer Content */}
+        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+          {/* Brand Section */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2596be] to-[#4EA8DE] flex items-center justify-center shadow-lg">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <span
+                className={`text-xl font-bold ${
+                  darkMode ? "text-white" : "text-gray-900"
+                }`}
+              >
+                Aspiring Engineers
+              </span>
+            </div>
+            <p
+              className={`text-sm mb-6 max-w-xs ${
+                darkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              Your trusted partner for JEE, NEET & Board exam preparation.
+              Excellence through dedication.
+            </p>
+
+            {/* Social Links */}
+            <div className="flex gap-3">
+              {socialLinks.map((social, idx) => (
+                <a
+                  key={idx}
+                  href={social.href}
+                  aria-label={social.label}
+                  className={`
+                    w-9 h-9 rounded-lg flex items-center justify-center
+                    transition-all duration-300
+                    ${
+                      darkMode
+                        ? "bg-gray-800/50 text-gray-400 hover:bg-[#2596be]/20 hover:text-[#60DFFF]"
+                        : "bg-gray-100 text-gray-600 hover:bg-[#2596be]/10 hover:text-[#2596be]"
+                    }
+                  `}
+                >
+                  <social.icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
           </div>
 
-          <p
-            className={`
-              text-2xl font-bold tracking-tight
-              ${darkMode ? "text-white" : "text-[#2596be]"}
-            `}
-          >
-            Aspiring Engineers
-          </p>
+          {/* JEE Links */}
+          <div>
+            <h3
+              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+                darkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              JEE Preparation
+            </h3>
+            <ul className="space-y-3">
+              {footerLinks.jee.map((link, idx) => (
+                <li key={idx}>
+                  <a
+                    href={link.href}
+                    className={`text-sm transition-colors ${
+                      darkMode
+                        ? "text-gray-400 hover:text-[#60DFFF]"
+                        : "text-gray-600 hover:text-[#2596be]"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* NEET Links */}
+          <div>
+            <h3
+              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+                darkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              NEET Preparation
+            </h3>
+            <ul className="space-y-3">
+              {footerLinks.neet.map((link, idx) => (
+                <li key={idx}>
+                  <a
+                    href={link.href}
+                    className={`text-sm transition-colors ${
+                      darkMode
+                        ? "text-gray-400 hover:text-[#60DFFF]"
+                        : "text-gray-600 hover:text-[#2596be]"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Board Support Links */}
+          <div>
+            <h3
+              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+                darkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              Board Support
+            </h3>
+            <ul className="space-y-3">
+              {footerLinks.boards.map((link, idx) => (
+                <li key={idx}>
+                  <a
+                    href={link.href}
+                    className={`text-sm transition-colors ${
+                      darkMode
+                        ? "text-gray-400 hover:text-[#60DFFF]"
+                        : "text-gray-600 hover:text-[#2596be]"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h3
+              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+                darkMode ? "text-white" : "text-gray-900"
+              }`}
+            >
+              Company
+            </h3>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link, idx) => (
+                <li key={idx}>
+                  <a
+                    href={link.href}
+                    className={`text-sm transition-colors ${
+                      darkMode
+                        ? "text-gray-400 hover:text-[#60DFFF]"
+                        : "text-gray-600 hover:text-[#2596be]"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        {/* TAGLINE */}
-        <p
-          className={`
-            text-lg mb-3
-            ${darkMode ? "text-gray-300" : "text-gray-700"}
-          `}
+        {/* Contact Info Section */}
+        <div
+          className={`py-8 border-t ${
+            darkMode ? "border-gray-800" : "border-gray-200"
+          }`}
         >
-          Your Partner in JEE, NEET & Board Success
-        </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex items-start gap-3">
+              <div
+                className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  darkMode ? "bg-gray-800/50" : "bg-gray-100"
+                }`}
+              >
+                <Mail
+                  className={`w-5 h-5 ${
+                    darkMode ? "text-[#60DFFF]" : "text-[#2596be]"
+                  }`}
+                />
+              </div>
+              <div>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-wider mb-1 ${
+                    darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  Email
+                </p>
+                <a
+                  href="mailto:support@aspiringengineers.com"
+                  className={`text-sm ${
+                    darkMode
+                      ? "text-gray-300 hover:text-[#60DFFF]"
+                      : "text-gray-700 hover:text-[#2596be]"
+                  }`}
+                >
+                  support@aspiringengineers.com
+                </a>
+              </div>
+            </div>
 
-        {/* COPYRIGHT */}
-        <p
-          className={`
-            text-sm
-            ${darkMode ? "text-gray-500" : "text-gray-600"}
-          `}
+            <div className="flex items-start gap-3">
+              <div
+                className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  darkMode ? "bg-gray-800/50" : "bg-gray-100"
+                }`}
+              >
+                <Phone
+                  className={`w-5 h-5 ${
+                    darkMode ? "text-[#60DFFF]" : "text-[#2596be]"
+                  }`}
+                />
+              </div>
+              <div>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-wider mb-1 ${
+                    darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  Phone
+                </p>
+                <a
+                  href="tel:+911234567890"
+                  className={`text-sm ${
+                    darkMode
+                      ? "text-gray-300 hover:text-[#60DFFF]"
+                      : "text-gray-700 hover:text-[#2596be]"
+                  }`}
+                >
+                  +91 123 456 7890
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <div
+                className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  darkMode ? "bg-gray-800/50" : "bg-gray-100"
+                }`}
+              >
+                <MapPin
+                  className={`w-5 h-5 ${
+                    darkMode ? "text-[#60DFFF]" : "text-[#2596be]"
+                  }`}
+                />
+              </div>
+              <div>
+                <p
+                  className={`text-xs font-semibold uppercase tracking-wider mb-1 ${
+                    darkMode ? "text-gray-400" : "text-gray-500"
+                  }`}
+                >
+                  Address
+                </p>
+                <p
+                  className={`text-sm ${
+                    darkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  123 Education Street, Kota
+                  <br />
+                  Rajasthan - 324001, India
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div
+          className={`py-6 border-t ${
+            darkMode ? "border-gray-800" : "border-gray-200"
+          }`}
         >
-          © {new Date().getFullYear()} Aspiring Engineers. All rights reserved.
-        </p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p
+              className={`text-sm ${
+                darkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              © {new Date().getFullYear()} Aspiring Engineers. All rights
+              reserved.
+            </p>
+
+            {/* Legal Links */}
+            <div className="flex flex-wrap justify-center gap-6">
+              {footerLinks.legal.map((link, idx) => (
+                <a
+                  key={idx}
+                  href={link.href}
+                  className={`text-sm transition-colors ${
+                    darkMode
+                      ? "text-gray-400 hover:text-[#60DFFF]"
+                      : "text-gray-600 hover:text-[#2596be]"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </footer>
   );
