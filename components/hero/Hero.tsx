@@ -6,10 +6,11 @@ import { Spotlight } from "@/components/ui/spotlight";
 import HeroStats from "./HeroStats";
 import HeroBadge from "./HeroBadge";
 
+import { Button } from "@/components/ui/button";
+
 export default function Hero() {
   const [darkMode, setDarkMode] = useState(false);
 
-  // Sync with html.dark
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setDarkMode(document.documentElement.classList.contains("dark"));
@@ -32,23 +33,14 @@ export default function Hero() {
           className={`absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl transition-all
           ${darkMode ? "bg-[#2596be]/10" : "bg-[#2596be]/20"}`}
         />
-
         <div
           className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl transition-all
           ${darkMode ? "bg-[#4EA8DE]/15" : "bg-[#4EA8DE]/25"}`}
         />
       </div>
 
-      {/* SPOTLIGHT FIXED: ALWAYS VISIBLE */}
       <Spotlight
-        className="
-          absolute
-          -top-40 md:-top-20
-          left-0 md:left-60
-          z-10
-          pointer-events-none
-          mix-blend-screen
-        "
+        className="absolute -top-40 md:-top-20 left-0 md:left-60 z-10 pointer-events-none mix-blend-screen"
         fill={darkMode ? "rgba(255,255,255,0.35)" : "white"}
       />
 
@@ -82,21 +74,35 @@ export default function Hero() {
           counselling.
         </p>
 
-        {/* CTA */}
+        {/* CTA BUTTONS – UPDATED */}
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <button className="h-10 px-8 text-lg bg-[#2596be] text-white rounded-md shadow-xl flex items-center gap-2 hover:scale-105 hover:bg-[#2596be]/90 transition">
+          {/* PRIMARY – FILLED */}
+          <Button
+            size="lg"
+            className="
+              h-10 px-8 text-lg font-medium 
+              bg-[#2596be] text-white shadow-xl
+              hover:bg-[#1e7ca0]
+              transition
+            "
+          >
             Start Free Trial <ChevronRight className="w-5 h-5" />
-          </button>
+          </Button>
 
-          <button
-            className={`h-10 px-8 text-lg rounded-md border shadow-lg hover:scale-105 transition ${
-              darkMode
-                ? "border-[#2596be] text-[#2596be] hover:bg-[#2596be]/10"
-                : "border-2 border-[#2596be] text-[#2596be] hover:bg-[#2596be]/10"
-            }`}
+          {/* SECONDARY – OUTLINE */}
+          <Button
+            variant="outline"
+            size="lg"
+            className={`
+              h-10 px-8 text-lg font-medium
+              border-2 text-[#2596be]
+              hover:bg-[#2596be]/10
+              transition
+              ${darkMode ? "border-[#2596be]" : "border-[#2596be]"}
+            `}
           >
             View Test Series
-          </button>
+          </Button>
         </div>
 
         <HeroStats darkMode={darkMode} />

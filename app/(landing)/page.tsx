@@ -5,6 +5,7 @@ import Exams from "@/components/sections/Exams";
 import Features from "@/components/sections/Features";
 import CTASection from "@/components/sections/CTAsection";
 import Footer from "@/components/layout/Footer";
+import EducatorsShowcase from "@/components/sections/Educators";
 
 export default function HomePage() {
   return (
@@ -13,6 +14,7 @@ export default function HomePage() {
       <Hero />
       <Features />
       <Exams />
+      <EducatorsShowcase />
       <Counselling />
       <CTASection />
       <Footer />
