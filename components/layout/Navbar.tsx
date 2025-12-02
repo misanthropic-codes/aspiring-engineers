@@ -179,8 +179,8 @@ export default function Navbar(): JSX.Element {
     isDarkMode,
   } = useModeAnimation({
     animationType: ThemeAnimationType.BLUR_CIRCLE,
-    blurAmount: 8,
-    duration: 650,
+    blurAmount: 0,
+    duration: 700,
   });
 
   // mobile state
@@ -219,7 +219,6 @@ export default function Navbar(): JSX.Element {
         },
         backgroundColor: "var(--navbar-backdrop)",
         borderColor: "var(--navbar-border)",
-
         backdropFilter: "blur(8px)",
         duration: 0.3,
         ease: "power1.out",
@@ -229,6 +228,7 @@ export default function Navbar(): JSX.Element {
     return () => {
       ctx.revert();
       ScrollTrigger.getAll().forEach((t) => t.kill());
+      ScrollTrigger.refresh();
     };
   }, [pathname]);
 
@@ -538,8 +538,11 @@ export default function Navbar(): JSX.Element {
         ref={(el) => {
           navRef.current = el;
         }}
-        className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 rounded-full px-5 py-3 transition-colors"
-        style={{ backgroundColor: "transparent" }}
+        className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 rounded-full px-5 py-3"
+        style={{ 
+          backgroundColor: "transparent",
+          willChange: "background-color, border-color, backdrop-filter"
+        }}
         aria-label="Primary navigation"
       >
         {/* Brand */}
@@ -633,7 +636,7 @@ export default function Navbar(): JSX.Element {
 
           <div className="flex items-center gap-3">
             <button
-              onClick={() => toggleSwitchTheme()}
+              onClick={toggleSwitchTheme}
               className="inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/60"
             >
               {isDarkMode ? (

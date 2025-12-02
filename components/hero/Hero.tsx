@@ -5,8 +5,32 @@ import { ChevronRight } from "lucide-react";
 import { Spotlight } from "@/components/ui/spotlight";
 import HeroStats from "./HeroStats";
 import HeroBadge from "./HeroBadge";
+import { InfiniteMovingCards, BannerItem } from "@/components/ui/infinite-moving-cards";
 
 import { Button } from "@/components/ui/button";
+
+const bannerItems: BannerItem[] = [
+  {
+    image: "/banners/jee.png",
+    title: "JEE Mains & Advanced",
+    link: "/exams/jee",
+  },
+  {
+    image: "/banners/neet.png",
+    title: "NEET Preparation",
+    link: "/exams/neet",
+  },
+  {
+    image: "/banners/wbjee.png",
+    title: "WBJEE Test Series",
+    link: "/exams/wbjee",
+  },
+  {
+    image: "/banners/boards.png",
+    title: "Board Exams (10 & 12)",
+    link: "/boards",
+  },
+];
 
 export default function Hero() {
   const [darkMode, setDarkMode] = useState(false);
@@ -103,6 +127,17 @@ export default function Hero() {
           >
             View Test Series
           </Button>
+        </div>
+
+        {/* INFINITE MOVING CARDS */}
+        <div className="mt-16">
+          <InfiniteMovingCards
+            items={bannerItems}
+            direction="left"
+            speed="normal"
+            pauseOnHover={true}
+            className="py-4"
+          />
         </div>
 
         <HeroStats darkMode={darkMode} />
