@@ -155,6 +155,12 @@ const MENU: MenuItem[] = [
       { id: "c-jee", label: "JEE Counselling", href: "/counselling/jee" },
       { id: "c-neet", label: "NEET Counselling", href: "/counselling/neet" },
       { id: "c-wbjee", label: "WBJEE Counselling", href: "/counselling/wbjee" },
+    ],
+  },
+  {
+    id: "admission",
+    label: "Admission Guidance",
+    children: [
       {
         id: "admission-guidance",
         label: "Admission Guidance",
