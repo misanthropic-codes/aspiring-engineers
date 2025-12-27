@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { isValidEmail, isValidPassword } from '@/lib/utils/validators';
 import { ExamType } from '@/types';
+import OTPModal from '@/components/OTPModal';
 
 export default function RegisterPage() {
   const { register } = useAuth();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,6 +24,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [showOTPModal, setShowOTPModal] = useState(false);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -77,12 +81,28 @@ export default function RegisterPage() {
         ...registrationData,
         examTargets,
       });
+      // Registration successful - show OTP modal for email verification
+      setShowOTPModal(true);
     } catch (err: any) {
       const errorMessage = err?.message || 'Registration failed. Please try again.';
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleOTPVerify = (success: boolean) => {
+    if (success) {
+      setShowOTPModal(false);
+      // Redirect to dashboard or home after verification
+      router.push('/');
+    }
+  };
+
+  const handleOTPClose = () => {
+    // Allow user to close but warn them
+    setShowOTPModal(false);
+    setError('Please verify your email to complete registration.');
   };
 
   const toggleExam = (exam: ExamType) => {
@@ -300,6 +320,15 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
+
+      {/* OTP Verification Modal */}
+      <OTPModal
+        isOpen={showOTPModal}
+        onClose={handleOTPClose}
+        onVerify={handleOTPVerify}
+        email={formData.email}
+        darkMode={darkMode}
+      />
     </div>
   );
 }
