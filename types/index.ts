@@ -143,3 +143,27 @@ export interface PackageDetailResponse {
   data: PackageDetail;
 }
 
+// Payment Types
+export interface PaymentRequest {
+  amount: number;
+  currency: string;
+  productId: string;
+}
+
+export interface Payment {
+  _id: string;
+  userId: string;
+  amount: number;
+  currency: string;
+  productId: string;
+  status: 'SUCCESS' | 'PENDING' | 'FAILED';
+  paymentMethod: string;
+  transactionId: string;
+  createdAt: string;
+}
+
+export interface PaymentResponse {
+  success: boolean;
+  message: string;
+  data: Payment;
+}

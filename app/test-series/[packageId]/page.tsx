@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import apiClient from '@/lib/api-client';
 import { PackageDetail, PackageDetailResponse } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { tokenManager } from '@/lib/utils/tokenManager';
+import paymentService from '@/services/payment.service';
 import Navbar from '@/components/layout/Navbar';
 import { 
   BookOpen, 
@@ -19,17 +22,29 @@ import {
   Play,
   Award,
   Timer,
-  Target
+  Target,
+  Loader2,
+  CheckCircle,
+  XCircle
 } from 'lucide-react';
 
 export default function PackageDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const packageId = params.packageId as string;
+  const { isAuthenticated } = useAuth();
   
   const [packageData, setPackageData] = useState<PackageDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+  
+  // Payment state
+  const [purchasing, setPurchasing] = useState(false);
+  const [purchaseSuccess, setPurchaseSuccess] = useState(false);
+  const [purchaseError, setPurchaseError] = useState('');
+  const [hasAccess, setHasAccess] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(false);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -57,6 +72,14 @@ export default function PackageDetailPage() {
         
         if (response.data.success) {
           setPackageData(response.data.data);
+          
+          // Check access if user is authenticated
+          if (isAuthenticated) {
+            setCheckingAccess(true);
+            const access = await paymentService.checkAccess(response.data.data._id);
+            setHasAccess(access);
+            setCheckingAccess(false);
+          }
         }
       } catch (err: any) {
         setError('Failed to load package details. Please try again.');
@@ -67,11 +90,46 @@ export default function PackageDetailPage() {
     };
 
     fetchPackage();
-  }, [packageId]);
+  }, [packageId, isAuthenticated]);
 
   const discountPercent = packageData?.discountPrice 
     ? Math.round(((packageData.price - packageData.discountPrice) / packageData.price) * 100) 
     : 0;
+
+  const handlePurchase = async () => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      // Redirect to login with return URL
+      router.push(`/login?redirect=/test-series/${packageId}`);
+      return;
+    }
+
+    if (!packageData) return;
+
+    setPurchasing(true);
+    setPurchaseError('');
+    setPurchaseSuccess(false);
+
+    try {
+      console.log('🛒 Starting purchase for:', packageData._id);
+      
+      const response = await paymentService.createPayment({
+        amount: packageData.discountPrice || packageData.price,
+        currency: packageData.currency || 'INR',
+        productId: packageData._id, // Use MongoDB _id instead of slug
+      });
+
+      console.log('✅ Payment response:', response);
+      
+      // If we get here without error, the payment was successful
+      setPurchaseSuccess(true);
+    } catch (err: any) {
+      console.error('❌ Payment error:', err);
+      setPurchaseError(err.message || 'Payment failed. Please try again.');
+    } finally {
+      setPurchasing(false);
+    }
+  };
 
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-[#071219]' : 'bg-gray-50'}`}>
@@ -315,10 +373,68 @@ export default function PackageDetailPage() {
 
                 {/* CTA Buttons */}
                 <div className="space-y-3 mb-6">
-                  <button className="w-full py-3 px-4 bg-[#2596be] text-white font-semibold rounded-xl shadow-lg hover:bg-[#1e7ca0] transition-colors flex items-center justify-center gap-2">
-                    <Play className="w-5 h-5" />
-                    Buy Now
-                  </button>
+                  {hasAccess || purchaseSuccess ? (
+                    <div className="space-y-3">
+                      <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-center">
+                        <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                        <p className="text-green-500 font-medium">
+                          {purchaseSuccess ? 'Purchase Successful!' : 'You have access!'}
+                        </p>
+                        <p className={`text-sm mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          Start taking tests from this series.
+                        </p>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          // Get tokens for SSO
+                          const token = tokenManager.getAuthToken();
+                          const refreshToken = tokenManager.getRefreshToken();
+                          const testPortalUrl = process.env.NEXT_PUBLIC_TEST_PORTAL_URL || 'http://localhost:3001';
+                          
+                          // Redirect to test portal with SSO params
+                          const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(token || '')}&refreshToken=${encodeURIComponent(refreshToken || '')}&packageId=${encodeURIComponent(packageData?._id || '')}`;
+                          window.location.href = ssoUrl;
+                        }}
+                        className="w-full py-3 px-4 bg-green-500 text-white font-semibold rounded-xl shadow-lg hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                      >
+                        <Play className="w-5 h-5" />
+                        Start Tests
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <button 
+                        onClick={handlePurchase}
+                        disabled={purchasing || checkingAccess}
+                        className="w-full py-3 px-4 bg-[#2596be] text-white font-semibold rounded-xl shadow-lg hover:bg-[#1e7ca0] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                      >
+                        {purchasing ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            Processing...
+                          </>
+                        ) : checkingAccess ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            Checking access...
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-5 h-5" />
+                            {isAuthenticated ? 'Buy Now' : 'Login to Buy'}
+                          </>
+                        )}
+                      </button>
+                      
+                      {purchaseError && (
+                        <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-2">
+                          <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                          <p className="text-red-500 text-sm">{purchaseError}</p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  
                   <button className={`w-full py-3 px-4 font-semibold rounded-xl border transition-colors flex items-center justify-center gap-2 ${
                     darkMode 
                       ? 'border-white/20 text-white hover:bg-white/10' 
