@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { tokenManager } from './utils/tokenManager';
 
 // Create axios instance
 const apiClient: AxiosInstance = axios.create({
@@ -12,8 +13,8 @@ const apiClient: AxiosInstance = axios.create({
 // Request interceptor - add auth token
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // Get token from localStorage
-    const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+    // Get token from tokenManager (centralized token storage)
+    const token = tokenManager.getAuthToken();
     
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -39,33 +40,35 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refresh_token') : null;
+        const refreshToken = tokenManager.getRefreshToken();
         
         if (refreshToken) {
           // Try to refresh token
-          const response = await axios.post(
+          const response = await axios.post<{ accessToken: string; refreshToken?: string }>(
             `${process.env.NEXT_PUBLIC_API_URL || 'https://aspiring-engineers-api-dbbcfdascdezgvcx.centralindia-01.azurewebsites.net/api/v1'}/auth/refresh`,
             { refreshToken }
           );
 
-          const { token } = response.data.data;
-          if (typeof window !== 'undefined') {
-            localStorage.setItem('auth_token', token);
+          const { accessToken, refreshToken: newRefreshToken } = response.data;
+          
+          // Store the new tokens
+          tokenManager.setAuthToken(accessToken);
+          if (newRefreshToken) {
+            tokenManager.setRefreshToken(newRefreshToken);
           }
 
           // Retry original request with new token
           if (originalRequest.headers) {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
+            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           }
           return apiClient(originalRequest);
         }
       } catch (refreshError) {
         // Refresh failed, logout user
+        tokenManager.clearTokens();
+        
         if (typeof window !== 'undefined') {
-          localStorage.removeItem('auth_token');
-          localStorage.removeItem('refresh_token');
-          localStorage.removeItem('user');
-          window.location.href = '/';
+          window.location.href = '/login';
         }
         return Promise.reject(refreshError);
       }

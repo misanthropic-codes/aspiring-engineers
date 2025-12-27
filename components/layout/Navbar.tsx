@@ -9,7 +9,8 @@ import {
   ThemeAnimationType,
   useModeAnimation,
 } from "react-theme-switch-animation";
-import { Menu as MenuIcon, X as XIcon, ChevronDown } from "lucide-react";
+import { Menu as MenuIcon, X as XIcon, ChevronDown, User, LogIn } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -44,11 +45,6 @@ const MENU: MenuItem[] = [
                 label: "PYQ — Without Solutions",
                 href: "/exams/jee/mains/pyq/without-solutions",
               },
-              {
-                id: "mains-tests",
-                label: "Test Series",
-                href: "/exams/jee/mains/test-series",
-              },
             ],
           },
           {
@@ -64,11 +60,6 @@ const MENU: MenuItem[] = [
                 id: "adv-pyq-no-sol",
                 label: "PYQ — Without Solutions",
                 href: "/exams/jee/advanced/pyq/without-solutions",
-              },
-              {
-                id: "adv-tests",
-                label: "Test Series",
-                href: "/exams/jee/advanced/test-series",
               },
             ],
           },
@@ -88,11 +79,6 @@ const MENU: MenuItem[] = [
             label: "PYQ — Without Solutions",
             href: "/exams/neet/pyq/without-solutions",
           },
-          {
-            id: "neet-tests",
-            label: "Test Series",
-            href: "/exams/neet/test-series",
-          },
         ],
       },
       {
@@ -109,15 +95,11 @@ const MENU: MenuItem[] = [
             label: "PYQ — Without Solutions",
             href: "/exams/wbjee/pyq/without-solutions",
           },
-          {
-            id: "wb-tests",
-            label: "Test Series",
-            href: "/exams/wbjee/test-series",
-          },
         ],
       },
     ],
   },
+  { id: "test-series", label: "Test Series", href: "/test-series" },
   {
     id: "boards",
     label: "Boards",
@@ -179,6 +161,7 @@ const MENU: MenuItem[] = [
 export default function Navbar(): JSX.Element {
   const navRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
+  const { user, isAuthenticated, logout } = useAuth();
   const {
     ref: themeRef,
     toggleSwitchTheme,
@@ -609,6 +592,40 @@ export default function Navbar(): JSX.Element {
               </svg>
             )}
           </button>
+
+          {/* Auth Buttons */}
+          {isAuthenticated ? (
+            <div className="hidden sm:flex items-center gap-2">
+              <Link
+                href="/profile"
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md text-sm font-medium"
+              >
+                <User size={16} />
+                <span className="truncate max-w-[100px]">{user?.name?.split(' ')[0] || 'Profile'}</span>
+              </Link>
+              <button
+                onClick={() => logout()}
+                className="px-3 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="hidden sm:flex items-center gap-2">
+              <Link
+                href="/login"
+                className="px-4 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href="/register"
+                className="px-4 py-2 rounded-full bg-[#2596be] text-white text-sm font-semibold hover:bg-[#1e7ca0] transition-colors"
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
 
           <button
             onClick={() => setMobileOpen((v) => !v)}
