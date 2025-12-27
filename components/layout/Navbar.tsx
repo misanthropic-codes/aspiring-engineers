@@ -11,6 +11,7 @@ import {
 } from "react-theme-switch-animation";
 import { Menu as MenuIcon, X as XIcon, ChevronDown, User, LogIn } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { tokenManager } from "@/lib/utils/tokenManager";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -596,13 +597,20 @@ export default function Navbar(): JSX.Element {
           {/* Auth Buttons */}
           {isAuthenticated ? (
             <div className="hidden sm:flex items-center gap-2">
-              <Link
-                href="/profile"
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md text-sm font-medium"
+              <button
+                onClick={() => {
+                  // Cross-domain SSO to test-portal-client profile
+                  const token = tokenManager.getAuthToken();
+                  const refreshToken = tokenManager.getRefreshToken();
+                  const testPortalUrl = process.env.NEXT_PUBLIC_TEST_PORTAL_URL || 'http://localhost:3001';
+                  const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(token || '')}&refreshToken=${encodeURIComponent(refreshToken || '')}&redirect=/profile`;
+                  window.location.href = ssoUrl;
+                }}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md text-sm font-medium cursor-pointer"
               >
                 <User size={16} />
                 <span className="truncate max-w-[100px]">{user?.name?.split(' ')[0] || 'Profile'}</span>
-              </Link>
+              </button>
               <button
                 onClick={() => logout()}
                 className="px-3 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
