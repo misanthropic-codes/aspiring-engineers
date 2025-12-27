@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import apiClient from '@/lib/api-client';
 import { Package, PackagesResponse } from '@/types';
 import Navbar from '@/components/layout/Navbar';
@@ -11,7 +10,6 @@ import { BookOpen, Clock, FileText, Star, Users, ChevronRight, Search, Filter } 
 const EXAM_FILTERS = ['All', 'JEE', 'NEET', 'WBJEE'];
 
 export default function TestSeriesPage() {
-  const searchParams = useSearchParams();
   const [packages, setPackages] = useState<Package[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
