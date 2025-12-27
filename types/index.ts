@@ -116,3 +116,30 @@ export interface ApiError {
   };
   timestamp: string;
 }
+
+// Package Test (inside package detail)
+export interface PackageTest {
+  _id: string;
+  title: string;
+  category: string;
+  type: string;
+  duration: number;
+  totalMarks: number;
+}
+
+// Package Detail (extended package with tests)
+export interface PackageDetail extends Omit<Package, 'metadata'> {
+  tests: PackageTest[];
+  metadata: PackageMetadata & {
+    instructors?: string[];
+  };
+  launchDate?: string;
+  expiryDate?: string;
+}
+
+export interface PackageDetailResponse {
+  success: boolean;
+  message: string;
+  data: PackageDetail;
+}
+
