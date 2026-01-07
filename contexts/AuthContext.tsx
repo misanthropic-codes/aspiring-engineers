@@ -1,17 +1,23 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, AuthResponse, LoginCredentials, RegisterData } from '@/types';
-import { storage, STORAGE_KEYS } from '@/lib/utils/storage';
-import { tokenManager } from '@/lib/utils/tokenManager';
-import authService from '@/services/auth.service';
-import { useRouter } from 'next/navigation';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { User, AuthResponse, LoginCredentials, RegisterData } from "@/types";
+import { storage, STORAGE_KEYS } from "@/lib/utils/storage";
+import { tokenManager } from "@/lib/utils/tokenManager";
+import authService, { RegisterResponse } from "@/services/auth.service";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
-  register: (data: RegisterData) => Promise<void>;
+  register: (data: RegisterData) => Promise<RegisterResponse>;
   logout: () => Promise<void>;
   refreshSession: () => Promise<void>;
   refreshProfile: () => Promise<void>;
@@ -33,36 +39,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (hasTokens && savedUser) {
       setUser(savedUser);
     }
-    
+
     setLoading(false);
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
     try {
       const response: AuthResponse = await authService.login(credentials);
-      
+
       tokenManager.setAuthToken(response.token);
       tokenManager.setRefreshToken(response.refreshToken);
       storage.set(STORAGE_KEYS.USER, response.user);
-      
+
       setUser(response.user);
-      router.push('/');
+      router.push("/");
     } catch (error) {
       throw error;
     }
   };
 
-  const register = async (data: RegisterData) => {
+  const register = async (data: RegisterData): Promise<RegisterResponse> => {
     try {
-      const response: AuthResponse = await authService.register(data);
-      
-      tokenManager.setAuthToken(response.token);
-      tokenManager.setRefreshToken(response.refreshToken);
-      storage.set(STORAGE_KEYS.USER, response.user);
-      
-      setUser(response.user);
-      // Redirect after registration
-      router.push('/');
+      // Registration returns email/name but NO tokens (user must verify email first)
+      const response = await authService.register(data);
+
+      // Don't store tokens or user - they need to verify email first
+      // The OTP modal will handle the verification flow
+      console.log("✅ Registration successful, OTP sent to:", response.email);
+
+      return response;
     } catch (error) {
       throw error;
     }
@@ -71,9 +76,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshSession = async () => {
     try {
       const refreshToken = tokenManager.getRefreshToken();
-      
+
       if (!refreshToken) {
-        throw new Error('No refresh token available');
+        throw new Error("No refresh token available");
       }
 
       await authService.refreshToken(refreshToken);
@@ -87,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshProfile = async () => {
     try {
       const updatedUser = await authService.getCurrentUser();
-      
+
       // Update state and localStorage
       storage.set(STORAGE_KEYS.USER, updatedUser);
       setUser(updatedUser);
@@ -102,13 +107,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await authService.logout();
     } catch (error) {
       // Continue with logout even if API fails
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
       // Always clear tokens and local storage, then redirect
       tokenManager.clearTokens();
       storage.remove(STORAGE_KEYS.USER);
       setUser(null);
-      router.push('/');
+      router.push("/");
     }
   };
 
@@ -133,7 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

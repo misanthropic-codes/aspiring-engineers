@@ -480,7 +480,7 @@ export default function Navbar(): JSX.Element {
             ref={(el) => {
               desktopDropdownRefs.current[item.id] = el;
             }}
-            className="absolute left-0 top-full mt-3 z-50 w-[34rem] origin-top-left rounded-lg border border-bg-700 bg-white/60 dark:bg-[#071219]/70 p-4 shadow-2xl backdrop-blur-lg"
+            className="absolute left-0 top-full mt-3 z-50 w-136 origin-top-left rounded-lg border border-bg-700 bg-white/60 dark:bg-[#071219]/70 p-4 shadow-2xl backdrop-blur-lg"
             style={{ display: "none" }}
           >
             <div className="grid grid-cols-2 gap-4">
@@ -534,7 +534,7 @@ export default function Navbar(): JSX.Element {
         ref={(el) => {
           navRef.current = el;
         }}
-        className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 rounded-full px-5 py-3"
+        className="mx-auto flex max-w-7xl items-center justify-between gap-6 rounded-full px-5 py-3"
         style={{
           backgroundColor: "transparent",
           willChange: "background-color, border-color, backdrop-filter",

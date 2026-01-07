@@ -1,17 +1,28 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import Link from 'next/link';
-import { isValidEmail } from '@/lib/utils/validators';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { isValidEmail } from "@/lib/utils/validators";
+import { CheckCircle } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check if user was redirected after email verification
+    if (searchParams.get("verified") === "true") {
+      setSuccessMessage("Email verified successfully! You can now log in.");
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -29,15 +40,15 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!isValidEmail(email)) {
-      setError('Please enter a valid email address');
+      setError("Please enter a valid email address");
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError("Password must be at least 6 characters");
       return;
     }
 
@@ -45,7 +56,8 @@ export default function LoginPage() {
       setLoading(true);
       await login({ email, password });
     } catch (err: any) {
-      const errorMessage = err?.message || 'Login failed. Please check your credentials.';
+      const errorMessage =
+        err?.message || "Login failed. Please check your credentials.";
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -53,7 +65,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-4 relative overflow-hidden ${darkMode ? 'bg-[#071219]' : 'bg-gray-50'}`}>
+    <div
+      className={`min-h-screen flex items-center justify-center p-4 relative overflow-hidden ${
+        darkMode ? "bg-[#071219]" : "bg-gray-50"
+      }`}
+    >
       {/* Background blobs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
@@ -69,35 +85,87 @@ export default function LoginPage() {
       </div>
 
       <div className="w-full max-w-md relative z-10">
-        <div className={`p-8 rounded-2xl border backdrop-blur-2xl shadow-2xl ${
-          darkMode ? 'bg-white/5 border-white/10' : 'bg-white/90 border-gray-200'
-        }`}>
+        <div
+          className={`p-8 rounded-2xl border backdrop-blur-2xl shadow-2xl ${
+            darkMode
+              ? "bg-white/5 border-white/10"
+              : "bg-white/90 border-gray-200"
+          }`}
+        >
           {/* Header */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-block mb-4">
-              <span className="font-clash text-3xl font-bold text-[#2596be]">AE</span>
+              <span className="font-clash text-3xl font-bold text-[#2596be]">
+                AE
+              </span>
             </Link>
-            <h1 className={`text-3xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-[#2596be]'}`}>
+            <h1
+              className={`text-3xl font-bold mb-2 ${
+                darkMode ? "text-white" : "text-[#2596be]"
+              }`}
+            >
               Welcome Back
             </h1>
-            <p className={`text-base ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            <p
+              className={`text-base ${
+                darkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
               Sign in to continue your preparation
             </p>
           </div>
 
+          {/* Success Message */}
+          {successMessage && (
+            <div
+              className={`p-3 rounded-lg mb-4 flex items-center gap-2 ${
+                darkMode
+                  ? "bg-green-500/10 border border-green-500/20"
+                  : "bg-green-50 border border-green-200"
+              }`}
+            >
+              <CheckCircle
+                className={`w-5 h-5 shrink-0 ${
+                  darkMode ? "text-green-400" : "text-green-600"
+                }`}
+              />
+              <p
+                className={`text-sm ${
+                  darkMode ? "text-green-400" : "text-green-600"
+                }`}
+              >
+                {successMessage}
+              </p>
+            </div>
+          )}
+
           {/* Error Message */}
           {error && (
-            <div className={`p-3 rounded-lg mb-4 ${
-              darkMode ? 'bg-red-500/10 border border-red-500/20' : 'bg-red-50 border border-red-200'
-            }`}>
-              <p className={`text-sm ${darkMode ? 'text-red-400' : 'text-red-600'}`}>{error}</p>
+            <div
+              className={`p-3 rounded-lg mb-4 ${
+                darkMode
+                  ? "bg-red-500/10 border border-red-500/20"
+                  : "bg-red-50 border border-red-200"
+              }`}
+            >
+              <p
+                className={`text-sm ${
+                  darkMode ? "text-red-400" : "text-red-600"
+                }`}
+              >
+                {error}
+              </p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div>
-              <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              <label
+                className={`block text-sm font-medium mb-2 ${
+                  darkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
                 Email Address
               </label>
               <input
@@ -107,8 +175,8 @@ export default function LoginPage() {
                 required
                 className={`w-full px-4 py-3 rounded-lg border transition-colors ${
                   darkMode
-                    ? 'bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]'
-                    : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]'
+                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
                 }`}
                 placeholder="your@email.com"
               />
@@ -117,12 +185,20 @@ export default function LoginPage() {
             {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                <label
+                  className={`text-sm font-medium ${
+                    darkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className={`text-sm font-medium ${darkMode ? 'text-[#60DFFF] hover:text-[#2596be]' : 'text-[#2596be] hover:text-[#1e7ca0]'}`}
+                  className={`text-sm font-medium ${
+                    darkMode
+                      ? "text-[#60DFFF] hover:text-[#2596be]"
+                      : "text-[#2596be] hover:text-[#1e7ca0]"
+                  }`}
                 >
                   Forgot password?
                 </Link>
@@ -134,8 +210,8 @@ export default function LoginPage() {
                 required
                 className={`w-full px-4 py-3 rounded-lg border transition-colors ${
                   darkMode
-                    ? 'bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]'
-                    : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]'
+                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
                 }`}
                 placeholder="••••••••"
               />
@@ -150,7 +226,9 @@ export default function LoginPage() {
               />
               <label
                 htmlFor="remember"
-                className={`ml-2 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}
+                className={`ml-2 text-sm ${
+                  darkMode ? "text-gray-400" : "text-gray-600"
+                }`}
               >
                 Remember me
               </label>
@@ -162,18 +240,26 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-3 px-4 bg-[#2596be] text-white font-semibold rounded-lg shadow-lg hover:bg-[#1e7ca0] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
 
           {/* Register Link */}
           <div className="mt-6 text-center">
-            <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Don't have an account?{' '}
+            <span
+              className={`text-sm ${
+                darkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
+              Don't have an account?{" "}
             </span>
             <Link
               href="/register"
-              className={`text-sm font-semibold ${darkMode ? 'text-[#60DFFF] hover:text-[#2596be]' : 'text-[#2596be] hover:text-[#1e7ca0]'}`}
+              className={`text-sm font-semibold ${
+                darkMode
+                  ? "text-[#60DFFF] hover:text-[#2596be]"
+                  : "text-[#2596be] hover:text-[#1e7ca0]"
+              }`}
             >
               Sign up
             </Link>

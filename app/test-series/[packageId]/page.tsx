@@ -222,8 +222,8 @@ export default function PackageDetailPage() {
                   <div
                     className={`w-full h-64 flex items-center justify-center rounded-xl mb-6 ${
                       darkMode
-                        ? "bg-gradient-to-br from-[#2596be]/20 to-[#4EA8DE]/20"
-                        : "bg-gradient-to-br from-[#2596be]/10 to-[#4EA8DE]/10"
+                        ? "bg-linear-to-br from-[#2596be]/20 to-[#4EA8DE]/20"
+                        : "bg-linear-to-br from-[#2596be]/10 to-[#4EA8DE]/10"
                     }`}
                   >
                     <BookOpen
@@ -360,7 +360,7 @@ export default function PackageDetailPage() {
                         darkMode ? "text-gray-300" : "text-gray-700"
                       }`}
                     >
-                      <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <Check className="w-5 h-5 text-green-500 mt-0.5 shrink-0" />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -583,7 +583,7 @@ export default function PackageDetailPage() {
 
                       {purchaseError && (
                         <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-2">
-                          <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                          <XCircle className="w-4 h-4 text-red-500 shrink-0" />
                           <p className="text-red-500 text-sm">
                             {purchaseError}
                           </p>
