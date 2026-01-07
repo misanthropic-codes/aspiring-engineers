@@ -9,7 +9,13 @@ import {
   ThemeAnimationType,
   useModeAnimation,
 } from "react-theme-switch-animation";
-import { Menu as MenuIcon, X as XIcon, ChevronDown, User, LogIn } from "lucide-react";
+import {
+  Menu as MenuIcon,
+  X as XIcon,
+  ChevronDown,
+  User,
+  LogIn,
+} from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { tokenManager } from "@/lib/utils/tokenManager";
 
@@ -529,9 +535,9 @@ export default function Navbar(): JSX.Element {
           navRef.current = el;
         }}
         className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 rounded-full px-5 py-3"
-        style={{ 
+        style={{
           backgroundColor: "transparent",
-          willChange: "background-color, border-color, backdrop-filter"
+          willChange: "background-color, border-color, backdrop-filter",
         }}
         aria-label="Primary navigation"
       >
@@ -602,14 +608,27 @@ export default function Navbar(): JSX.Element {
                   // Cross-domain SSO to test-portal-client profile
                   const token = tokenManager.getAuthToken();
                   const refreshToken = tokenManager.getRefreshToken();
-                  const testPortalUrl = process.env.NEXT_PUBLIC_TEST_PORTAL_URL || 'http://localhost:3001';
-                  const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(token || '')}&refreshToken=${encodeURIComponent(refreshToken || '')}&redirect=/profile`;
+                  const testPortalUrl =
+                    process.env.NEXT_PUBLIC_TEST_PORTAL_URL || "";
+                  if (!testPortalUrl) {
+                    console.error(
+                      "NEXT_PUBLIC_TEST_PORTAL_URL is not configured"
+                    );
+                    return;
+                  }
+                  const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(
+                    token || ""
+                  )}&refreshToken=${encodeURIComponent(
+                    refreshToken || ""
+                  )}&redirect=/profile`;
                   window.location.href = ssoUrl;
                 }}
                 className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md text-sm font-medium cursor-pointer"
               >
                 <User size={16} />
-                <span className="truncate max-w-[100px]">{user?.name?.split(' ')[0] || 'Profile'}</span>
+                <span className="truncate max-w-[100px]">
+                  {user?.name?.split(" ")[0] || "Profile"}
+                </span>
               </button>
               <button
                 onClick={() => logout()}
