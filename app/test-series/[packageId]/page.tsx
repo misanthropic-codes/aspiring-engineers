@@ -32,7 +32,7 @@ export default function PackageDetailPage() {
   const params = useParams();
   const router = useRouter();
   const packageId = params.packageId as string;
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const [packageData, setPackageData] = useState<PackageDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -96,6 +96,23 @@ export default function PackageDetailPage() {
     fetchPackage();
   }, [packageId, isAuthenticated]);
 
+  // Re-check access when user returns to the page (e.g., after payment)
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === 'visible' && isAuthenticated && packageData) {
+        console.log('🔄 Page visible again, re-checking access...');
+        setCheckingAccess(true);
+        const access = await paymentService.checkAccess(packageData._id);
+        setHasAccess(access);
+        setCheckingAccess(false);
+        console.log('✅ Access check updated:', access);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [isAuthenticated, packageData]);
+
   const discountPercent = packageData?.discountPrice
     ? Math.round(
         ((packageData.price - packageData.discountPrice) / packageData.price) *
@@ -111,7 +128,10 @@ export default function PackageDetailPage() {
       return;
     }
 
-    if (!packageData) return;
+    if (!packageData || !user) {
+      setPurchaseError("Unable to process purchase. Please try again.");
+      return;
+    }
 
     setPurchasing(true);
     setPurchaseError("");
@@ -120,20 +140,47 @@ export default function PackageDetailPage() {
     try {
       console.log("🛒 Starting purchase for:", packageData._id);
 
-      const response = await paymentService.createPayment({
+      // Step 1: Create Cashfree order with customer details
+      const orderResponse = await paymentService.createOrder({
         amount: packageData.discountPrice || packageData.price,
-        currency: packageData.currency || "INR",
-        productId: packageData._id, // Use MongoDB _id instead of slug
+        packageId: packageData._id,
+        customerName: user.name,
+        customerEmail: user.email,
+        customerPhone: user.phone,
+        returnUrl: `${window.location.origin}/payment/verify?order_id={order_id}`,
       });
 
-      console.log("✅ Payment response:", response);
+      if (!orderResponse.success) {
+        throw new Error(orderResponse.message || "Failed to create order");
+      }
 
-      // If we get here without error, the payment was successful
-      setPurchaseSuccess(true);
+      console.log("✅ Order created:", orderResponse.data.orderId);
+
+      // Step 2: Initialize Cashfree SDK
+      const { initializeCashfree } = await import("@/lib/cashfree");
+      const cashfree = await initializeCashfree();
+
+      console.log("✅ Cashfree SDK initialized");
+
+      // Step 3: Open Cashfree checkout
+      // Using _self (full page redirect) to ensure returnUrl works
+      const checkoutOptions = {
+        paymentSessionId: orderResponse.data.paymentSessionId,
+        redirectTarget: "_self" as const,
+      };
+
+      console.log("🚀 Opening Cashfree checkout...");
+      
+      // Open Cashfree checkout modal
+      // User will be redirected to returnUrl after payment completion
+      cashfree.checkout(checkoutOptions);
+      
+      // Reset processing state
+      // Verification will happen on the verify page (returnUrl)
+      setPurchasing(false);
     } catch (err: any) {
       console.error("❌ Payment error:", err);
       setPurchaseError(err.message || "Payment failed. Please try again.");
-    } finally {
       setPurchasing(false);
     }
   };

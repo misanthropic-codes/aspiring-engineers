@@ -1,21 +1,63 @@
 import apiClient, { handleApiError } from '@/lib/api-client';
-import { PaymentRequest, PaymentResponse } from '@/types';
+import {
+  CashfreeOrderRequest,
+  CashfreeOrderResponse,
+  CashfreeVerifyRequest,
+  CashfreeVerifyResponse,
+  PurchasedContentResponse,
+} from '@/types';
 
 /**
  * Payment Service
  * 
- * Handles all payment-related API calls
+ * Handles all payment-related API calls with Cashfree integration
  */
 
 export const paymentService = {
   /**
-   * Create a payment/purchase for a package
-   * POST /payments
+   * Create a Cashfree payment order
+   * POST /payments/cashfree-sdk/create-order
    * Requires authentication
    */
-  createPayment: async (data: PaymentRequest): Promise<PaymentResponse> => {
+  createOrder: async (data: CashfreeOrderRequest): Promise<CashfreeOrderResponse> => {
     try {
-      const response = await apiClient.post<PaymentResponse>('/payments', data);
+      const response = await apiClient.post<CashfreeOrderResponse>(
+        '/payments/cashfree-sdk/create-order',
+        data
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  /**
+   * Verify a Cashfree payment
+   * POST /payments/cashfree-sdk/verify
+   * Requires authentication
+   */
+  verifyPayment: async (data: CashfreeVerifyRequest): Promise<CashfreeVerifyResponse> => {
+    try {
+      const response = await apiClient.post<CashfreeVerifyResponse>(
+        '/payments/cashfree-sdk/verify',
+        data
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  /**
+   * Get all purchased content for the authenticated user
+   * GET /payments/purchased/content
+   * Requires authentication
+   */
+  getPurchasedContent: async (): Promise<PurchasedContentResponse> => {
+    try {
+      const response = await apiClient.get<PurchasedContentResponse>(
+        '/payments/purchased/content'
+      );
       return response.data;
     } catch (error) {
       throw new Error(handleApiError(error));
@@ -42,4 +84,3 @@ export const paymentService = {
 };
 
 export default paymentService;
-

@@ -167,3 +167,76 @@ export interface PaymentResponse {
   message: string;
   data: Payment;
 }
+
+// Cashfree Order Types
+export interface CashfreeOrderRequest {
+  amount: number;
+  packageId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  returnUrl: string;
+}
+
+export interface CashfreeOrderResponse {
+  success: boolean;
+  message: string;
+  data: {
+    orderId: string;
+    paymentSessionId: string;
+    amount: number;
+    currency: string;
+    status: 'PENDING' | 'ACTIVE' | 'PAID' | 'EXPIRED';
+    createdAt: string;
+    expiresAt: string;
+  };
+}
+
+// Cashfree Verification Types
+export interface CashfreeVerifyRequest {
+  orderId: string;
+}
+
+export interface CashfreeVerifyResponse {
+  success: boolean;
+  message: string;
+  data: {
+    orderId: string;
+    orderAmount: number;
+    orderCurrency: string;
+    orderStatus: 'ACTIVE' | 'PAID' | 'EXPIRED';
+    paymentStatus: 'SUCCESS' | 'FAILED' | 'PENDING';
+    cfOrderId?: string;
+    cfPaymentId?: number;
+    paymentTime?: string;
+    paymentMethod?: string;
+    paymentDetails?: any;
+    productId: string;
+    productName: string;
+    accessGranted: boolean;
+    validUntil?: string;
+    errorMessage?: string;
+  };
+}
+
+// Purchased Content Types
+export interface PurchasedPackage {
+  productId: string;
+  productName: string;
+  amount: number;
+  currency: string;
+  purchaseDate: string;
+  validUntil: string;
+  daysRemaining: number;
+  status: 'ACTIVE' | 'EXPIRED';
+  paymentId: string;
+  orderId: string;
+  paymentMethod: string;
+}
+
+export interface PurchasedContentResponse {
+  totalPurchases: number;
+  totalSpent: number;
+  purchasedProducts: string[];
+  purchases: PurchasedPackage[];
+}

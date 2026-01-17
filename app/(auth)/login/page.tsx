@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { isValidEmail } from "@/lib/utils/validators";
 import { CheckCircle } from "lucide-react";
 
-export default function LoginPage() {
+function LoginContent() {
   const { login } = useAuth();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
@@ -267,5 +267,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#071219]">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#2596be] border-t-transparent"></div>
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
