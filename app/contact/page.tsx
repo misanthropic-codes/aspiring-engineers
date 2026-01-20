@@ -64,7 +64,7 @@ export default function ContactPage() {
                   {
                     icon: MapPin,
                     title: "Address",
-                    value: "Kshudiram Nagar, Near Tata Play Office, P.O: Hatiberia BO, P.S: Haldia, Dist: Purba Medinipur, West Bengal - 721657",
+                    value: "Hemanti Block, Kshudiram Nagar, Haldia, West Bengal - 721657, P.O: Hatiberia BO, P.S: Haldia, Dist: Purba Medinipur, Ward No. 24",
                   },
                 ].map((contact, idx) => (
                   <div

@@ -319,11 +319,13 @@ export default function Footer() {
                     darkMode ? "text-gray-300" : "text-gray-700"
                   }`}
                 >
-                  Kshudiram Nagar, Near Tata Play Office
+                  Hemanti Block, Kshudiram Nagar
+                  <br />
+                  Haldia, West Bengal - 721657
                   <br />
                   P.O: Hatiberia BO, P.S: Haldia
                   <br />
-                  Dist: Purba Medinipur, West Bengal - 721657
+                  Dist: Purba Medinipur, Ward No. 24
                 </p>
               </div>
             </div>

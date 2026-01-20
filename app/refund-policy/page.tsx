@@ -162,7 +162,7 @@ export default function RefundPolicyPage() {
               <ul className="text-gray-600 dark:text-gray-400 space-y-2">
                 <li><strong>Email:</strong> support@aspiringengineers.com</li>
                 <li><strong>Phone:</strong> +91 9002912888</li>
-                <li><strong>Address:</strong> Kshudiram Nagar, Near Tata Play Office, P.O: Hatiberia BO, P.S: Haldia, Dist: Purba Medinipur, West Bengal - 721657</li>
+                <li><strong>Address:</strong> Hemanti Block, Kshudiram Nagar, Haldia, West Bengal - 721657, P.O: Hatiberia BO, P.S: Haldia, Dist: Purba Medinipur, Ward No. 24</li>
               </ul>
             </div>
 
