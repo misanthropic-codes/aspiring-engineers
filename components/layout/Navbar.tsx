@@ -4,6 +4,7 @@ import React, { JSX, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   ThemeAnimationType,
@@ -543,11 +544,14 @@ export default function Navbar(): JSX.Element {
       >
         {/* Brand */}
         <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="font-clash text-2xl font-semibold text-text-primary"
-          >
-            AE
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="Aspiring Engineers"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
           </Link>
         </div>
 
@@ -679,9 +683,15 @@ export default function Navbar(): JSX.Element {
           <Link
             href="/"
             onClick={() => setMobileOpen(false)}
-            className="font-clash text-2xl font-semibold"
+            className="flex items-center"
           >
-            AE
+            <Image
+              src="/logo.png"
+              alt="Aspiring Engineers"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
           </Link>
 
           <div className="flex items-center gap-3">

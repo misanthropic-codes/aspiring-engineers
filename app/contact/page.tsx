@@ -58,13 +58,13 @@ export default function ContactPage() {
                   {
                     icon: Phone,
                     title: "Phone",
-                    value: "+91 123 456 7890",
-                    href: "tel:+911234567890",
+                    value: "+91 9002912888",
+                    href: "tel:+919002912888",
                   },
                   {
                     icon: MapPin,
                     title: "Address",
-                    value: "123 Education Street, Kota, Rajasthan - 324001, India",
+                    value: "Kshudiram Nagar, Near Tata Play Office, P.O: Hatiberia BO, P.S: Haldia, Dist: Purba Medinipur, West Bengal - 721657",
                   },
                 ].map((contact, idx) => (
                   <div

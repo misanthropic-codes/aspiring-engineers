@@ -17,6 +17,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Aspiring Engineers | Exam Preparation Platform",
   description: "Comprehensive preparation platform for JEE, NEET, WBJEE and other competitive exams",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

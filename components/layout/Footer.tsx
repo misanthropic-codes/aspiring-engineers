@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import {
-  Sparkles,
   Mail,
   Phone,
   MapPin,
@@ -98,9 +98,13 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2596be] to-[#4EA8DE] flex items-center justify-center shadow-lg">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
+              <Image
+                src="/logo.png"
+                alt="Aspiring Engineers"
+                width={48}
+                height={48}
+                className="object-contain"
+              />
               <span
                 className={`text-xl font-bold ${
                   darkMode ? "text-white" : "text-gray-900"
@@ -311,14 +315,14 @@ export default function Footer() {
                   Phone
                 </p>
                 <a
-                  href="tel:+911234567890"
+                  href="tel:+919002912888"
                   className={`text-sm ${
                     darkMode
                       ? "text-gray-300 hover:text-[#60DFFF]"
                       : "text-gray-700 hover:text-[#2596be]"
                   }`}
                 >
-                  +91 123 456 7890
+                  +91 9002912888
                 </a>
               </div>
             </div>
@@ -348,9 +352,11 @@ export default function Footer() {
                     darkMode ? "text-gray-300" : "text-gray-700"
                   }`}
                 >
-                  123 Education Street, Kota
+                  Kshudiram Nagar, Near Tata Play Office
                   <br />
-                  Rajasthan - 324001, India
+                  P.O: Hatiberia BO, P.S: Haldia
+                  <br />
+                  Dist: Purba Medinipur, West Bengal - 721657
                 </p>
               </div>
             </div>
