@@ -2,9 +2,9 @@ import React from "react";
 import { Users, BookOpen, Award, Clock } from "lucide-react";
 
 const stats = [
-  { value: "10K+", label: "Active Students", icon: Users },
-  { value: "500+", label: "Practice Tests", icon: BookOpen },
-  { value: "95%", label: "Success Rate", icon: Award },
+  { value: "500+", label: "Active Students", icon: Users },
+  { value: "100+", label: "Practice Tests", icon: BookOpen },
+  { value: "90%", label: "Success Rate", icon: Award },
   { value: "24/7", label: "Support", icon: Clock },
 ];
 

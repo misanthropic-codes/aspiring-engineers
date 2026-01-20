@@ -41,12 +41,6 @@ export default function Footer() {
       { label: "NEET Mock Tests", href: "/neet-mock-tests" },
       { label: "NEET Study Material", href: "/neet-material" },
     ],
-    boards: [
-      { label: "10th Board Support", href: "/10th-board" },
-      { label: "12th Board Support", href: "/12th-board" },
-      { label: "CBSE Resources", href: "/cbse-resources" },
-      { label: "State Board Support", href: "/state-board" },
-    ],
     company: [
       { label: "About Us", href: "/about" },
       { label: "Contact Us", href: "/contact" },
@@ -183,33 +177,6 @@ export default function Footer() {
             </h3>
             <ul className="space-y-3">
               {footerLinks.neet.map((link, idx) => (
-                <li key={idx}>
-                  <a
-                    href={link.href}
-                    className={`text-sm transition-colors ${
-                      darkMode
-                        ? "text-gray-400 hover:text-[#60DFFF]"
-                        : "text-gray-600 hover:text-[#2596be]"
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Board Support Links */}
-          <div>
-            <h3
-              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
-                darkMode ? "text-white" : "text-gray-900"
-              }`}
-            >
-              Board Support
-            </h3>
-            <ul className="space-y-3">
-              {footerLinks.boards.map((link, idx) => (
                 <li key={idx}>
                   <a
                     href={link.href}
