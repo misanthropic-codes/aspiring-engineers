@@ -347,7 +347,7 @@ function TestSeriesCard({ package: pkg, darkMode }: { package: Package; darkMode
           </div>
           
           <Link
-            href={`/test-series/${pkg.packageId}`}
+            href={`/test-series/${pkg._id}`}
             className="flex items-center gap-1 px-4 py-2 bg-[#2596be] text-white text-sm font-semibold rounded-lg hover:bg-[#1e7ca0] transition-colors"
           >
             View <ChevronRight className="w-4 h-4" />

@@ -69,7 +69,7 @@ export default function PackageDetailPage() {
 
       try {
         const response = await apiClient.get<PackageDetailResponse>(
-          `/packages/${packageId}`
+          `/packages/id/${packageId}`
         );
 
         if (response.data.success) {

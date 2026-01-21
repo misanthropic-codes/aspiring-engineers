@@ -43,7 +43,7 @@ function CheckoutContent() {
     try {
       setLoading(true);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/packages/${packageId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/packages/id/${packageId}`
       );
       const data = await response.json();
       
