@@ -11,6 +11,7 @@ import {
   Linkedin,
   Youtube,
 } from "lucide-react";
+import { getSiteSettings, SiteSettings } from "@/services/siteSettings";
 
 export default function Footer() {
   const [darkMode, setDarkMode] = useState(false);
@@ -28,7 +29,7 @@ export default function Footer() {
     return () => observer.disconnect();
   }, []);
 
-  const footerLinks = {
+  const defaultFooterLinks = {
     jee: [
       { label: "JEE PYQ with Solutions", href: "/jee-pyq" },
       { label: "JEE Test Series", href: "/jee-test-series" },
@@ -63,12 +64,64 @@ export default function Footer() {
     ],
   };
 
+  const [footerLinks, setFooterLinks] = useState(defaultFooterLinks);
+  const [socialUrls, setSocialUrls] = useState({
+    facebook: "#",
+    twitter: "#",
+    instagram: "#",
+    linkedin: "#",
+    youtube: "#",
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const settings = await getSiteSettings();
+      if (settings) {
+        // Patch footer links
+        const newLinks = { ...defaultFooterLinks };
+        
+        // Group API links
+        const apiGroups: Record<string, { label: string; href: string }[]> = {};
+        
+        settings.footerLinks.forEach((link) => {
+          const group = link.group.toLowerCase();
+          if (!apiGroups[group]) {
+            apiGroups[group] = [];
+          }
+          apiGroups[group].push({ label: link.label, href: link.url });
+        });
+
+        // Override default groups if API data exists
+        Object.keys(apiGroups).forEach((group) => {
+          // Map API group names to our keys if needed, or just use as is if they match
+          // We assume 'company' maps to 'company', etc.
+          if (group in newLinks) {
+             // @ts-ignore - Dynamic key access
+            newLinks[group as keyof typeof newLinks] = apiGroups[group];
+          }
+        });
+
+        setFooterLinks(newLinks);
+
+        // Patch social links
+        if (settings.socialLinks) {
+          setSocialUrls((prev) => ({
+            ...prev,
+            ...settings.socialLinks,
+          }));
+        }
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
   const socialLinks = [
-    { icon: Facebook, href: "#", label: "Facebook" },
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Youtube, href: "#", label: "YouTube" },
+    { icon: Facebook, href: socialUrls.facebook, label: "Facebook" },
+    { icon: Twitter, href: socialUrls.twitter, label: "Twitter" },
+    { icon: Instagram, href: socialUrls.instagram, label: "Instagram" },
+    { icon: Linkedin, href: socialUrls.linkedin, label: "LinkedIn" },
+    { icon: Youtube, href: socialUrls.youtube, label: "YouTube" },
   ];
 
   return (
