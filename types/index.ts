@@ -1,23 +1,23 @@
 // Enums and Constants
 export enum ExamType {
-  JEE_MAIN = 'JEE_MAIN',
-  JEE_ADVANCED = 'JEE_ADVANCED',
-  NEET = 'NEET',
-  WBJEE = 'WBJEE',
-  BITSAT = 'BITSAT',
-  COMEDK = 'COMEDK',
+  JEE_MAIN = "JEE_MAIN",
+  JEE_ADVANCED = "JEE_ADVANCED",
+  NEET = "NEET",
+  WBJEE = "WBJEE",
+  BITSAT = "BITSAT",
+  COMEDK = "COMEDK",
 }
 
 export enum PackageType {
-  TEST_SERIES = 'test-series',
-  COURSE = 'course',
-  BUNDLE = 'bundle',
+  TEST_SERIES = "test-series",
+  COURSE = "course",
+  BUNDLE = "bundle",
 }
 
 export enum PackageStatus {
-  ACTIVE = 'active',
-  DRAFT = 'draft',
-  ARCHIVED = 'archived',
+  ACTIVE = "active",
+  DRAFT = "draft",
+  ARCHIVED = "archived",
 }
 
 // User Types
@@ -58,7 +58,7 @@ export interface AuthResponse {
 
 // Package Types (Test Series)
 export interface PackageMetadata {
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  difficulty: "EASY" | "MEDIUM" | "HARD";
   targetYear: number;
   rating: number;
   totalStudents: number;
@@ -128,7 +128,7 @@ export interface PackageTest {
 }
 
 // Package Detail (extended package with tests)
-export interface PackageDetail extends Omit<Package, 'metadata'> {
+export interface PackageDetail extends Omit<Package, "metadata"> {
   tests: PackageTest[];
   metadata: PackageMetadata & {
     instructors?: string[];
@@ -156,7 +156,7 @@ export interface Payment {
   amount: number;
   currency: string;
   productId: string;
-  status: 'SUCCESS' | 'PENDING' | 'FAILED';
+  status: "SUCCESS" | "PENDING" | "FAILED";
   paymentMethod: string;
   transactionId: string;
   createdAt: string;
@@ -186,7 +186,7 @@ export interface CashfreeOrderResponse {
     paymentSessionId: string;
     amount: number;
     currency: string;
-    status: 'PENDING' | 'ACTIVE' | 'PAID' | 'EXPIRED';
+    status: "PENDING" | "ACTIVE" | "PAID" | "EXPIRED";
     createdAt: string;
     expiresAt: string;
   };
@@ -204,8 +204,8 @@ export interface CashfreeVerifyResponse {
     orderId: string;
     orderAmount: number;
     orderCurrency: string;
-    orderStatus: 'ACTIVE' | 'PAID' | 'EXPIRED';
-    paymentStatus: 'SUCCESS' | 'FAILED' | 'PENDING';
+    orderStatus: "ACTIVE" | "PAID" | "EXPIRED";
+    paymentStatus: "SUCCESS" | "FAILED" | "PENDING";
     cfOrderId?: string;
     cfPaymentId?: number;
     paymentTime?: string;
@@ -228,7 +228,7 @@ export interface PurchasedPackage {
   purchaseDate: string;
   validUntil: string;
   daysRemaining: number;
-  status: 'ACTIVE' | 'EXPIRED';
+  status: "ACTIVE" | "EXPIRED";
   paymentId: string;
   orderId: string;
   paymentMethod: string;
@@ -239,4 +239,18 @@ export interface PurchasedContentResponse {
   totalSpent: number;
   purchasedProducts: string[];
   purchases: PurchasedPackage[];
+}
+
+// Team Member Types
+export interface TeamMember {
+  _id: string;
+  name: string;
+  title: string;
+  image: string;
+  expertise: string[];
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
 }
