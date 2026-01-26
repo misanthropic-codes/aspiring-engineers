@@ -33,7 +33,7 @@ const MENU: MenuItem[] = [
   { id: "home", label: "Home", href: "/" },
   {
     id: "exams",
-    label: "Exams",
+    label: "PYQs",
     children: [
       {
         id: "jee",
@@ -547,10 +547,10 @@ export default function Navbar(): JSX.Element {
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.png"
+              src="/logo.svg"
               alt="Aspiring Engineers"
-              width={40}
-              height={40}
+              width={60}
+              height={60}
               className="object-contain"
             />
           </Link>
@@ -687,10 +687,10 @@ export default function Navbar(): JSX.Element {
             className="flex items-center"
           >
             <Image
-              src="/logo.png"
+              src="/logo.svg"
               alt="Aspiring Engineers"
-              width={40}
-              height={40}
+              width={48}
+              height={48}
               className="object-contain"
             />
           </Link>
