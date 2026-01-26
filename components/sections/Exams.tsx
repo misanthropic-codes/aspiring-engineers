@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 const exams = [
+
   { name: "JEE Mains", icon: "/icons/jee-icon.svg" },
   { name: "WBJEE", icon: "/icons/wbjee-icon.svg" },
   { name: "NEET", icon: "/icons/neet-icon.svg" },
@@ -85,9 +86,14 @@ export default function Exams() {
                 <Image
                   src={exam.icon}
                   alt={exam.name}
+
                   width={112}
                   height={112}
                   className="w-28 h-28"
+                  width={80}
+                  height={80}
+                  className="w-20 h-20"
+
                 />
               </div>
 

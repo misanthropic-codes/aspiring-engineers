@@ -1,17 +1,24 @@
 "use client";
 
-import PaperList from "@/components/papers/PaperList";
+import PyqPage from "@/components/papers/PyqPage";
 
 export default function JeeAdvancedPyqPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">JEE Advanced - Previous Year Questions</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Challenging problems from past JEE Advanced papers with solutions.
-        </p>
-      </div>
-      <PaperList category="jee-advanced" />
-    </div>
+    <PyqPage
+      title="JEE Advanced"
+      subtitle="Previous Year Questions with Solutions"
+      description="Tackle the toughest JEE Advanced problems with our comprehensive collection. Each paper features step-by-step solutions and expert video explanations."
+      accentColor="#9333ea"
+      category="jee-advanced"
+      breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Exams", href: "/exams" },
+        { label: "JEE", href: "/exams/jee" },
+        {
+          label: "Advanced PYQ",
+          href: "/exams/jee/advanced/pyq/with-solutions",
+        },
+      ]}
+    />
   );
 }

@@ -7,6 +7,7 @@ import HeroStats from "./HeroStats";
 import HeroBadge from "./HeroBadge";
 import HeroCarousel, { BannerItem } from "./HeroCarousel";
 import { getSiteSettings } from "@/services/siteSettings";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
@@ -41,14 +42,18 @@ export default function Hero() {
     const fetchSettings = async () => {
       try {
         const settings = await getSiteSettings();
-        if (settings && settings.heroBanners && settings.heroBanners.length > 0) {
+        if (
+          settings &&
+          settings.heroBanners &&
+          settings.heroBanners.length > 0
+        ) {
           const apiBanners = settings.heroBanners
-            .filter(b => b.isActive)
+            .filter((b) => b.isActive)
             .sort((a, b) => a.order - b.order)
-            .map(b => ({
+            .map((b) => ({
               image: b.imageUrl,
               title: b.title,
-              link: b.ctaUrl
+              link: b.ctaUrl,
             }));
           setItems(apiBanners);
         }
@@ -124,32 +129,36 @@ export default function Hero() {
         {/* CTA BUTTONS – UPDATED */}
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           {/* PRIMARY – FILLED */}
-          <Button
-            size="lg"
-            className="
-              h-10 px-8 text-lg font-medium 
-              bg-[#2596be] text-white shadow-xl
-              hover:bg-[#1e7ca0]
-              transition
-            "
-          >
-            Start Free Trial <ChevronRight className="w-5 h-5" />
-          </Button>
+          <Link href="/exams/jee/mains/pyq/with-solutions">
+            <Button
+              size="lg"
+              className="
+                h-10 px-8 text-lg font-medium 
+                bg-[#2596be] text-white shadow-xl
+                hover:bg-[#1e7ca0]
+                transition
+              "
+            >
+              Start Free Trial <ChevronRight className="w-5 h-5" />
+            </Button>
+          </Link>
 
           {/* SECONDARY – OUTLINE */}
-          <Button
-            variant="outline"
-            size="lg"
-            className={`
-              h-10 px-8 text-lg font-medium
-              border-2 text-[#2596be]
-              hover:bg-[#2596be]/10
-              transition
-              ${darkMode ? "border-[#2596be]" : "border-[#2596be]"}
-            `}
-          >
-            View Test Series
-          </Button>
+          <Link href="/test-series">
+            <Button
+              variant="outline"
+              size="lg"
+              className={`
+                h-10 px-8 text-lg font-medium
+                border-2 text-[#2596be]
+                hover:bg-[#2596be]/10
+                transition
+                ${darkMode ? "border-[#2596be]" : "border-[#2596be]"}
+              `}
+            >
+              View Test Series
+            </Button>
+          </Link>
         </div>
 
         {/* HERO CAROUSEL */}
