@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   title: "Aspiring Engineers | Exam Preparation Platform",
   description: "Comprehensive preparation platform for JEE, NEET, WBJEE and other competitive exams",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/logo.svg",
+    apple: "/logo.svg",
   },
 };
 

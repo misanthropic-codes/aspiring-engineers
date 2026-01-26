@@ -11,8 +11,8 @@ const counsellingPoints = [
 ];
 
 const counsellingStats = [
-  { icon: Users, value: "5000+", label: "Students Guided" },
-  { icon: Award, value: "500+", label: "Partner Colleges" },
+  { icon: Users, value: "1000+", label: "Students Guided" },
+  { icon: Award, value: "100+", label: "Partner Colleges" },
   { icon: Target, value: "95%", label: "Success Rate" },
 ];
 

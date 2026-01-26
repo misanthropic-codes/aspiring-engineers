@@ -10,6 +10,7 @@ import {
   Instagram,
   Linkedin,
   Youtube,
+  Send,
 } from "lucide-react";
 import { getSiteSettings, SiteSettings } from "@/services/siteSettings";
 
@@ -117,11 +118,13 @@ export default function Footer() {
   }, []);
 
   const socialLinks = [
+
     { icon: Facebook, href: socialUrls.facebook, label: "Facebook" },
     { icon: Twitter, href: socialUrls.twitter, label: "Twitter" },
     { icon: Instagram, href: socialUrls.instagram, label: "Instagram" },
     { icon: Linkedin, href: socialUrls.linkedin, label: "LinkedIn" },
     { icon: Youtube, href: socialUrls.youtube, label: "YouTube" },
+
   ];
 
   return (
@@ -154,10 +157,10 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="Aspiring Engineers"
-                width={48}
-                height={48}
+                width={70}
+                height={70}
                 className="object-contain"
               />
               <span
@@ -173,7 +176,7 @@ export default function Footer() {
                 darkMode ? "text-gray-400" : "text-gray-600"
               }`}
             >
-              Your trusted partner for JEE, NEET & Board exam preparation.
+              Your trusted partner for JEE, NEET, WBJEE & Board exam preparation.
               Excellence through dedication.
             </p>
 
@@ -207,7 +210,7 @@ export default function Footer() {
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
-              JEE Preparation
+              Engineering Preparation
             </h3>
             <ul className="space-y-3">
               {footerLinks.jee.map((link, idx) => (
@@ -234,7 +237,7 @@ export default function Footer() {
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
-              NEET Preparation
+              Medical Preparation
             </h3>
             <ul className="space-y-3">
               {footerLinks.neet.map((link, idx) => (
@@ -344,7 +347,7 @@ export default function Footer() {
                       : "text-gray-700 hover:text-[#2596be]"
                   }`}
                 >
-                  support@aspiringengineers.com
+                  aspiringengineersofficial@gmail.com
                 </a>
               </div>
             </div>
