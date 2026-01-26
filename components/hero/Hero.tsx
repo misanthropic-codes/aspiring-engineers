@@ -86,7 +86,7 @@ export default function Hero() {
             darkMode ? "text-gray-300" : "text-gray-600"
           }`}
         >
-          Your Complete Preparation Platform for JEE, NEET & Board Exams
+          One Platform. Every Exam. Complete Success
         </p>
 
         <p
@@ -94,8 +94,7 @@ export default function Hero() {
             darkMode ? "text-gray-400" : "text-gray-500"
           }`}
         >
-          Access comprehensive test series, previous year questions, and expert
-          counselling.
+          From Preparation to Performance
         </p>
 
         {/* CTA BUTTONS – UPDATED */}

@@ -33,7 +33,7 @@ const MENU: MenuItem[] = [
   { id: "home", label: "Home", href: "/" },
   {
     id: "exams",
-    label: "Exams",
+    label: "PYQs",
     children: [
       {
         id: "jee",
