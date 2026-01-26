@@ -10,7 +10,7 @@ export default function RefundPolicyPage() {
       <Navbar />
       
       <PageHero
-        title="Refund Policy"
+        title="fund Policy"
         description="Last updated: January 20, 2026"
       />
 
