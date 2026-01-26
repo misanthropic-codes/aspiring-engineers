@@ -163,7 +163,8 @@ const MENU: MenuItem[] = [
       },
     ],
   },
-  { id: "contact", label: "Contact", href: "/contact" },
+      { id: "internship", label: "Internships", href: "/internship" },
+      { id: "contact", label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar(): JSX.Element {
