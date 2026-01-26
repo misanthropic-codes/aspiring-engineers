@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageHero from "@/components/layout/PageHero";
@@ -19,7 +20,16 @@ import {
   MapPin,
   BookOpen,
   Settings,
+  Star,
+  BadgeCheck,
+  Sparkles,
+  Loader2,
+  Check,
+  X,
+  ArrowRight,
 } from "lucide-react";
+import { counsellingService } from "@/services/counselling.service";
+import type { CounsellingPackage, Counsellor } from "@/types/counselling";
 
 const counsellingPhases = [
   {
@@ -156,6 +166,38 @@ const branches = [
 ];
 
 export default function WBJEECounsellingPage() {
+  const [packages, setPackages] = useState<CounsellingPackage[]>([]);
+  const [counsellors, setCounsellors] = useState<Counsellor[]>([]);
+  const [loadingPackages, setLoadingPackages] = useState(true);
+  const [loadingCounsellors, setLoadingCounsellors] = useState(true);
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const data = await counsellingService.getPackagesByExam("wbjee");
+        setPackages(data);
+      } catch (error) {
+        console.error("Failed to fetch packages:", error);
+      } finally {
+        setLoadingPackages(false);
+      }
+    };
+
+    const fetchCounsellors = async () => {
+      try {
+        const data = await counsellingService.getCounsellorsByExam("wbjee");
+        setCounsellors(data);
+      } catch (error) {
+        console.error("Failed to fetch counsellors:", error);
+      } finally {
+        setLoadingCounsellors(false);
+      }
+    };
+
+    fetchPackages();
+    fetchCounsellors();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -166,8 +208,8 @@ export default function WBJEECounsellingPage() {
         description="Complete guidance for WBJEE seat allocation. Secure your seat in Jadavpur University, IIEST Shibpur, and top West Bengal engineering colleges."
         badge="West Bengal Engineering Admissions"
         showCTA
-        ctaText="Get Expert Guidance"
-        ctaLink="/contact"
+        ctaText="View Pricing Plans"
+        ctaLink="#pricing"
       />
 
       {/* Top Colleges */}
@@ -326,6 +368,258 @@ export default function WBJEECounsellingPage() {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section id="pricing" className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Choose Your Counselling Plan
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Select the perfect package for your WBJEE counselling needs
+            </p>
+          </div>
+
+          {loadingPackages ? (
+            <div className="flex justify-center items-center py-16">
+              <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+            </div>
+          ) : packages.length === 0 ? (
+            <div className="text-center py-16 text-gray-500">
+              No packages available at the moment. Please check back later.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {packages.map((pkg) => (
+                <div
+                  key={pkg._id}
+                  className={`relative p-6 rounded-2xl border ${
+                    pkg.isFeatured
+                      ? "border-purple-500 ring-2 ring-purple-500/20"
+                      : "border-gray-200 dark:border-white/10"
+                  } bg-white dark:bg-gray-900 hover:shadow-xl transition-all`}
+                >
+                  {/* Featured Badge */}
+                  {pkg.isFeatured && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <div className="px-4 py-1 rounded-full bg-linear-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-1">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Most Popular
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Package Badges */}
+                  {pkg.badges && pkg.badges.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {pkg.badges.map((badge, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-medium"
+                        >
+                          {badge}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Title & Description */}
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                    {pkg.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
+                    {pkg.description}
+                  </p>
+
+                  {/* Pricing */}
+                  <div className="mb-6">
+                    {pkg.discountPrice ? (
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                          ₹{pkg.discountPrice.toLocaleString()}
+                        </span>
+                        <span className="text-lg text-gray-400 line-through">
+                          ₹{pkg.price.toLocaleString()}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-xs font-semibold">
+                          {Math.round(
+                            ((pkg.price - pkg.discountPrice) / pkg.price) * 100,
+                          )}
+                          % OFF
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                        ₹{pkg.price.toLocaleString()}
+                      </span>
+                    )}
+                    {pkg.duration && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        {pkg.duration}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Highlights */}
+                  {pkg.highlights && pkg.highlights.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {pkg.highlights.map((highlight, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-medium"
+                        >
+                          {highlight}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Features */}
+                  <div className="space-y-3 mb-6">
+                    {pkg.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        {feature.included ? (
+                          <Check className="w-5 h-5 text-purple-500 shrink-0 mt-0.5" />
+                        ) : (
+                          <X className="w-5 h-5 text-gray-300 dark:text-gray-600 shrink-0 mt-0.5" />
+                        )}
+                        <span
+                          className={`text-sm ${
+                            feature.included
+                              ? "text-gray-700 dark:text-gray-300"
+                              : "text-gray-400 dark:text-gray-500"
+                          }`}
+                        >
+                          {feature.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA Button */}
+                  <Link
+                    href={`/checkout?package=${pkg.slug}`}
+                    className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
+                      pkg.isFeatured
+                        ? "bg-linear-to-r from-purple-500 to-pink-500 text-white hover:opacity-90"
+                        : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20"
+                    }`}
+                  >
+                    Choose Plan
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Expert Counsellors Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Meet Our WBJEE Expert Counsellors
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Alumni from top WB colleges with years of counselling experience
+            </p>
+          </div>
+
+          {loadingCounsellors ? (
+            <div className="flex justify-center items-center py-16">
+              <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+            </div>
+          ) : counsellors.length === 0 ? (
+            <div className="text-center py-16 text-gray-500">
+              Counsellors information coming soon.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {counsellors.slice(0, 6).map((counsellor) => (
+                <div
+                  key={counsellor._id}
+                  className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-xl transition-all"
+                >
+                  {/* Counsellor Image & Info */}
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-16 h-16 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-bold overflow-hidden">
+                      {counsellor.image ? (
+                        <img
+                          src={counsellor.image}
+                          alt={counsellor.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        counsellor.name.charAt(0)
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                        {counsellor.name}
+                        <BadgeCheck className="w-5 h-5 text-purple-500" />
+                      </h3>
+                      <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">
+                        {counsellor.title}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Bio */}
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                    {counsellor.bio}
+                  </p>
+
+                  {/* Stats */}
+                  {counsellor.stats && (
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      {counsellor.stats.studentsHelped && (
+                        <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
+                          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                            {counsellor.stats.studentsHelped.toLocaleString()}+
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Students Helped
+                          </div>
+                        </div>
+                      )}
+                      {counsellor.stats.experience && (
+                        <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
+                          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                            {counsellor.stats.experience}+
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Years Exp.
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Specializations */}
+                  {counsellor.specializations &&
+                    counsellor.specializations.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {counsellor.specializations
+                          .slice(0, 3)
+                          .map((spec, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-medium"
+                            >
+                              {spec}
+                            </span>
+                          ))}
+                      </div>
+                    )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Timeline Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
@@ -428,18 +722,18 @@ export default function WBJEECounsellingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/contact"
+                href="#pricing"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold bg-white text-purple-600 hover:bg-gray-100 transition-colors"
               >
-                <Users className="w-5 h-5" />
-                Book Free Consultation
+                <Star className="w-5 h-5" />
+                View Pricing Plans
               </Link>
               <Link
-                href="tel:+919876543210"
+                href="/counselling/admission-guidance"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold border-2 border-white text-white hover:bg-white/10 transition-colors"
               >
-                <Phone className="w-5 h-5" />
-                Call Us Now
+                <Users className="w-5 h-5" />
+                Free Consultation
               </Link>
             </div>
           </div>
