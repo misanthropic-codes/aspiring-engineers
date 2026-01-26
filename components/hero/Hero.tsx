@@ -6,6 +6,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 import HeroStats from "./HeroStats";
 import HeroBadge from "./HeroBadge";
 import HeroCarousel, { BannerItem } from "./HeroCarousel";
+import { getSiteSettings } from "@/services/siteSettings";
 
 import { Button } from "@/components/ui/button";
 
@@ -34,6 +35,29 @@ const bannerItems: BannerItem[] = [
 
 export default function Hero() {
   const [darkMode, setDarkMode] = useState(false);
+  const [items, setItems] = useState<BannerItem[]>(bannerItems);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const settings = await getSiteSettings();
+        if (settings && settings.heroBanners && settings.heroBanners.length > 0) {
+          const apiBanners = settings.heroBanners
+            .filter(b => b.isActive)
+            .sort((a, b) => a.order - b.order)
+            .map(b => ({
+              image: b.imageUrl,
+              title: b.title,
+              link: b.ctaUrl
+            }));
+          setItems(apiBanners);
+        }
+      } catch (error) {
+        console.error("Failed to fetch hero banners", error);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
@@ -130,7 +154,7 @@ export default function Hero() {
 
         {/* HERO CAROUSEL */}
         <div className="mt-16">
-          <HeroCarousel items={bannerItems} />
+          <HeroCarousel items={items} />
         </div>
 
         <HeroStats darkMode={darkMode} />
