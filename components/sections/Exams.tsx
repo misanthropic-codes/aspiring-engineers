@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 const exams = [
-  { name: "JEE Mains", icon: "/icons/jee-icon.png" },
-  { name: "WBJEE", icon: "/icons/wbjee-icon.png" },
-  { name: "NEET", icon: "/icons/neet-icon.png" },
-  { name: "Boards", icon: "/icons/boards-icon.png" },
+  { name: "JEE Mains", icon: "/icons/jee-icon.svg" },
+  { name: "WBJEE", icon: "/icons/wbjee-icon.svg" },
+  { name: "NEET", icon: "/icons/neet-icon.svg" },
+  { name: "Boards", icon: "/icons/boards-icon.svg" },
 ];
 
 export default function Exams() {
@@ -77,18 +77,17 @@ export default function Exams() {
               {/* ICON BLOCK */}
               <div
                 className="
-                w-20 h-20 mx-auto mb-5 rounded-2xl 
-                bg-linear-to-br from-[#2596be] to-[#4EA8DE]
-                flex items-center justify-center shadow-md
+                w-28 h-28 mx-auto mb-5 rounded-2xl 
+                flex items-center justify-center
                 transition-all group-hover:scale-110
               "
               >
                 <Image
                   src={exam.icon}
                   alt={exam.name}
-                  width={80}
-                  height={80}
-                  className="w-20 h-20"
+                  width={112}
+                  height={112}
+                  className="w-28 h-28"
                 />
               </div>
 

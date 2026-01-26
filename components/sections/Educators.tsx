@@ -77,14 +77,14 @@ export default function EducatorsShowcase({
           className={`text-4xl md:text-5xl font-bold tracking-tight mb-4 transition-colors
             ${darkMode ? "text-white" : "text-gray-900"}`}
         >
-          Meet the Team
+          The People Who Power Your Preparation
         </h2>
         <div className="w-20 h-1 bg-gradient-to-r from-[#2596be] to-[#4EA8DE] mx-auto rounded-full" />
         <p
           className={`mt-4 text-lg max-w-2xl mx-auto transition-colors
             ${darkMode ? "text-gray-300" : "text-gray-600"}`}
         >
-          Talented professionals dedicated to your success
+          Experts dedicated to helping you succeed
         </p>
       </div>
 
