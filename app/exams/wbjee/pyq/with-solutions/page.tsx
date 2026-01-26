@@ -1,17 +1,20 @@
 "use client";
 
-import PaperList from "@/components/papers/PaperList";
+import PyqPage from "@/components/papers/PyqPage";
 
 export default function WbjeePyqPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">WBJEE - Previous Year Questions</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Ace the WBJEE with our collection of solved previous year papers.
-        </p>
-      </div>
-      <PaperList category="wbjee" />
-    </div>
+    <PyqPage
+      title="WBJEE"
+      subtitle="Previous Year Questions with Solutions"
+      description="Prepare for West Bengal Joint Entrance Examination with our curated collection of previous year papers. Complete with solutions and video explanations."
+      accentColor="#059669"
+      category="wbjee"
+      breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Exams", href: "/exams" },
+        { label: "WBJEE PYQ", href: "/exams/wbjee/pyq/with-solutions" },
+      ]}
+    />
   );
 }

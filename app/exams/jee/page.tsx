@@ -1,10 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageHero from "@/components/layout/PageHero";
 import ContentCard from "@/components/ui/ContentCard";
-import { BookOpen, FileText, Target, Users } from "lucide-react";
+import {
+  BookOpen,
+  Target,
+  Users,
+  Calendar,
+  FileText,
+  ExternalLink,
+} from "lucide-react";
+import { getPapers, Paper } from "@/services/papers";
+import Link from "next/link";
 
 const jeeFeatures = [
   {
@@ -20,75 +30,47 @@ const jeeFeatures = [
     description:
       "Full-length mock tests designed as per latest JEE pattern with AI-powered analysis",
     icon: Target,
-    href: "/exams/jee/mains/test-series",
+    href: "/test-series",
     metadata: [
       { label: "Tests", value: "50+" },
       { label: "Questions", value: "3750+" },
     ],
   },
   {
-    title: "Study Material",
-    description:
-      "Topic-wise notes, formulas, and practice questions covering entire JEE syllabus",
-    icon: FileText,
-    href: "#",
-    badge: "Updated",
-  },
-  {
     title: "Expert Guidance",
     description:
       "Live doubt-solving sessions and personalized mentorship from IIT alumni",
     icon: Users,
-    href: "#",
+    href: "/contact",
     metadata: [{ label: "Success Rate", value: "95%" }],
   },
 ];
 
-const jeeMainsResources = [
-  {
-    title: "JEE Mains 2024 PYQ with Solutions",
-    description: "Complete paper with detailed step-by-step solutions",
-    metadata: [
-      { label: "Questions", value: "90" },
-      { label: "Duration", value: "3 Hours" },
-    ],
-    action: { label: "Start Practice", onClick: () => {} },
-  },
-  {
-    title: "JEE Mains 2023 PYQ with Solutions",
-    description: "All sessions with comprehensive explanations",
-    metadata: [
-      { label: "Sessions", value: "4" },
-      { label: "Total Qs", value: "360" },
-    ],
-    action: { label: "Start Practice", onClick: () => {} },
-  },
-  {
-    title: "JEE Mains Mock Test Series",
-    description: "10 full-length tests matching latest pattern",
-    metadata: [
-      { label: "Tests", value: "10" },
-      { label: "Analysis", value: "AI-Powered" },
-    ],
-    badge: "Popular",
-    action: { label: "Enroll Now", onClick: () => {} },
-  },
-  {
-    title: "Subject-wise Practice",
-    description: "Physics, Chemistry, and Mathematics topic tests",
-    metadata: [
-{ label: "Topics", value: "75+" },
-      { label: "Questions", value: "2500+" },
-    ],
-    action: { label: "Browse Topics", onClick: () => {} },
-  },
-];
-
 export default function JEEPage() {
+  const [papers, setPapers] = useState<Paper[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPapers = async () => {
+      try {
+        const data = await getPapers("jee-main");
+        // Get latest 4 papers sorted by year
+        const sortedPapers = data.sort((a, b) => b.year - a.year).slice(0, 4);
+        setPapers(sortedPapers);
+      } catch (error) {
+        console.error("Failed to load papers", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPapers();
+  }, []);
+
   return (
     <>
       <Navbar />
-      
+
       <PageHero
         title="Joint Entrance Examination"
         subtitle="JEE"
@@ -96,7 +78,7 @@ export default function JEEPage() {
         badge="Most Popular"
         showCTA
         ctaText="Start Free Trial"
-        ctaLink="#"
+        ctaLink="/exams/jee/mains/pyq/with-solutions"
       />
 
       {/* Main Features Section */}
@@ -111,7 +93,7 @@ export default function JEEPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {jeeFeatures.map((feature, idx) => (
               <ContentCard key={idx} {...feature} />
             ))}
@@ -131,37 +113,89 @@ export default function JEEPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {jeeMainsResources.map((resource, idx) => (
-              <ContentCard key={idx} {...resource} />
-            ))}
-          </div>
-        </div>
-      </section>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="h-64 rounded-2xl animate-pulse bg-gray-200 dark:bg-gray-800"
+                />
+              ))}
+            </div>
+          ) : papers.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {papers.map((paper) => (
+                <div
+                  key={paper._id}
+                  className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                >
+                  {/* Year Badge */}
+                  <div className="absolute top-4 right-4 z-10 px-3 py-1 rounded-full bg-[#2596be] text-white text-sm font-bold flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {paper.year}
+                  </div>
 
-      {/* Stats Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { value: "10K+", label: "Students Enrolled" },
-              { value: "95%", label: "Success Rate" },
-              { value: "50+", label: "Mock Tests" },
-              { value: "2500+", label: "Practice Questions" },
-            ].map((stat, idx) => (
-              <div
-                key={idx}
-                className="text-center p-6 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5"
+                  {/* Card Content */}
+                  <div className="p-6">
+                    <div className="w-12 h-12 rounded-xl bg-[#2596be]/10 flex items-center justify-center mb-4">
+                      <FileText className="w-6 h-6 text-[#2596be]" />
+                    </div>
+
+                    <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-[#2596be] transition-colors">
+                      {paper.title}
+                    </h3>
+
+                    {paper.type && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                        {paper.type}
+                      </p>
+                    )}
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-2 mt-auto">
+                      {paper.paperDriveLink && (
+                        <Link
+                          href={paper.paperDriveLink}
+                          target="_blank"
+                          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-[#2596be]/10 text-[#2596be] hover:bg-[#2596be]/20 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          View Paper
+                        </Link>
+                      )}
+                      {paper.solutionDriveLink && (
+                        <Link
+                          href={paper.solutionDriveLink}
+                          target="_blank"
+                          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          View Solution
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              <p>No papers available yet. Check back soon!</p>
+            </div>
+          )}
+
+          {/* View All Link */}
+          {papers.length > 0 && (
+            <div className="text-center mt-8">
+              <Link
+                href="/exams/jee/mains/pyq/with-solutions"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-[#2596be] text-white hover:bg-[#2596be]/90 transition-colors"
               >
-                <div className="text-4xl font-bold text-[#2596be] mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
+                View All Papers
+                <ExternalLink className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

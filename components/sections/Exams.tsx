@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 const exams = [
+
   { name: "JEE Mains", icon: "/icons/jee-icon.svg" },
   { name: "WBJEE", icon: "/icons/wbjee-icon.svg" },
   { name: "NEET", icon: "/icons/neet-icon.svg" },
   { name: "Boards", icon: "/icons/boards-icon.svg" },
+
 ];
 
 export default function Exams() {
@@ -85,9 +87,11 @@ export default function Exams() {
                 <Image
                   src={exam.icon}
                   alt={exam.name}
+
                   width={112}
                   height={112}
                   className="w-28 h-28"
+
                 />
               </div>
 
