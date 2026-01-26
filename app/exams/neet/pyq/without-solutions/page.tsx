@@ -13,7 +13,10 @@ export default function NeetPyqNoSolutionPage() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Exams", href: "/exams" },
-        { label: "NEET PYQ (Practice)", href: "/exams/neet/pyq/without-solutions" },
+        {
+          label: "NEET PYQ (Practice)",
+          href: "/exams/neet/pyq/without-solutions",
+        },
       ]}
     />
   );
