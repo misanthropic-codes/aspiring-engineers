@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Sparkles, TrendingUp, Target, Award } from "lucide-react";
+import Image from "next/image";
 
 const exams = [
-  { name: "JEE Mains", icon: Sparkles },
-  { name: "JEE Advanced", icon: TrendingUp },
-  { name: "NEET", icon: Target },
-  { name: "12th Board", icon: Award },
+  { name: "JEE Mains", icon: "/icons/jee-icon.png" },
+  { name: "WBJEE", icon: "/icons/wbjee-icon.png" },
+  { name: "NEET", icon: "/icons/neet-icon.png" },
+  { name: "Boards", icon: "/icons/boards-icon.png" },
 ];
 
 export default function Exams() {
@@ -55,14 +55,12 @@ export default function Exams() {
             ${darkMode ? "text-gray-400" : "text-gray-700"}
           `}
         >
-          Comprehensive preparation for major competitive exams
+          Complete test series and practice resources
         </p>
       </div>
 
       <div className="relative grid grid-cols-2 md:grid-cols-4 gap-8 max-w-7xl mx-auto">
         {exams.map((exam, index) => {
-          const Icon = exam.icon;
-
           return (
             <div
               key={index}
@@ -85,7 +83,13 @@ export default function Exams() {
                 transition-all group-hover:scale-110
               "
               >
-                <Icon className="w-10 h-10 text-white" />
+                <Image
+                  src={exam.icon}
+                  alt={exam.name}
+                  width={80}
+                  height={80}
+                  className="w-20 h-20"
+                />
               </div>
 
               {/* TITLE */}

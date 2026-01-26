@@ -6,24 +6,24 @@ import { BookOpen, Target, Users, BarChart } from "lucide-react";
 const features = [
   {
     icon: BookOpen,
-    title: "Comprehensive Test Series",
+    title: "Smart Practice, Real Results",
     description:
-      "Practice JEE, NEET & Board mock tests with real exam patterns.",
+      "Attempt JEE, NEET & WBJEE mocks that feel like the real exam.",
   },
   {
     icon: Target,
-    title: "Previous Year Questions",
-    description: "Attempt curated PYQs from the last 12 years.",
+    title: "Learn from Past Exams",
+    description: "Attempt carefully selected PYQs from the last 12 years.",
   },
   {
     icon: Users,
-    title: "Expert Counselling",
-    description: "Get personal guidance for colleges & branches.",
+    title: "Plan Your Path to the Right College",
+    description: "Expert counselling for colleges and branch selection.",
   },
   {
     icon: BarChart,
-    title: "Performance Analytics",
-    description: "AI-driven insights to improve your weak areas.",
+    title: "Advanced Performance Analysis",
+    description: "Smart insights to identify and improve weak areas.",
   },
 ];
 
@@ -67,7 +67,7 @@ export default function Features() {
             ${darkMode ? "text-white" : "text-[#2596be]"}
           `}
         >
-          Everything You Need to Succeed
+          Designed to Help You Ace Engineering and Medical Entrance Exams
         </h2>
 
         <p
@@ -76,7 +76,7 @@ export default function Features() {
             ${darkMode ? "text-gray-400" : "text-gray-700"}
           `}
         >
-          Comprehensive resources for aspiring engineers and doctors
+          Empowering the Next Generation of Engineers and Doctors
         </p>
       </div>
 
