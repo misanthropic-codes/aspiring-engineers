@@ -90,9 +90,7 @@ export default function Exams() {
                   width={112}
                   height={112}
                   className="w-28 h-28"
-                  width={80}
-                  height={80}
-                  className="w-20 h-20"
+                 
 
                 />
               </div>
