@@ -10,7 +10,7 @@ export default function HeroBadge({ darkMode }: { darkMode: boolean }) {
           darkMode ? "text-gray-300" : "text-gray-700"
         }`}
       >
-        Trusted by 10,000+ Students
+        Trusted by 1000+ Students
       </span>
     </div>
   );

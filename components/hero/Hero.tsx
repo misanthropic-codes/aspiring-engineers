@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { Spotlight } from "@/components/ui/spotlight";
 import HeroStats from "./HeroStats";
 import HeroBadge from "./HeroBadge";
-import { InfiniteMovingCards, BannerItem } from "@/components/ui/infinite-moving-cards";
+import HeroCarousel, { BannerItem } from "./HeroCarousel";
 
 import { Button } from "@/components/ui/button";
 
@@ -129,15 +129,9 @@ export default function Hero() {
           </Button>
         </div>
 
-        {/* INFINITE MOVING CARDS */}
+        {/* HERO CAROUSEL */}
         <div className="mt-16">
-          <InfiniteMovingCards
-            items={bannerItems}
-            direction="left"
-            speed="normal"
-            pauseOnHover={true}
-            className="py-4"
-          />
+          <HeroCarousel items={bannerItems} />
         </div>
 
         <HeroStats darkMode={darkMode} />
