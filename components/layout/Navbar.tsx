@@ -141,6 +141,7 @@ const MENU: MenuItem[] = [
   {
     id: "counselling",
     label: "Counselling",
+    href: "/counselling",
     children: [
       { id: "c-jee", label: "JEE Counselling", href: "/counselling/jee" },
       { id: "c-neet", label: "NEET Counselling", href: "/counselling/neet" },
@@ -150,6 +151,7 @@ const MENU: MenuItem[] = [
   {
     id: "admission",
     label: "Admission Guidance",
+    href: "/counselling/admission-guidance",
     children: [
       {
         id: "admission-guidance",
@@ -163,8 +165,8 @@ const MENU: MenuItem[] = [
       },
     ],
   },
-      { id: "internship", label: "Internships", href: "/internship" },
-      { id: "contact", label: "Contact", href: "/contact" },
+  { id: "internship", label: "Internships", href: "/internship" },
+  { id: "contact", label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar(): JSX.Element {
@@ -242,7 +244,7 @@ export default function Navbar(): JSX.Element {
       gsap.fromTo(
         el,
         { y: "-6%", opacity: 0 },
-        { y: "0%", opacity: 1, duration: 0.38, ease: "power3.out" }
+        { y: "0%", opacity: 1, duration: 0.38, ease: "power3.out" },
       );
       document.body.style.overflow = "hidden";
     } else {
@@ -280,7 +282,7 @@ export default function Navbar(): JSX.Element {
     let next: string[];
     if (already) {
       next = openIds.filter(
-        (open) => open !== id && !open.startsWith(id + "-")
+        (open) => open !== id && !open.startsWith(id + "-"),
       );
     } else {
       next = [...openIds, id];
@@ -303,7 +305,7 @@ export default function Navbar(): JSX.Element {
           onComplete: () => {
             container.style.height = "auto";
           },
-        }
+        },
       );
     } else {
       gsap.to(container, {
@@ -324,7 +326,7 @@ export default function Navbar(): JSX.Element {
     gsap.fromTo(
       el,
       { y: -6, opacity: 0, scale: 0.98 },
-      { y: 0, opacity: 1, scale: 1, duration: 0.28, ease: "power3.out" }
+      { y: 0, opacity: 1, scale: 1, duration: 0.28, ease: "power3.out" },
     );
   };
   const onDesktopLeave = (id: string) => {
@@ -454,6 +456,11 @@ export default function Navbar(): JSX.Element {
         );
       }
 
+      // Check if children are flat (have direct href) or nested (have their own children)
+      const hasFlatChildren = item.children!.every(
+        (child) => child.href && !child.children,
+      );
+
       return (
         <li
           key={item.id}
@@ -463,67 +470,103 @@ export default function Navbar(): JSX.Element {
           onFocus={() => onDesktopEnter(item.id)}
           onBlur={() => onDesktopLeave(item.id)}
         >
-          <button
-            className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary`}
-            aria-haspopup="true"
-          >
-            <span className="relative inline-flex overflow-hidden group">
-              <div className="translate-y-0 transform-gpu transition-transform duration-300 group-hover:-translate-y-[110%]">
-                {item.label}
-              </div>
-              <div className="absolute translate-y-[110%] transform-gpu text-text-primary transition-transform duration-300 group-hover:translate-y-0">
-                {item.label}
-              </div>
-            </span>
-            <ChevronDown className="ml-1" size={14} />
-          </button>
+          {item.href ? (
+            <Link
+              href={item.href}
+              className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary`}
+            >
+              <span className="relative inline-flex overflow-hidden group">
+                <div className="translate-y-0 transform-gpu transition-transform duration-300 group-hover:-translate-y-[110%]">
+                  {item.label}
+                </div>
+                <div className="absolute translate-y-[110%] transform-gpu text-text-primary transition-transform duration-300 group-hover:translate-y-0">
+                  {item.label}
+                </div>
+              </span>
+              <ChevronDown className="ml-1" size={14} />
+            </Link>
+          ) : (
+            <button
+              className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary`}
+              aria-haspopup="true"
+            >
+              <span className="relative inline-flex overflow-hidden group">
+                <div className="translate-y-0 transform-gpu transition-transform duration-300 group-hover:-translate-y-[110%]">
+                  {item.label}
+                </div>
+                <div className="absolute translate-y-[110%] transform-gpu text-text-primary transition-transform duration-300 group-hover:translate-y-0">
+                  {item.label}
+                </div>
+              </span>
+              <ChevronDown className="ml-1" size={14} />
+            </button>
+          )}
 
           <div
             ref={(el) => {
               desktopDropdownRefs.current[item.id] = el;
             }}
-            className="absolute left-0 top-full mt-3 z-50 w-136 origin-top-left rounded-lg border border-bg-700 bg-white/60 dark:bg-[#071219]/70 p-4 shadow-2xl backdrop-blur-lg"
+            className={`absolute left-0 top-full mt-3 z-50 origin-top-left rounded-lg border border-bg-700 bg-white/60 dark:bg-[#071219]/70 p-4 shadow-2xl backdrop-blur-lg ${
+              hasFlatChildren ? "w-56" : "w-136"
+            }`}
             style={{ display: "none" }}
           >
-            <div className="grid grid-cols-2 gap-4">
-              {item.children!.map((section) => (
-                <div key={section.id}>
-                  <h4 className="font-semibold text-sm mb-2">
-                    {section.label}
-                  </h4>
-                  <ul className="flex flex-col gap-2 text-sm">
-                    {section.children?.map((sub) => (
-                      <li key={sub.id}>
-                        {sub.children ? (
-                          <div>
-                            <span className="font-medium">{sub.label}</span>
-                            <ul className="ml-3 mt-2 flex flex-col gap-1">
-                              {sub.children.map((leaf) => (
-                                <li key={leaf.id}>
-                                  <Link
-                                    href={leaf.href || "#"}
-                                    className="block hover:underline py-1 text-sm"
-                                  >
-                                    {leaf.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : (
-                          <Link
-                            href={sub.href || "#"}
-                            className="block hover:underline py-1"
-                          >
-                            {sub.label}
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+            {hasFlatChildren ? (
+              // Flat children - simple list of links
+              <ul className="flex flex-col gap-2 text-sm">
+                {item.children!.map((child) => (
+                  <li key={child.id}>
+                    <Link
+                      href={child.href || "#"}
+                      className="block hover:underline py-1 hover:text-[#2596be] transition-colors"
+                    >
+                      {child.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              // Nested children - grid layout with sections
+              <div className="grid grid-cols-2 gap-4">
+                {item.children!.map((section) => (
+                  <div key={section.id}>
+                    <h4 className="font-semibold text-sm mb-2">
+                      {section.label}
+                    </h4>
+                    <ul className="flex flex-col gap-2 text-sm">
+                      {section.children?.map((sub) => (
+                        <li key={sub.id}>
+                          {sub.children ? (
+                            <div>
+                              <span className="font-medium">{sub.label}</span>
+                              <ul className="ml-3 mt-2 flex flex-col gap-1">
+                                {sub.children.map((leaf) => (
+                                  <li key={leaf.id}>
+                                    <Link
+                                      href={leaf.href || "#"}
+                                      className="block hover:underline py-1 text-sm"
+                                    >
+                                      {leaf.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : (
+                            <Link
+                              href={sub.href || "#"}
+                              className="block hover:underline py-1"
+                            >
+                              {sub.label}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </li>
       );
@@ -617,14 +660,14 @@ export default function Navbar(): JSX.Element {
                     process.env.NEXT_PUBLIC_TEST_PORTAL_URL || "";
                   if (!testPortalUrl) {
                     console.error(
-                      "NEXT_PUBLIC_TEST_PORTAL_URL is not configured"
+                      "NEXT_PUBLIC_TEST_PORTAL_URL is not configured",
                     );
                     return;
                   }
                   const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(
-                    token || ""
+                    token || "",
                   )}&refreshToken=${encodeURIComponent(
-                    refreshToken || ""
+                    refreshToken || "",
                   )}&redirect=/profile`;
                   window.location.href = ssoUrl;
                 }}
