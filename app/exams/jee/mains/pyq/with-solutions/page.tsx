@@ -1,17 +1,21 @@
 "use client";
 
-import PaperList from "@/components/papers/PaperList";
+import PyqPage from "@/components/papers/PyqPage";
 
 export default function JeeMainsPyqPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">JEE Main - Previous Year Questions</h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Practice with past year papers complete with detailed solutions.
-        </p>
-      </div>
-      <PaperList category="jee-main" />
-    </div>
+    <PyqPage
+      title="JEE Main"
+      subtitle="Previous Year Questions with Solutions"
+      description="Master JEE Main with comprehensive previous year papers. Each paper includes detailed solutions and video explanations to help you understand every concept."
+      accentColor="#2596be"
+      category="jee-main"
+      breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Exams", href: "/exams" },
+        { label: "JEE", href: "/exams/jee" },
+        { label: "Mains PYQ", href: "/exams/jee/mains/pyq/with-solutions" },
+      ]}
+    />
   );
 }

@@ -4,7 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageHero from "@/components/layout/PageHero";
 import ContentCard from "@/components/ui/ContentCard";
-import { BookOpen, FileText, Target, Users } from "lucide-react";
+import { BookOpen, Target, Users } from "lucide-react";
 
 const jeeFeatures = [
   {
@@ -20,26 +20,18 @@ const jeeFeatures = [
     description:
       "Full-length mock tests designed as per latest JEE pattern with AI-powered analysis",
     icon: Target,
-    href: "/exams/jee/mains/test-series",
+    href: "/test-series",
     metadata: [
       { label: "Tests", value: "50+" },
       { label: "Questions", value: "3750+" },
     ],
   },
   {
-    title: "Study Material",
-    description:
-      "Topic-wise notes, formulas, and practice questions covering entire JEE syllabus",
-    icon: FileText,
-    href: "#",
-    badge: "Updated",
-  },
-  {
     title: "Expert Guidance",
     description:
       "Live doubt-solving sessions and personalized mentorship from IIT alumni",
     icon: Users,
-    href: "#",
+    href: "/contact",
     metadata: [{ label: "Success Rate", value: "95%" }],
   },
 ];
@@ -77,7 +69,7 @@ const jeeMainsResources = [
     title: "Subject-wise Practice",
     description: "Physics, Chemistry, and Mathematics topic tests",
     metadata: [
-{ label: "Topics", value: "75+" },
+      { label: "Topics", value: "75+" },
       { label: "Questions", value: "2500+" },
     ],
     action: { label: "Browse Topics", onClick: () => {} },
@@ -88,7 +80,7 @@ export default function JEEPage() {
   return (
     <>
       <Navbar />
-      
+
       <PageHero
         title="Joint Entrance Examination"
         subtitle="JEE"
@@ -96,7 +88,7 @@ export default function JEEPage() {
         badge="Most Popular"
         showCTA
         ctaText="Start Free Trial"
-        ctaLink="#"
+        ctaLink="/exams/jee/mains/pyq/with-solutions"
       />
 
       {/* Main Features Section */}
@@ -111,7 +103,7 @@ export default function JEEPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {jeeFeatures.map((feature, idx) => (
               <ContentCard key={idx} {...feature} />
             ))}
