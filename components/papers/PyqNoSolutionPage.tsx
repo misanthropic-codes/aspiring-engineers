@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getPapersNoSolution, Paper } from "@/services/papers";
+import { getPapers, Paper } from "@/services/papers";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -59,7 +59,7 @@ export default function PyqNoSolutionPage({
   useEffect(() => {
     const fetchPapers = async () => {
       try {
-        const data = await getPapersNoSolution(category);
+        const data = await getPapers({ category });
         setPapers(data);
       } catch (error) {
         console.error("Failed to load papers", error);
