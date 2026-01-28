@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import Link from "next/link";
+import NextImage from "next/image";
 import {
   Mail,
   Phone,
@@ -32,30 +33,24 @@ export default function Footer() {
 
   const defaultFooterLinks = {
     jee: [
-      { label: "JEE PYQ with Solutions", href: "/jee-pyq" },
-      { label: "JEE Test Series", href: "/jee-test-series" },
-      { label: "JEE Advanced PYQ", href: "/jee-advanced-pyq" },
-      { label: "JEE Main PYQ", href: "/jee-main-pyq" },
+      { label: "JEE Main PYQ - With Solutions", href: "/exams/jee/mains/pyq/with-solutions" },
+      { label: "JEE Main PYQ", href: "/exams/jee/mains/pyq/with-solutions" },
+      { label: "JEE Advanced PYQ", href: "/exams/jee/advanced/pyq/with-solutions" },
+      { label: "JEE Test Series", href: "/test-series" },
     ],
     neet: [
-      { label: "NEET PYQ with Solutions", href: "/neet-pyq" },
-      { label: "NEET Test Series", href: "/neet-test-series" },
-      { label: "NEET Mock Tests", href: "/neet-mock-tests" },
-      { label: "NEET Study Material", href: "/neet-material" },
+      { label: "NEET PYQ - With Solutions", href: "/exams/neet/pyq/with-solutions" },
+      { label: "NEET PYQ", href: "/exams/neet/pyq/with-solutions" },
+      { label: "NEET Test Series", href: "/test-series" },
+      { label: "NEET Mock Tests", href: "/test-series" },
     ],
     company: [
       { label: "About Us", href: "/about" },
       { label: "Contact Us", href: "/contact" },
-      { label: "Careers", href: "/careers" },
-      { label: "Blog", href: "/blog" },
     ],
     internships: [
-      { label: "Web Development", href: "/internship" },
-      { label: "App Development", href: "/internship" },
-      { label: "Machine Learning", href: "/internship" },
-      { label: "Data Science", href: "/internship" },
-      { label: "Cloud Computing", href: "/internship" },
-      { label: "DevOps", href: "/internship" },
+      { label: "Engineering Internships", href: "/internship" },
+      { label: "See All Internships", href: "/internship" },
     ],
     legal: [
       { label: "Privacy Policy", href: "/privacy-policy" },
@@ -156,7 +151,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <Image
+              <NextImage
                 src="/logo.svg"
                 alt="Aspiring Engineers"
                 width={70}
@@ -215,7 +210,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.jee.map((link, idx) => (
                 <li key={idx}>
-                  <a
+                  <Link
                     href={link.href}
                     className={`text-sm transition-colors ${
                       darkMode
@@ -224,7 +219,7 @@ export default function Footer() {
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -242,7 +237,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.neet.map((link, idx) => (
                 <li key={idx}>
-                  <a
+                  <Link
                     href={link.href}
                     className={`text-sm transition-colors ${
                       darkMode
@@ -251,7 +246,7 @@ export default function Footer() {
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -269,7 +264,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.internships.map((link, idx) => (
                 <li key={idx}>
-                  <a
+                  <Link
                     href={link.href}
                     className={`text-sm transition-colors ${
                       darkMode
@@ -278,7 +273,7 @@ export default function Footer() {
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -296,7 +291,7 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.map((link, idx) => (
                 <li key={idx}>
-                  <a
+                  <Link
                     href={link.href}
                     className={`text-sm transition-colors ${
                       darkMode
@@ -305,7 +300,7 @@ export default function Footer() {
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -442,7 +437,7 @@ export default function Footer() {
             {/* Legal Links */}
             <div className="flex flex-wrap justify-center gap-6">
               {footerLinks.legal.map((link, idx) => (
-                <a
+                <Link
                   key={idx}
                   href={link.href}
                   className={`text-sm transition-colors ${
@@ -452,7 +447,7 @@ export default function Footer() {
                   }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
