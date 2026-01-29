@@ -21,16 +21,16 @@ export interface GetCounsellorsParams {
 export const counsellingService = {
   /**
    * Get all active counselling packages
-   * GET /counselling-packages?isActive=true
+   * GET /counselling/packages?isActive=true
    */
   getPackages: async (
     params?: GetPackagesParams,
   ): Promise<CounsellingPackage[]> => {
     try {
-      console.log("🚀 [counsellingService] GET /counselling-packages", params);
+      console.log("🚀 [counsellingService] GET /counselling/packages", params);
       const response = await apiClient.get<
         CounsellingPackagesResponse | CounsellingPackage[]
-      >("/counselling-packages", {
+      >("/counselling/packages", {
         params: {
           ...params,
           isActive: true,
@@ -61,17 +61,17 @@ export const counsellingService = {
 
   /**
    * Get a single package by slug
-   * GET /counselling-packages/slug/:slug
+   * GET /counselling/packages/slug/:slug
    */
   getPackageBySlug: async (slug: string): Promise<CounsellingPackage> => {
     try {
       console.log(
-        `🚀 [counsellingService] GET /counselling-packages/slug/${slug}`,
+        `🚀 [counsellingService] GET /counselling/packages/slug/${slug}`,
       );
       const response = await apiClient.get<{
         success: boolean;
         data: CounsellingPackage;
-      }>(`/counselling-packages/slug/${slug}`);
+      }>(`/counselling/packages/slug/${slug}`);
       console.log("✅ [counsellingService] Response:", response.data);
       return (
         response.data.data || (response.data as unknown as CounsellingPackage)
@@ -84,15 +84,15 @@ export const counsellingService = {
 
   /**
    * Get all active counsellors
-   * GET /counsellors?isActive=true
+   * GET /counselling/counsellors?isActive=true
    */
   getCounsellors: async (
     params?: GetCounsellorsParams,
   ): Promise<Counsellor[]> => {
     try {
-      console.log("🚀 [counsellingService] GET /counsellors", params);
+      console.log("🚀 [counsellingService] GET /counselling/counsellors", params);
       const response = await apiClient.get<CounsellorsResponse | Counsellor[]>(
-        "/counsellors",
+        "/counselling/counsellors",
         {
           params: {
             ...params,
@@ -133,21 +133,21 @@ export const counsellingService = {
 
   /**
    * Submit a counselling inquiry (from admission guidance form)
-   * POST /counselling-inquiries
+   * POST /counselling/inquiries
    */
   submitInquiry: async (
     payload: CounsellingInquiryPayload,
   ): Promise<{ ticketNumber: string }> => {
     try {
       console.log(
-        "🚀 [counsellingService] POST /counselling-inquiries",
+        "🚀 [counsellingService] POST /counselling/inquiries",
         payload,
       );
       const response = await apiClient.post<{
         success: boolean;
         message: string;
         data: { ticketNumber: string };
-      }>("/counselling-inquiries", payload);
+      }>("/counselling/inquiries", payload);
       console.log("✅ [counsellingService] Response:", response.data);
       return response.data.data;
     } catch (error) {

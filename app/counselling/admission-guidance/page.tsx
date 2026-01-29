@@ -19,6 +19,7 @@ import {
   Star,
   ArrowRight,
 } from "lucide-react";
+import { counsellingService } from "@/services/counselling.service";
 
 const guidanceServices = [
   {
@@ -133,12 +134,20 @@ export default function AdmissionGuidancePage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const result = await counsellingService.submitInquiry({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        exam: formData.exam,
+        rank: formData.rank,
+        category: formData.category,
+        state: formData.state,
+        message: formData.message,
+      });
 
-    console.log("Form submitted:", formData);
-    setIsSubmitting(false);
-    setSubmitted(true);
+      console.log("Inquiry submitted successfully:", result);
+      setSubmitted(true);
 
     // Reset form after showing success
     setTimeout(() => {
@@ -154,6 +163,15 @@ export default function AdmissionGuidancePage() {
       });
       setSubmitted(false);
     }, 5000);
+    } catch (error: any) {
+      console.error("Failed to submit inquiry:", error);
+      alert(
+        error.response?.data?.message ||
+          "Failed to submit form. Please try again later."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (

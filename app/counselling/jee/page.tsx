@@ -181,8 +181,10 @@ export default function JEECounsellingPage() {
       try {
         const data = await counsellingService.getPackagesByExam("jee");
         setPackages(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to fetch packages:", error);
+        // Don't throw - just set empty array to avoid redirect
+        setPackages([]);
       } finally {
         setLoadingPackages(false);
       }
@@ -192,8 +194,10 @@ export default function JEECounsellingPage() {
       try {
         const data = await counsellingService.getCounsellorsByExam("jee");
         setCounsellors(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to fetch counsellors:", error);
+        // Don't throw - just set empty array to avoid redirect
+        setCounsellors([]);
       } finally {
         setLoadingCounsellors(false);
       }

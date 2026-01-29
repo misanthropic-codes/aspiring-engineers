@@ -24,6 +24,7 @@ export interface NavbarLink {
 }
 
 export interface HeroBanner {
+  _id?: string;
   title: string;
   description: string;
   imageUrl: string;

@@ -186,6 +186,40 @@ export default function Navbar(): JSX.Element {
   // mobile state
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openIds, setOpenIds] = useState<string[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(MENU);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { getSiteSettings } = await import("@/services/siteSettings");
+        const settings = await getSiteSettings();
+        if (settings?.navbarLinks && settings.navbarLinks.length > 0) {
+          // Map API response to MenuItem structure if needed
+          // Assuming API structure matches MenuItem closely enough or we map it
+          // API NavbarLink: { label, url, order, isActive, children }
+          // UI MenuItem: { id, label, href, children }
+          
+          const mapToMenuItem = (links: any[]): MenuItem[] => {
+            return links
+              .filter(link => link.isActive)
+              .sort((a, b) => a.order - b.order)
+              .map((link, index) => ({
+                id: link._id || `nav-${index}-${link.label}`,
+                label: link.label,
+                href: link.url,
+                children: link.children ? mapToMenuItem(link.children) : undefined
+              }));
+          };
+          
+          setMenuItems(mapToMenuItem(settings.navbarLinks));
+        }
+      } catch (error) {
+        console.error("Failed to load site settings", error);
+      }
+    };
+    
+    fetchSettings();
+  }, []);
 
   // refs
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -601,7 +635,7 @@ export default function Navbar(): JSX.Element {
 
         {/* Desktop menu */}
         <ul className="hidden gap-6 text-sm text-text-secondary sm:flex font-satoshi items-center">
-          {renderDesktopMenu(MENU)}
+          {renderDesktopMenu(menuItems)}
         </ul>
 
         {/* Controls */}
@@ -790,7 +824,7 @@ export default function Navbar(): JSX.Element {
 
         <nav aria-label="Mobile menu" className="overflow-auto max-h-[78vh]">
           <div className="flex flex-col space-y-0">
-            {renderMobileMenu(MENU)}
+            {renderMobileMenu(menuItems)}
           </div>
         </nav>
       </div>
