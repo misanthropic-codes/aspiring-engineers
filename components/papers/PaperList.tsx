@@ -53,7 +53,7 @@ export default function PaperList({ category, accentColor }: PaperListProps) {
   useEffect(() => {
     const fetchPapers = async () => {
       try {
-        const data = await getPapers(category);
+        const data = await getPapers({ category });
         setPapers(data);
       } catch (error) {
         console.error("Failed to load papers", error);

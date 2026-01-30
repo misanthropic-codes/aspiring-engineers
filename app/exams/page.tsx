@@ -110,7 +110,7 @@ export default function ExamsPage() {
         const counts: Record<string, number> = {};
 
         for (const category of categories) {
-          const papers = await getPapers(category);
+          const papers = await getPapers({ category });
           counts[category] = papers.length;
         }
 
