@@ -53,7 +53,7 @@ export default function JEEPage() {
   useEffect(() => {
     const fetchPapers = async () => {
       try {
-        const data = await getPapers("jee-main");
+        const data = await getPapers({ category: "jee-main" });
         // Get latest 4 papers sorted by year
         const sortedPapers = data.sort((a, b) => b.year - a.year).slice(0, 4);
         setPapers(sortedPapers);
