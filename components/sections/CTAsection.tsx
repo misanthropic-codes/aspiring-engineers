@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function CTASection() {
   const [darkMode, setDarkMode] = useState(false);
@@ -60,16 +61,19 @@ export default function CTASection() {
           Join thousands of students preparing smarter with Aspiring Engineers.
         </p>
 
-        <button
-          className="
-            h-12 px-12 text-lg font-semibold
-            bg-[#2596be] text-white rounded-lg shadow-xl
-            hover:scale-105 hover:bg-[#2596be]/90
-            transition-all
-          "
-        >
-          Get Started Today
-        </button>
+
+        <Link href="/login">
+          <button
+            className="
+              h-12 px-12 text-lg font-semibold
+              bg-[#2596be] text-white rounded-lg shadow-xl
+              hover:scale-105 hover:bg-[#2596be]/90
+              transition-all
+            "
+          >
+            Get Started Today
+          </button>
+        </Link>
       </div>
     </section>
   );

@@ -129,7 +129,7 @@ export default function Hero() {
         {/* CTA BUTTONS – UPDATED */}
         <div className="flex flex-col sm:flex-row justify-center gap-4">
           {/* PRIMARY – FILLED */}
-          <Link href="/exams/jee/mains/pyq/with-solutions">
+          <Link href="/test-series">
             <Button
               size="lg"
               className="

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Users, Award, Target, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 const counsellingPoints = [
   "Personalized college recommendations",
@@ -86,10 +87,13 @@ export default function Counselling() {
             ))}
           </div>
 
+
           {/* CTA */}
-          <button className="h-11 px-8 text-lg bg-[#2596be] text-white rounded-lg shadow-xl hover:scale-105 hover:bg-[#2596be]/90 transition">
-            Book Counselling Session
-          </button>
+          <Link href="/counselling">
+            <button className="h-11 px-8 text-lg bg-[#2596be] text-white rounded-lg shadow-xl hover:scale-105 hover:bg-[#2596be]/90 transition">
+              Book Counselling Session
+            </button>
+          </Link>
         </div>
 
         {/* RIGHT STATS CARD */}
