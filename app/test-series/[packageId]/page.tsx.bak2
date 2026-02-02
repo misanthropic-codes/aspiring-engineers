@@ -144,7 +144,7 @@ export default function PackageDetailPage() {
       const orderResponse = await paymentService.createOrder({
         amount: packageData.discountPrice || packageData.price,
         packageId: packageData._id,
-        packageType: 'test_package',
+        packageType: 'test_series_package',
         customerName: user.name,
         customerEmail: user.email,
         customerPhone: user.phone,
