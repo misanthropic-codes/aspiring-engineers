@@ -155,6 +155,72 @@ export const counsellingService = {
       throw error;
     }
   },
+
+  /**
+   * Get current user's enrollments
+   * GET /counselling/enrollments/my
+   */
+  getMyEnrollments: async (): Promise<any[]> => {
+    try {
+      console.log("🚀 [counsellingService] GET /counselling/enrollments/my");
+      const response = await apiClient.get<{
+        success: boolean;
+        data: any[];
+      }>("/counselling/enrollments/my");
+      console.log("✅ [counsellingService] Response:", response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error("❌ [counsellingService] Failed to fetch enrollments:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Book a session
+   * POST /counselling/sessions
+   */
+  bookSession: async (payload: {
+    enrollmentId: string;
+    preferredDate: string;
+    preferredTimeSlot: string;
+    agenda: string;
+    meetingPreference: string;
+  }): Promise<any> => {
+    try {
+      console.log("🚀 [counsellingService] POST /counselling/sessions", payload);
+      const response = await apiClient.post<{
+        success: boolean;
+        data: any;
+      }>("/counselling/sessions", payload);
+      console.log("✅ [counsellingService] Response:", response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error("❌ [counsellingService] Failed to book session:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get user's sessions
+   * GET /counselling/sessions/my
+   */
+  getMySessions: async (params?: {
+    status?: string;
+    upcoming?: boolean;
+  }): Promise<any[]> => {
+    try {
+      console.log("🚀 [counsellingService] GET /counselling/sessions/my", params);
+      const response = await apiClient.get<{
+        success: boolean;
+        data: any[];
+      }>("/counselling/sessions/my", { params });
+      console.log("✅ [counsellingService] Response:", response.data);
+      return response.data.data || response.data;
+    } catch (error) {
+      console.error("❌ [counsellingService] Failed to fetch sessions:", error);
+      throw error;
+    }
+  },
 };
 
 export default counsellingService;

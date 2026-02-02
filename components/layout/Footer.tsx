@@ -7,11 +7,10 @@ import {
   Phone,
   MapPin,
   Facebook,
-  Twitter,
+  Send,
   Instagram,
   Linkedin,
   Youtube,
-  Send,
 } from "lucide-react";
 import { getSiteSettings, SiteSettings } from "@/services/siteSettings";
 
@@ -63,7 +62,7 @@ export default function Footer() {
   const [footerLinks, setFooterLinks] = useState(defaultFooterLinks);
   const [socialUrls, setSocialUrls] = useState({
     facebook: "#",
-    twitter: "#",
+    telegram: "#",
     instagram: "#",
     linkedin: "#",
     youtube: "#",
@@ -115,7 +114,7 @@ export default function Footer() {
   const socialLinks = [
 
     { icon: Facebook, href: socialUrls.facebook, label: "Facebook" },
-    { icon: Twitter, href: socialUrls.twitter, label: "Twitter" },
+    { icon: Send, href: socialUrls.telegram, label: "Telegram" },
     { icon: Instagram, href: socialUrls.instagram, label: "Instagram" },
     { icon: Linkedin, href: socialUrls.linkedin, label: "LinkedIn" },
     { icon: Youtube, href: socialUrls.youtube, label: "YouTube" },

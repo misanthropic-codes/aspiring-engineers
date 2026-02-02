@@ -29,6 +29,7 @@ const features = [
 
 export default function Features() {
   const [darkMode, setDarkMode] = useState(false);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   useEffect(() => {
     const update = () => {
@@ -88,21 +89,55 @@ export default function Features() {
           return (
             <div
               key={i}
+              onMouseEnter={() => setHoveredId(i)}
+              onMouseLeave={() => setHoveredId(null)}
               className={`
-                p-8 rounded-2xl backdrop-blur-2xl border shadow-lg
-                transition-all group cursor-pointer
+                relative p-8 rounded-2xl backdrop-blur-2xl border 
+                cursor-pointer transition-all duration-300 group overflow-hidden
                 ${
                   darkMode
                     ? "bg-white/5 border-white/10 hover:bg-white/10"
                     : "bg-white/90 border-gray-200 hover:bg-white"
                 }
-                hover:scale-[1.04]
+                ${
+                  hoveredId === i
+                    ? "shadow-2xl -translate-y-2"
+                    : "shadow-lg hover:shadow-xl"
+                }
+                ${
+                  hoveredId === i && darkMode
+                    ? "shadow-[#2596be]/30 border-[#2596be]/60 bg-white/10"
+                    : hoveredId === i
+                      ? "shadow-[#2596be]/20 border-[#4EA8DE]/60 bg-white"
+                      : ""
+                }
               `}
             >
+              {/* Subtle inner glow when hovered */}
+              {hoveredId === i && (
+                <div
+                  className={`absolute inset-0 rounded-2xl pointer-events-none
+                    ${
+                      darkMode
+                        ? "bg-gradient-to-br from-[#2596be]/5 to-[#4EA8DE]/5"
+                        : "bg-gradient-to-br from-[#2596be]/3 to-[#4EA8DE]/3"
+                    }`}
+                />
+              )}
+
+              {/* Top accent line on hover */}
+              <div
+                className={`
+                  absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#2596be] to-[#4EA8DE]
+                  transition-opacity duration-300
+                  ${hoveredId === i ? "opacity-100" : "opacity-0"}
+                `}
+              />
+
               {/* ICON */}
               <div
                 className="
-                  w-16 h-16 rounded-xl mb-6 flex items-center justify-center
+                  relative z-10 w-16 h-16 rounded-xl mb-6 flex items-center justify-center
                   bg-linear-to-br from-[#2596be] to-[#4EA8DE]
                   shadow-md transition-all group-hover:scale-110
                 "
@@ -113,8 +148,16 @@ export default function Features() {
               {/* TITLE */}
               <h3
                 className={`
-                  text-xl font-bold mb-3 tracking-tight
-                  ${darkMode ? "text-white" : "text-[#2596be]"}
+                  relative z-10 text-xl font-bold mb-3 tracking-tight transition-colors
+                  ${
+                    hoveredId === i && darkMode
+                      ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#60DFFF]"
+                      : hoveredId === i
+                        ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#4EA8DE]"
+                        : darkMode
+                          ? "text-white"
+                          : "text-[#2596be]"
+                  }
                 `}
               >
                 {feature.title}
@@ -123,7 +166,7 @@ export default function Features() {
               {/* DESCRIPTION */}
               <p
                 className={`
-                  leading-relaxed
+                  relative z-10 leading-relaxed
                   ${darkMode ? "text-gray-400" : "text-gray-700"}
                 `}
               >

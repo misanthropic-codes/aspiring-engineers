@@ -29,6 +29,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { counsellingService } from "@/services/counselling.service";
+import { useAuth } from "@/contexts/AuthContext";
 import type { CounsellingPackage, Counsellor } from "@/types/counselling";
 
 const counsellingPhases = [
@@ -166,10 +167,22 @@ const branches = [
 ];
 
 export default function WBJEECounsellingPage() {
+  const { isAuthenticated } = useAuth();
   const [packages, setPackages] = useState<CounsellingPackage[]>([]);
   const [counsellors, setCounsellors] = useState<Counsellor[]>([]);
   const [loadingPackages, setLoadingPackages] = useState(true);
   const [loadingCounsellors, setLoadingCounsellors] = useState(true);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [loadingEnrollments, setLoadingEnrollments] = useState(false);
+
+  // Helper function to check if user has active enrollment for a package
+  const hasEnrollmentForPackage = (packageSlug: string): boolean => {
+    return enrollments.some(
+      (enrollment) =>
+        enrollment.packageSnapshot?.slug === packageSlug &&
+        enrollment.status === "active"
+    );
+  };
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -194,9 +207,25 @@ export default function WBJEECounsellingPage() {
       }
     };
 
+    const fetchEnrollments = async () => {
+      if (!isAuthenticated) return;
+      
+      setLoadingEnrollments(true);
+      try {
+        const data = await counsellingService.getMyEnrollments();
+        setEnrollments(data);
+      } catch (error: any) {
+        console.error("Failed to fetch enrollments:", error);
+        setEnrollments([]);
+      } finally {
+        setLoadingEnrollments(false);
+      }
+    };
+
     fetchPackages();
     fetchCounsellors();
-  }, []);
+    fetchEnrollments();
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -497,17 +526,54 @@ export default function WBJEECounsellingPage() {
                   </div>
 
                   {/* CTA Button */}
-                  <Link
-                    href={`/checkout?package=${pkg.slug}`}
-                    className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
-                      pkg.isFeatured
-                        ? "bg-linear-to-r from-purple-500 to-pink-500 text-white hover:opacity-90"
-                        : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20"
-                    }`}
-                  >
-                    Choose Plan
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  {hasEnrollmentForPackage(pkg.slug) ? (
+                    <button
+                      onClick={() => {
+                        // Redirect to test-portal-client counselling page with SSO
+                        const testPortalUrl = process.env.NEXT_PUBLIC_TEST_PORTAL_URL || "";
+                        if (!testPortalUrl) {
+                          console.error("NEXT_PUBLIC_TEST_PORTAL_URL is not configured");
+                          return;
+                        }
+                        // Import tokenManager dynamically
+                        import("@/lib/utils/tokenManager").then(({ tokenManager }) => {
+                          const token = tokenManager.getAuthToken();
+                          const refreshToken = tokenManager.getRefreshToken();
+                          const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(
+                            token || ""
+                          )}&refreshToken=${encodeURIComponent(
+                            refreshToken || ""
+                          )}&redirect=/counselling/enrollments`;
+                          window.location.href = ssoUrl;
+                        });
+                      }}
+                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
+                        pkg.isFeatured
+                          ? "bg-purple-500 text-white hover:bg-purple-600"
+                          : "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/50"
+                      }`}
+                    >
+                      <CheckCircle className="w-4 h-4" />
+                      Go to Counselling
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  ) : (
+                    <Link
+                      href={
+                        isAuthenticated
+                          ? `/checkout?package=${pkg.slug}&type=counselling_package`
+                          : `/login?redirect=/checkout?package=${pkg.slug}&type=counselling_package`
+                      }
+                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
+                        pkg.isFeatured
+                          ? "bg-linear-to-r from-purple-500 to-pink-500 text-white hover:opacity-90"
+                          : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20"
+                      }`}
+                    >
+                      {isAuthenticated ? "Buy Now" : "Login to Buy"}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>

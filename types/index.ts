@@ -172,6 +172,7 @@ export interface PaymentResponse {
 export interface CashfreeOrderRequest {
   amount: number;
   packageId: string;
+  packageType: "test_package" | "counselling_package";
   customerName: string;
   customerEmail: string;
   customerPhone: string;

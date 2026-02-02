@@ -11,6 +11,8 @@ function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const packageId = searchParams.get('packageId');
+  const packageSlug = searchParams.get('package'); // For counselling packages
+  const packageType = searchParams.get('type') || 'test_package'; // Default to test package
   const { isAuthenticated, user } = useAuth();
   
   const [packageData, setPackageData] = useState<any>(null);
@@ -25,30 +27,41 @@ function CheckoutContent() {
     }
   }, [isAuthenticated, router, packageId]);
 
-  // Redirect if no packageId
+  // Redirect if no packageId or packageSlug
   useEffect(() => {
-    if (!packageId) {
+    if (!packageId && !packageSlug) {
       router.push('/test-series');
     }
-  }, [packageId, router]);
+  }, [packageId, packageSlug, router]);
 
   // Fetch package details
   useEffect(() => {
-    if (packageId && isAuthenticated) {
+    if ((packageId || packageSlug) && isAuthenticated) {
       fetchPackageDetails();
     }
-  }, [packageId, isAuthenticated]);
+  }, [packageId, packageSlug, isAuthenticated]);
 
   const fetchPackageDetails = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/packages/id/${packageId}`
-      );
+      let endpoint = '';
+      
+      if (packageType === 'counselling_package' && packageSlug) {
+        endpoint = `${process.env.NEXT_PUBLIC_API_URL}/counselling/packages/slug/${packageSlug}`;
+      } else if (packageId) {
+        endpoint = `${process.env.NEXT_PUBLIC_API_URL}/packages/id/${packageId}`;
+      }
+      
+      if (!endpoint) {
+        setError('Invalid package information');
+        return;
+      }
+
+      const response = await fetch(endpoint);
       const data = await response.json();
       
-      if (data.success) {
-        setPackageData(data.data);
+      if (data.success || data.data || data._id) {
+        setPackageData(data.data || data);
       } else {
         setError('Failed to load package details');
       }
@@ -61,7 +74,8 @@ function CheckoutContent() {
   };
 
   const handlePayment = async () => {
-    if (!packageId || !user || !packageData) return;
+    // Check if we have either packageId or packageSlug AND user AND packageData
+    if ((!packageId && !packageSlug) || !user || !packageData) return;
 
     setIsProcessing(true);
     setError('');
@@ -73,6 +87,7 @@ function CheckoutContent() {
       const orderResponse = await paymentService.createOrder({
         amount: packageData.discountPrice || packageData.price,
         packageId: packageData._id,
+        packageType: packageType as 'test_package' | 'counselling_package',
         customerName: user.name,
         customerEmail: user.email,
         customerPhone: user.phone || '+911234567890',
@@ -89,16 +104,22 @@ function CheckoutContent() {
       const cashfree = await initializeCashfree();
       console.log('✅ Cashfree SDK initialized');
 
-      // Step 3: Open Cashfree checkout modal
+      // Step 3: Open Cashfree checkout
+      // Using _self (full page redirect) to ensure returnUrl works
       const checkoutOptions = {
         paymentSessionId: orderResponse.data.paymentSessionId,
-        redirectTarget: '_modal' as const,
+        redirectTarget: '_self' as const,
       };
 
-      console.log('🚀 Opening Cashfree checkout modal...');
-      await cashfree.checkout(checkoutOptions);
-
-      // Payment will be verified on the verify page after redirect
+      console.log('🚀 Opening Cashfree checkout...');
+      
+      // Open Cashfree checkout
+      // User will be redirected to returnUrl after payment completion
+      cashfree.checkout(checkoutOptions);
+      
+      // Reset processing state
+      // Verification will happen on the verify page (returnUrl)
+      setIsProcessing(false);
     } catch (err: any) {
       console.error('❌ Payment error:', err);
       setError(err.message || 'Failed to initiate payment. Please try again.');
