@@ -186,24 +186,33 @@ export default function AdmissionGuidancePage() {
     <>
       <Navbar />
 
-      <PageHero
-        title="Admission Guidance"
-        subtitle="Expert"
-        description="Get personalized guidance for college admissions. Our expert counsellors help you navigate the complex admission process and secure your dream seat."
-        badge="Free Consultation Available"
-      />
+      {/* Compact Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-3">
+          <CheckCircle className="w-4 h-4" />
+          Free Consultation Available
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+          <span className="bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            Expert Admission Guidance
+          </span>
+        </h1>
+        <p className="text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          Get personalized guidance for college admissions. Our expert counsellors help you navigate the complex admission process and secure your dream seat.
+        </p>
+      </div>
 
       {/* Main Content Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-6 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Side - Content */}
             <div>
-              <h2 className="text-3xl font-bold mb-6 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
                 Why Choose Our Guidance?
               </h2>
 
-              <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+              <p className="text-base text-gray-600 dark:text-gray-400 mb-6">
                 Navigating the admission process can be overwhelming. With
                 multiple counselling rounds, complex choice filling, and tight
                 deadlines, students often miss out on better opportunities. Our
@@ -211,16 +220,16 @@ export default function AdmissionGuidancePage() {
               </p>
 
               {/* Services Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                 {guidanceServices.map((service, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
+                    className="p-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-[#2596be]/10 flex items-center justify-center mb-3">
-                      <service.icon className="w-5 h-5 text-[#2596be]" />
+                    <div className="w-8 h-8 rounded-lg bg-[#2596be]/10 flex items-center justify-center mb-2">
+                      <service.icon className="w-4 h-4 text-[#2596be]" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                    <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-1">
                       {service.title}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -231,7 +240,7 @@ export default function AdmissionGuidancePage() {
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl mb-8">
+              <div className="grid grid-cols-3 gap-3 p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl mb-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-[#2596be]">
                     10,000+
@@ -255,9 +264,9 @@ export default function AdmissionGuidancePage() {
               </div>
 
               {/* Quick Contact */}
-              <div className="flex items-center gap-4 p-4 rounded-xl border border-[#2596be]/30 bg-[#2596be]/5">
-                <div className="w-12 h-12 rounded-full bg-[#2596be] flex items-center justify-center">
-                  <Phone className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-[#2596be]/30 bg-[#2596be]/5">
+                <div className="w-10 h-10 rounded-full bg-[#2596be] flex items-center justify-center">
+                  <Phone className="w-4 h-4 text-white" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -275,13 +284,13 @@ export default function AdmissionGuidancePage() {
 
             {/* Right Side - Form */}
             <div>
-              <div className="sticky top-24 p-8 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 shadow-xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#2596be] to-[#4EA8DE] flex items-center justify-center">
-                    <GraduationCap className="w-6 h-6 text-white" />
+              <div className="sticky top-24 p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 shadow-xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-linear-to-br from-[#2596be] to-[#4EA8DE] flex items-center justify-center">
+                    <GraduationCap className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">
                       Get Free Guidance
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -303,7 +312,7 @@ export default function AdmissionGuidancePage() {
                     </p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-3">
                     <div>
                       <label
                         htmlFor="name"
@@ -318,7 +327,7 @@ export default function AdmissionGuidancePage() {
                         required
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                         placeholder="Enter your full name"
                       />
                     </div>
@@ -500,25 +509,25 @@ export default function AdmissionGuidancePage() {
       </section>
 
       {/* Process Steps */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               How It Works
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="text-base text-gray-600 dark:text-gray-400">
               Simple 4-step process to get personalized admission guidance
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {processSteps.map((item, idx) => (
               <div key={idx} className="relative">
-                <div className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 text-center">
-                  <div className="text-4xl font-bold text-[#2596be]/20 mb-4">
+                <div className="p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 text-center">
+                  <div className="text-3xl font-bold text-[#2596be]/20 mb-3">
                     {item.step}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">
                     {item.title}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -537,23 +546,23 @@ export default function AdmissionGuidancePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Success Stories
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="text-base text-gray-600 dark:text-gray-400">
               Hear from students who secured their dream colleges with our
               guidance
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {testimonials.map((testimonial, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
+                className="p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
               >
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
@@ -584,19 +593,19 @@ export default function AdmissionGuidancePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="p-8 md:p-12 rounded-3xl bg-linear-to-br from-[#2596be] to-[#4EA8DE] text-white">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <div className="p-6 md:p-8 rounded-2xl bg-linear-to-br from-[#2596be] to-[#4EA8DE] text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
               Explore Colleges
             </h2>
-            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-base text-white/90 mb-6 max-w-2xl mx-auto">
               Browse our comprehensive database of engineering and medical
               colleges with cutoff trends, placements, and detailed information.
             </p>
             <Link
               href="/counselling/college-list"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
             >
               View College List
               <ArrowRight className="w-5 h-5" />
