@@ -3,17 +3,13 @@
 import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import PageHero from "@/components/layout/PageHero";
-import Link from "next/link";
+import HeroCarousel, { BannerItem } from "@/components/hero/HeroCarousel";
 import {
   Building2,
   MapPin,
-  Users,
-  TrendingUp,
   Search,
   Filter,
   ExternalLink,
-  Star,
   GraduationCap,
   Stethoscope,
   ChevronDown,
@@ -424,7 +420,14 @@ export default function CollegeListPage() {
     return matchesSearch && matchesType && matchesCategory && matchesState;
   });
 
-  const featuredColleges = colleges.filter((c) => c.featured);
+  // Convert featured colleges to carousel items
+  const carouselItems: BannerItem[] = colleges
+    .filter((c) => c.featured)
+    .map((college) => ({
+      image: college.type === "engineering" ? "/banners/jee.png" : "/banners/neet.png",
+      title: college.shortName,
+      link: college.website || "#",
+    }));
 
   const clearFilters = () => {
     setSearchQuery("");
@@ -443,119 +446,27 @@ export default function CollegeListPage() {
     <>
       <Navbar />
 
-      <PageHero
-        title="College List"
-        subtitle="Explore"
-        description="Browse our comprehensive database of engineering and medical colleges. Find detailed information about admissions, placements, and rankings."
-        badge="500+ Colleges"
-      />
-
-      {/* Featured Colleges */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
-              Featured Colleges
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Top-ranked institutions across India
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredColleges.slice(0, 8).map((college) => (
-              <div
-                key={college.id}
-                className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                {/* Type Badge */}
-                <div className="absolute top-4 right-4 z-10">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                      college.type === "engineering"
-                        ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
-                        : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                    }`}
-                  >
-                    {college.type === "engineering" ? "Engineering" : "Medical"}
-                  </span>
-                </div>
-
-                {/* NIRF Badge */}
-                {college.nirf && (
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className="px-2 py-1 rounded-full text-xs font-bold bg-yellow-500/10 text-yellow-600 dark:text-yellow-400">
-                      NIRF #{college.nirf}
-                    </span>
-                  </div>
-                )}
-
-                <div className="p-6 pt-12">
-                  {/* Icon */}
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
-                      college.type === "engineering"
-                        ? "bg-blue-500/10"
-                        : "bg-emerald-500/10"
-                    }`}
-                  >
-                    {college.type === "engineering" ? (
-                      <GraduationCap
-                        className={`w-6 h-6 ${
-                          college.type === "engineering"
-                            ? "text-blue-600 dark:text-blue-400"
-                            : "text-emerald-600 dark:text-emerald-400"
-                        }`}
-                      />
-                    ) : (
-                      <Stethoscope className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-                    )}
-                  </div>
-
-                  {/* Name */}
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-[#2596be] transition-colors">
-                    {college.shortName}
-                  </h3>
-
-                  {/* Location */}
-                  <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    <MapPin className="w-3.5 h-3.5" />
-                    {college.location}, {college.state}
-                  </div>
-
-                  {/* Stats */}
-                  {college.avgPackage && (
-                    <div className="flex items-center justify-between text-sm py-2 border-t border-gray-100 dark:border-white/5">
-                      <span className="text-gray-500 dark:text-gray-400">
-                        Avg Package
-                      </span>
-                      <span className="font-semibold text-gray-900 dark:text-white">
-                        {college.avgPackage}
-                      </span>
-                    </div>
-                  )}
-
-                  {college.seats && (
-                    <div className="flex items-center justify-between text-sm py-2 border-t border-gray-100 dark:border-white/5">
-                      <span className="text-gray-500 dark:text-gray-400">
-                        Total Seats
-                      </span>
-                      <span className="font-semibold text-gray-900 dark:text-white">
-                        {college.seats.toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Centered Header with Gradient */}
+        <div className="text-center pt-12 pb-6">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-3">
+            <span className="bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+              Explore Colleges
+            </span>
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Browse {colleges.length}+ top engineering and medical institutions across India
+          </p>
         </div>
-      </section>
 
-      {/* Search & Filter Section */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20 sticky top-16 z-30">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-4">
+        {/* Featured Colleges Carousel */}
+        <div className="mb-8">
+          <HeroCarousel items={carouselItems} speed="normal" />
+        </div>
+
+        {/* Search & Filter Section */}
+        <div className="mb-6">
+          <div className="flex flex-col lg:flex-row gap-4 mb-4">
             {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -637,58 +548,58 @@ export default function CollegeListPage() {
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
             Showing {filteredColleges.length} of {colleges.length} colleges
           </div>
         </div>
-      </section>
 
-      {/* College List */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+
+
+        {/* College List - Dense Grid */}
+        <div className="pb-8">
           {filteredColleges.length === 0 ? (
-            <div className="text-center py-16">
-              <Building2 className="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <div className="text-center py-12">
+              <Building2 className="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600 mb-3" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                 No colleges found
               </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                 Try adjusting your search or filters
               </p>
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2596be] text-white hover:bg-[#1e7ca0] transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-[#2596be] text-white hover:bg-[#1e7ca0] transition-colors"
               >
                 Clear All Filters
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {filteredColleges.map((college) => (
                 <div
                   key={college.id}
-                  className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-lg transition-shadow"
+                  className="p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:shadow-md transition-shadow"
                 >
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                     {/* Left: Icon & Basic Info */}
-                    <div className="flex items-start gap-4 flex-1">
+                    <div className="flex items-start gap-3 flex-1">
                       <div
-                        className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
                           college.type === "engineering"
                             ? "bg-blue-500/10"
                             : "bg-emerald-500/10"
                         }`}
                       >
                         {college.type === "engineering" ? (
-                          <GraduationCap className="w-7 h-7 text-blue-600 dark:text-blue-400" />
+                          <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                         ) : (
-                          <Stethoscope className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
+                          <Stethoscope className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                         )}
                       </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                          <h3 className="font-bold text-base text-gray-900 dark:text-white">
                             {college.shortName}
                           </h3>
                           {college.nirf && (
@@ -731,7 +642,7 @@ export default function CollegeListPage() {
                     <div className="flex flex-wrap gap-6 lg:gap-8">
                       {college.avgPackage && (
                         <div className="text-center">
-                          <div className="text-lg font-bold text-gray-900 dark:text-white">
+                          <div className="text-base font-bold text-gray-900 dark:text-white">
                             {college.avgPackage}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -741,7 +652,7 @@ export default function CollegeListPage() {
                       )}
                       {college.highestPackage && (
                         <div className="text-center">
-                          <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                          <div className="text-base font-bold text-emerald-600 dark:text-emerald-400">
                             {college.highestPackage}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -751,7 +662,7 @@ export default function CollegeListPage() {
                       )}
                       {college.seats && (
                         <div className="text-center">
-                          <div className="text-lg font-bold text-gray-900 dark:text-white">
+                          <div className="text-base font-bold text-gray-900 dark:text-white">
                             {college.seats.toLocaleString()}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">
@@ -762,7 +673,7 @@ export default function CollegeListPage() {
                     </div>
 
                     {/* Right: Exams & Link */}
-                    <div className="flex flex-col items-end gap-3">
+                    <div className="flex flex-col items-start lg:items-end gap-2">
                       <div className="flex flex-wrap gap-2 justify-end">
                         {college.acceptedExams.map((exam) => (
                           <span
@@ -791,29 +702,7 @@ export default function CollegeListPage() {
             </div>
           )}
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="p-8 md:p-12 rounded-3xl bg-linear-to-br from-[#2596be] to-[#4EA8DE] text-white">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Need Help Choosing?
-            </h2>
-            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Our expert counsellors can help you select the right college based
-              on your rank, preferences, and career goals.
-            </p>
-            <Link
-              href="/counselling/admission-guidance"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
-            >
-              <Users className="w-5 h-5" />
-              Get Free Guidance
-            </Link>
-          </div>
-        </div>
-      </section>
+      </div>
 
       <Footer />
     </>
