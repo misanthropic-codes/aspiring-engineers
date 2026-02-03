@@ -242,10 +242,10 @@ export default function WBJEECounsellingPage() {
       />
 
       {/* Top Colleges */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Top Colleges Through WBJEE
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -278,10 +278,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* Popular Branches */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Popular Branches & Cutoffs
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -311,10 +311,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* Counselling Phases */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Counselling Process Overview
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -365,10 +365,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* Our Services */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Our WBJEE Counselling Services
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -398,10 +398,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-16 px-4 sm:px-6 lg:px-8">
+      <section id="pricing" className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
               Choose Your Counselling Plan
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -582,10 +582,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* Expert Counsellors Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
               Meet Our WBJEE Expert Counsellors
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -687,10 +687,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               WBJEE Counselling Timeline 2026
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -737,10 +737,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* FAQs Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -774,11 +774,11 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <div className="p-8 md:p-12 rounded-3xl bg-linear-to-br from-purple-500 to-pink-500 text-white">
             <GraduationCap className="w-16 h-16 mx-auto mb-6 opacity-90" />
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">
               Secure Your Seat in Top WB Colleges
             </h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">

@@ -247,21 +247,34 @@ export default function NEETCounsellingPage() {
     <>
       <Navbar />
 
-      <PageHero
-        title="NEET Counselling"
-        subtitle="Expert"
-        description="Navigate MCC, State, and Deemed University counselling with confidence. Secure your MBBS/BDS seat in top medical colleges across India."
-        badge="MCC | State | Deemed Universities"
-        showCTA
-        ctaText="View Pricing Plans"
-        ctaLink="#pricing"
-      />
+      {/* Compact Hero Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-3">
+          <Stethoscope className="w-4 h-4" />
+          MCC | State | Deemed Universities
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+          <span className="bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+            NEET Counselling Guidance
+          </span>
+        </h1>
+        <p className="text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-4">
+          Navigate MCC, State, and Deemed University counselling with confidence. Secure your MBBS/BDS seat in top medical colleges across India.
+        </p>
+        <Link
+         href="#pricing"
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors text-sm"
+        >
+          View Pricing Plans
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
 
       {/* Seat Matrix */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               NEET UG Seat Matrix
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -291,10 +304,10 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* Courses Available */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Courses Through NEET
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -327,10 +340,10 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* Counselling Types */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Counselling Process Overview
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -381,10 +394,10 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* Our Services */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Our NEET Counselling Services
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -414,10 +427,10 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-16 px-4 sm:px-6 lg:px-8">
+      <section id="pricing" className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
               Choose Your Counselling Plan
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -598,10 +611,10 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* Expert Counsellors Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
               Meet Our NEET Expert Counsellors
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -703,10 +716,10 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               NEET Counselling Timeline 2026
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -753,10 +766,10 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* FAQs Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -790,11 +803,11 @@ export default function NEETCounsellingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <div className="p-8 md:p-12 rounded-3xl bg-linear-to-br from-emerald-500 to-teal-500 text-white">
             <Stethoscope className="w-16 h-16 mx-auto mb-6 opacity-90" />
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">
               Start Your Medical Journey Today
             </h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">

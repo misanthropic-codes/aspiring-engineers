@@ -100,30 +100,43 @@ export default function CounsellingPage() {
     <>
       <Navbar />
 
-      <PageHero
-        title="College Counselling"
-        subtitle="Expert"
-        description="Navigate the complex admission process with confidence. Our expert counsellors help you secure seats in top engineering and medical colleges."
-        badge="Trusted by 10,000+ Students"
-        showCTA
-        ctaText="Book Free Consultation"
-        ctaLink="/contact"
-      />
+      {/* Compact Hero Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-3">
+          <CheckCircle className="w-4 h-4" />
+          Trusted by 10,000+ Students
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+          <span className="bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            Expert College Counselling
+          </span>
+        </h1>
+        <p className="text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-4">
+          Navigate the complex admission process with confidence. Our expert counsellors help you secure seats in top engineering and medical colleges.
+        </p>
+        <Link
+          href="/contact"
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-semibold bg-[#2596be] text-white hover:bg-[#1e7ca0] transition-colors text-sm"
+        >
+          Book Free Consultation
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
 
       {/* Counselling Types Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Choose Your Counselling Path
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               Select the exam-specific counselling service that matches your
               needs
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {counsellingTypes.map((type) => (
               <Link
                 key={type.id}
@@ -133,19 +146,19 @@ export default function CounsellingPage() {
                 {/* Gradient Header */}
                 <div className={`h-2 bg-gradient-to-r ${type.color}`} />
 
-                <div className="p-6">
+                <div className="p-5">
                   {/* Icon */}
                   <div
-                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${type.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}
                   >
-                    <type.icon className="w-7 h-7 text-white" />
+                    <type.icon className="w-6 h-6 text-white" />
                   </div>
 
                   {/* Title & Subtitle */}
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-[#2596be] transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-[#2596be] transition-colors">
                     {type.title}
                   </h3>
-                  <p className="text-sm text-[#2596be] font-medium mb-3">
+                  <p className="text-sm text-[#2596be] font-medium mb-2">
                     {type.subtitle}
                   </p>
 
@@ -155,7 +168,7 @@ export default function CounsellingPage() {
                   </p>
 
                   {/* Features */}
-                  <div className="space-y-2 mb-6">
+                  <div className="space-y-1.5 mb-4">
                     {type.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
@@ -179,9 +192,9 @@ export default function CounsellingPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, idx) => (
               <div key={idx} className="text-center">
                 <div className="text-4xl sm:text-5xl font-bold bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent mb-2">
@@ -197,33 +210,33 @@ export default function CounsellingPage() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
               Why Choose Our Counselling?
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               We've helped thousands of students make informed decisions about
               their future
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {whyChooseUs.map((item, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
+                className="p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-[#2596be]/10 flex items-center justify-center flex-shrink-0">
-                    <Star className="w-5 h-5 text-[#2596be]" />
+                  <div className="w-8 h-8 rounded-full bg-[#2596be]/10 flex items-center justify-center flex-shrink-0">
+                    <Star className="w-4 h-4 text-[#2596be]" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                    <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">
                       {item.title}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       {item.description}
                     </p>
                   </div>
@@ -235,27 +248,27 @@ export default function CounsellingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="p-8 md:p-12 rounded-3xl bg-gradient-to-br from-[#2596be] to-[#4EA8DE] text-white">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-[#2596be] to-[#4EA8DE] text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
               Ready to Secure Your Dream College?
             </h2>
-            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-base text-white/90 mb-6 max-w-2xl mx-auto">
               Don't leave your future to chance. Get expert guidance from our
               experienced counsellors and make informed decisions.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
               >
                 <Users className="w-5 h-5" />
                 Book Free Consultation
               </Link>
               <Link
                 href="tel:+919876543210"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold border-2 border-white text-white hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold border-2 border-white text-white hover:bg-white/10 transition-colors"
               >
                 Call Us Now
               </Link>

@@ -179,10 +179,28 @@ export default apiClient;
 // Helper function to handle API errors
 export const handleApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
-    const axiosError = error as AxiosError<{ error: { message: string } }>;
+    const axiosError = error as AxiosError<{
+      message?: string | string[];
+      error?: { message: string };
+    }>;
 
     if (axiosError.response) {
-      return axiosError.response.data?.error?.message || "An error occurred";
+      const data = axiosError.response.data;
+      
+      // Check for message array (validation errors)
+      if (data?.message) {
+        if (Array.isArray(data.message)) {
+          return data.message.join(', ');
+        }
+        return data.message;
+      }
+      
+      // Check for error.message (legacy format)
+      if (data?.error?.message) {
+        return data.error.message;
+      }
+      
+      return "An error occurred";
     } else if (axiosError.request) {
       return "No response from server. Please check your connection.";
     }

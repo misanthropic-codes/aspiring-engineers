@@ -122,7 +122,24 @@ function CheckoutContent() {
       setIsProcessing(false);
     } catch (err: any) {
       console.error('❌ Payment error:', err);
-      setError(err.message || 'Failed to initiate payment. Please try again.');
+      const errorMessage = err.message || 'Failed to initiate payment. Please try again.';
+      
+      // Check if it's a duplicate purchase error
+      if (errorMessage.toLowerCase().includes('already purchased')) {
+        setError(errorMessage);
+        
+        // Redirect to enrollments page after 3 seconds
+        setTimeout(() => {
+          if (packageType === 'counselling_package') {
+            window.location.href = `${process.env.NEXT_PUBLIC_TEST_PORTAL_URL}/counselling/enrollments`;
+          } else {
+            window.location.href = `${process.env.NEXT_PUBLIC_TEST_PORTAL_URL}/packages`;
+          }
+        }, 3000);
+      } else {
+        setError(errorMessage);
+      }
+      
       setIsProcessing(false);
     }
   };
@@ -248,8 +265,35 @@ function CheckoutContent() {
                 )}
 
                 {error && (
-                  <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
-                    {error}
+                  <div className={`rounded-lg p-4 text-sm ${
+                    error.toLowerCase().includes('already purchased')
+                      ? 'bg-blue-50 dark:bg-blue-500/10 border-2 border-blue-200 dark:border-blue-500/20'
+                      : 'bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20'
+                  }`}>
+                    <div className="flex items-start gap-2">
+                      {error.toLowerCase().includes('already purchased') ? (
+                        <svg className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      )}
+                      <div className="flex-1">
+                        <p className={error.toLowerCase().includes('already purchased')
+                          ? 'text-blue-700 dark:text-blue-300 font-medium'
+                          : 'text-red-700 dark:text-red-300 font-medium'
+                        }>
+                          {error}
+                        </p>
+                        {error.toLowerCase().includes('already purchased') && (
+                          <p className="text-blue-600 dark:text-blue-400 text-xs mt-1">
+                            Redirecting you to your enrollments...
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )}
 
