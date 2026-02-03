@@ -23,8 +23,8 @@ interface CounsellingEnrollment {
     name: string;
     examType: string;
     maxSessions: number;
-    sessionDuration: number;
-    validityDays: number;
+    sessionDuration?: number;
+    validityDays?: number;
   };
   status: "active" | "expired" | "cancelled" | "refunded";
   sessionsUsed: number;
@@ -239,7 +239,7 @@ export default function MyEnrollmentsPage() {
                         <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                           <Clock className="w-4 h-4" />
                           <span>
-                            {enrollment.packageSnapshot.sessionDuration} min sessions
+                            {enrollment.packageSnapshot.sessionDuration || 30} min sessions
                           </span>
                         </div>
                         {isActive && (
