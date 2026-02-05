@@ -100,15 +100,15 @@ const examOptions = [
   { value: "", label: "Select Exam" },
   { value: "jee-main", label: "JEE Main" },
   { value: "jee-advanced", label: "JEE Advanced" },
-  { value: "neet", label: "NEET UG" },
+  { value: "neet-ug", label: "NEET UG" },
   { value: "wbjee", label: "WBJEE" },
-  { value: "other", label: "Other State Exam" },
+  { value: "other-state-exam", label: "Other State Exam" },
 ];
 
 const categoryOptions = [
   { value: "", label: "Select Category" },
   { value: "general", label: "General" },
-  { value: "obc", label: "OBC-NCL" },
+  { value: "obc-ncl", label: "OBC-NCL" },
   { value: "sc", label: "SC" },
   { value: "st", label: "ST" },
   { value: "ews", label: "EWS" },
@@ -117,17 +117,17 @@ const categoryOptions = [
 
 export default function AdmissionGuidancePage() {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     email: "",
     phone: "",
     exam: "",
-    rank: "",
+    rankScore: "",
     category: "",
-    candidateType: "appearing",
-    percentage10: "",
-    percentage12: "",
-    state: "",
-    message: "",
+    class12Status: "appearing",
+    tenthPercentage: "",
+    twelfthPercentageExpected: "",
+    homeState: "",
+    additionalMessage: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -138,42 +138,42 @@ export default function AdmissionGuidancePage() {
     setIsSubmitting(true);
 
     try {
-      const result = await counsellingService.submitInquiry({
-        name: formData.name,
+      const result = await counsellingService.submitAdmissionGuidance({
+        fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
-        exam: formData.exam,
-        rank: formData.rank,
-        category: formData.category,
-        candidateType: formData.candidateType as "appearing" | "passed",
-        percentage10: formData.percentage10,
-        percentage12: formData.percentage12,
-        state: formData.state,
-        message: formData.message,
+        exam: formData.exam as "jee-main" | "jee-advanced" | "neet-ug" | "wbjee" | "other-state-exam",
+        rankScore: formData.rankScore || undefined,
+        category: formData.category as "general" | "obc-ncl" | "sc" | "st" | "ews" | "pwd",
+        homeState: formData.homeState,
+        class12Status: formData.class12Status as "appearing" | "passed",
+        tenthPercentage: formData.tenthPercentage,
+        twelfthPercentageExpected: formData.twelfthPercentageExpected || undefined,
+        additionalMessage: formData.additionalMessage || undefined,
       });
 
-      console.log("Inquiry submitted successfully:", result);
+      console.log("Admission guidance submitted successfully:", result);
       setSubmitted(true);
 
     // Reset form after showing success
     setTimeout(() => {
       setFormData({
-        name: "",
+        fullName: "",
         email: "",
         phone: "",
         exam: "",
-        rank: "",
+        rankScore: "",
         category: "",
-        candidateType: "appearing",
-        percentage10: "",
-        percentage12: "",
-        state: "",
-        message: "",
+        class12Status: "appearing",
+        tenthPercentage: "",
+        twelfthPercentageExpected: "",
+        homeState: "",
+        additionalMessage: "",
       });
       setSubmitted(false);
     }, 5000);
     } catch (error: any) {
-      console.error("Failed to submit inquiry:", error);
+      console.error("Failed to submit admission guidance:", error);
       alert(
         error.response?.data?.message ||
           "Failed to submit form. Please try again later."
@@ -324,17 +324,17 @@ export default function AdmissionGuidancePage() {
                   <form onSubmit={handleSubmit} className="space-y-3">
                     <div>
                       <label
-                        htmlFor="name"
+                        htmlFor="fullName"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                       >
                         Full Name *
                       </label>
                       <input
                         type="text"
-                        id="name"
-                        name="name"
+                        id="fullName"
+                        name="fullName"
                         required
-                        value={formData.name}
+                        value={formData.fullName}
                         onChange={handleChange}
                         className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                         placeholder="Enter your full name"
@@ -407,16 +407,16 @@ export default function AdmissionGuidancePage() {
 
                       <div>
                         <label
-                          htmlFor="rank"
+                          htmlFor="rankScore"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                         >
                           Rank / Score (Optional)
                         </label>
                         <input
                           type="text"
-                          id="rank"
-                          name="rank"
-                          value={formData.rank}
+                          id="rankScore"
+                          name="rankScore"
+                          value={formData.rankScore}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                           placeholder="e.g., 5000 or 650"
@@ -450,17 +450,17 @@ export default function AdmissionGuidancePage() {
 
                       <div>
                         <label
-                          htmlFor="state"
+                          htmlFor="homeState"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                         >
                           Home State *
                         </label>
                         <input
                           type="text"
-                          id="state"
-                          name="state"
+                          id="homeState"
+                          name="homeState"
                           required
-                          value={formData.state}
+                          value={formData.homeState}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                           placeholder="e.g., West Bengal"
@@ -476,9 +476,9 @@ export default function AdmissionGuidancePage() {
                         <label className="inline-flex items-center">
                           <input
                             type="radio"
-                            name="candidateType"
+                            name="class12Status"
                             value="appearing"
-                            checked={formData.candidateType === "appearing"}
+                            checked={formData.class12Status === "appearing"}
                             onChange={handleChange}
                             className="form-radio text-[#2596be] focus:ring-[#2596be]"
                           />
@@ -489,9 +489,9 @@ export default function AdmissionGuidancePage() {
                         <label className="inline-flex items-center">
                           <input
                             type="radio"
-                            name="candidateType"
+                            name="class12Status"
                             value="passed"
-                            checked={formData.candidateType === "passed"}
+                            checked={formData.class12Status === "passed"}
                             onChange={handleChange}
                             className="form-radio text-[#2596be] focus:ring-[#2596be]"
                           />
@@ -505,17 +505,17 @@ export default function AdmissionGuidancePage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label
-                          htmlFor="percentage10"
+                          htmlFor="tenthPercentage"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                         >
                           10th Percentage *
                         </label>
                         <input
                           type="text"
-                          id="percentage10"
-                          name="percentage10"
+                          id="tenthPercentage"
+                          name="tenthPercentage"
                           required
-                          value={formData.percentage10}
+                          value={formData.tenthPercentage}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                           placeholder="e.g., 85%"
@@ -524,17 +524,17 @@ export default function AdmissionGuidancePage() {
 
                       <div>
                         <label
-                          htmlFor="percentage12"
+                          htmlFor="twelfthPercentageExpected"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                         >
-                          12th Percentage {formData.candidateType === "appearing" ? "(Expected)" : "*"}
+                          12th Percentage {formData.class12Status === "appearing" ? "(Expected)" : "*"}
                         </label>
                         <input
                           type="text"
-                          id="percentage12"
-                          name="percentage12"
-                          required={formData.candidateType === "passed"}
-                          value={formData.percentage12}
+                          id="twelfthPercentageExpected"
+                          name="twelfthPercentageExpected"
+                          required={formData.class12Status === "passed"}
+                          value={formData.twelfthPercentageExpected}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                           placeholder="e.g., 80%"
@@ -544,15 +544,15 @@ export default function AdmissionGuidancePage() {
 
                     <div>
                       <label
-                        htmlFor="message"
+                        htmlFor="additionalMessage"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                       >
                         Additional Message (Optional)
                       </label>
                       <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
+                        id="additionalMessage"
+                        name="additionalMessage"
+                        value={formData.additionalMessage}
                         onChange={handleChange}
                         rows={3}
                         className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent resize-none"

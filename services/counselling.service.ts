@@ -5,6 +5,7 @@ import {
   Counsellor,
   CounsellorsResponse,
   CounsellingInquiryPayload,
+  AdmissionGuidancePayload,
   ExamType,
 } from "@/types/counselling";
 
@@ -152,6 +153,30 @@ export const counsellingService = {
       return response.data.data;
     } catch (error) {
       console.error("❌ [counsellingService] Failed to submit inquiry:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Submit admission guidance request
+   * POST /admission-guidance
+   */
+  submitAdmissionGuidance: async (
+    payload: AdmissionGuidancePayload,
+  ): Promise<{ success: boolean; message: string }> => {
+    try {
+      console.log(
+        "🚀 [counsellingService] POST /admission-guidance",
+        payload,
+      );
+      const response = await apiClient.post<{
+        success: boolean;
+        message: string;
+      }>("/admission-guidance", payload);
+      console.log("✅ [counsellingService] Response:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("❌ [counsellingService] Failed to submit admission guidance:", error);
       throw error;
     }
   },

@@ -76,7 +76,7 @@ export interface Counsellor {
   displayOrder?: number;
 }
 
-// Inquiry submission
+// Inquiry submission (legacy)
 export interface CounsellingInquiryPayload {
   name: string;
   email: string;
@@ -90,6 +90,21 @@ export interface CounsellingInquiryPayload {
   state?: string;
   message?: string;
   source?: string;
+}
+
+// Admission Guidance Form Payload
+export interface AdmissionGuidancePayload {
+  fullName: string;           // Required
+  email: string;              // Required
+  phone: string;              // Required
+  exam: "jee-main" | "jee-advanced" | "neet-ug" | "wbjee" | "other-state-exam"; // Required
+  rankScore?: string;         // Optional
+  category: "general" | "obc-ncl" | "sc" | "st" | "ews" | "pwd"; // Required
+  homeState: string;          // Required
+  class12Status: "appearing" | "passed"; // Required
+  tenthPercentage: string;    // Required
+  twelfthPercentageExpected?: string; // Optional
+  additionalMessage?: string; // Optional
 }
 
 // API Response Types
