@@ -3,34 +3,48 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import PageHero from "@/components/layout/PageHero";
 import Link from "next/link";
 import {
   GraduationCap,
   Building2,
   FileCheck,
   Users,
+  ArrowRight,
   CheckCircle,
   Calendar,
+  BookOpen,
+  Target,
   HelpCircle,
-  Phone,
   Award,
   TrendingUp,
   Layers,
-  MapPin,
-  BookOpen,
-  Settings,
-  Star,
-  BadgeCheck,
   Sparkles,
   Loader2,
   Check,
   X,
-  ArrowRight,
+  MapPin,
+  Settings,
+  BadgeCheck,
+  Star,
+  Landmark,
 } from "lucide-react";
 import { counsellingService } from "@/services/counselling.service";
 import { useAuth } from "@/contexts/AuthContext";
 import type { CounsellingPackage, Counsellor } from "@/types/counselling";
+
+// Define Blue Theme Colors (Consistent with JEE)
+const THEME = {
+  primary: "text-[#2596be]",
+  primaryBg: "bg-[#2596be]",
+  lightBg: "bg-[#2596be]/10",
+  darkBg: "dark:bg-[#2596be]/20",
+  gradientText: "bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent",
+  gradientBg: "bg-linear-to-r from-[#2596be] to-[#60DFFF]",
+  heroGradient: "bg-linear-to-br from-[#2596be] to-[#4EA8DE]",
+  iconBg: "bg-[#2596be]/10",
+  border: "border-gray-200 dark:border-white/10",
+  darkBorder: "dark:border-white/10",
+};
 
 const counsellingPhases = [
   {
@@ -47,28 +61,28 @@ const counsellingPhases = [
     timeline: "July - August",
   },
   {
-    title: "Special Round",
+    title: "Mop-Up Round",
     description:
-      "Additional rounds for filling vacant seats after general counselling is complete.",
+      "Centralized round for upgrading seats and filling vacancies after general rounds.",
     icon: Settings,
     details: [
-      "Vacant seat allocation",
       "Fresh choice filling",
-      "Limited time window",
-      "No previous allotment needed",
+      "Vacant seat allocation",
+      "One-time opportunity",
+      "Category conversion rules",
     ],
     timeline: "September",
   },
   {
-    title: "Spot Round",
+    title: "Decentralized Counselling",
     description:
-      "Final round for remaining vacant seats conducted at individual college level.",
+      "Final round conducted at individual college level for remaining vacant seats.",
     icon: MapPin,
     details: [
       "College-level admission",
       "Direct reporting",
-      "On-spot document verification",
-      "Immediate seat confirmation",
+      "On-spot verification",
+      "Immediate confirmation",
     ],
     timeline: "September - October",
   },
@@ -76,39 +90,39 @@ const counsellingPhases = [
 
 const services = [
   {
-    title: "College Prediction",
-    description:
-      "Accurate predictions based on WBJEE cutoff data from previous years for realistic expectations.",
-    icon: TrendingUp,
-  },
-  {
     title: "Choice Filling Strategy",
     description:
-      "Expert guidance on creating the optimal preference list based on your rank and preferences.",
+      "Expert guidance on creating the optimal preference list based on your GMR/PMR rank.",
     icon: Layers,
   },
   {
-    title: "College Comparison",
+    title: "College Prediction",
     description:
-      "Detailed analysis of West Bengal engineering colleges - placements, facilities, and reputation.",
-    icon: Award,
+      "Accurate predictions based on 5 years of WBJEE cutoff data for Jadavpur & other top colleges.",
+    icon: TrendingUp,
   },
   {
     title: "Branch Selection",
     description:
-      "Understand the scope of different engineering branches and their career prospects in WB.",
-    icon: BookOpen,
+      "Understand the scope of different engineering branches and their placements in West Bengal.",
+    icon: Target,
   },
   {
-    title: "Document Guidance",
+    title: "Document Verification",
     description:
-      "Complete checklist and verification support for domicile, category, and educational documents.",
+      "Complete checklist and verification support for domicile, TFW, and category certificates.",
     icon: FileCheck,
+  },
+  {
+    title: "College Comparison",
+    description:
+      "Detailed comparison of ROI, placements, and campus life of top Government vs Private colleges.",
+    icon: Award,
   },
   {
     title: "Personal Mentorship",
     description:
-      "One-on-one sessions with alumni from top WB colleges to guide your decision-making process.",
+      "One-on-one sessions with Jadavpur/IIEST alumni to guide your decision-making process.",
     icon: Users,
   },
 ];
@@ -119,51 +133,64 @@ const timeline = [
   { phase: "Choice Filling Begins", date: "July" },
   { phase: "Round 1 Seat Allotment", date: "July" },
   { phase: "Round 2 Seat Allotment", date: "August" },
-  { phase: "Round 3 Seat Allotment", date: "August" },
-  { phase: "Special Round", date: "September" },
-  { phase: "Spot Round", date: "September - October" },
+  { phase: "Mop-Up Round Registration", date: "August" },
+  { phase: "Mop-Up Seat Allotment", date: "September" },
+  { phase: "Decentralized Counselling", date: "September - October" },
 ];
 
 const faqs = [
   {
     question: "What is the eligibility for WBJEE counselling?",
     answer:
-      "Candidates must have a valid WBJEE rank, domicile of West Bengal (for state quota), and must have passed 10+2 with Physics, Chemistry, and Mathematics with minimum required marks.",
+      "Candidates must have a valid WBJEE rank. For Govt. colleges and Domicile quotas, West Bengal domicile is mandatory. Non-domicile students can apply for General Category seats in Pvt. colleges.",
   },
   {
-    question: "How many colleges participate in WBJEE counselling?",
+    question: "Is Domicile Certificate mandatory?",
     answer:
-      "WBJEE counselling covers 100+ engineering colleges in West Bengal including Jadavpur University, IIEST Shibpur (partial seats), and all government and private engineering colleges in the state.",
+      "Yes, for claiming Home State Quota seats in Government colleges and TFW seats, a valid Domicile Certificate (Performa A1/A2/B) is strictly required.",
   },
   {
-    question: "Can non-WB domicile students apply through WBJEE?",
+    question: "Can I get Jadavpur University with my rank?",
     answer:
-      "Yes, there are limited seats for non-domicile students in private colleges. However, government college seats are primarily reserved for WB domicile holders.",
+      "Jadavpur University is the most sought-after institute. Cutoffs vary by branch and category. Generally, a rank under 500-1000 is needed for top branches like CSE/IT/ECE for General Category.",
   },
   {
-    question: "What is the fee structure for WB government colleges?",
+    question: "What is TFW Scheme?",
     answer:
-      "Government engineering colleges in WB have very affordable fees, typically ranging from ₹5,000 to ₹15,000 per semester. Jadavpur University is particularly known for its nominal fee structure.",
+      "Tuition Fee Waiver (TFW) scheme allows students with family income less than ₹2.5 Lakhs/year to get 100% tuition fee waiver. Selection is based on merit (WBJEE rank).",
   },
   {
-    question: "What happens if I don't report to allotted college?",
+    question: "How many choices should I fill?",
     answer:
-      "Failure to report within the specified time will result in cancellation of your allotment and forfeiture of the seat acceptance fee. You may not be eligible for further rounds.",
+      "There is no limit. We recommend filling maximum choices in correct order of preference. Our mentors help you create a risk-free choice list.",
   },
 ];
 
-const topColleges = [
-  { name: "Jadavpur University", location: "Kolkata", type: "Government" },
-  { name: "IIEST Shibpur", location: "Howrah", type: "Government" },
-  { name: "WBUT Colleges", location: "Various", type: "Government" },
-  { name: "Heritage Institute", location: "Kolkata", type: "Private" },
-];
-
-const branches = [
-  { name: "Computer Science", seats: "High Demand", cutoff: "Top 5000" },
-  { name: "Electronics & Comm.", seats: "High Demand", cutoff: "Top 10000" },
-  { name: "Electrical Engineering", seats: "Moderate", cutoff: "Top 15000" },
-  { name: "Mechanical Engineering", seats: "Available", cutoff: "Top 20000" },
+const wbjeeStats = [
+  { 
+    name: "Jadavpur Univ.", 
+    count: "#1", 
+    description: "Top Ranked State Govt. University with 100% Placements",
+    icon:  Building2
+  },
+  {
+    name: "Govt. Colleges",
+    count: "10+",
+    description: "Including IIEST Shibpur, KGEC, JGEC & Others",
+    icon: Landmark
+  },
+  {
+    name: "TFW Seats",
+    count: "5%",
+    description: "Dedicated Tuition Fee Waiver Seats in Every Institute",
+    icon: Award
+  },
+  {
+    name: "Private Colleges",
+    count: "80+",
+    description: "IEM, Heritage, Techno India & Many More",
+    icon: BookOpen
+  },
 ];
 
 export default function WBJEECounsellingPage() {
@@ -189,8 +216,9 @@ export default function WBJEECounsellingPage() {
       try {
         const data = await counsellingService.getPackagesByExam("wbjee");
         setPackages(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to fetch packages:", error);
+        setPackages([]);
       } finally {
         setLoadingPackages(false);
       }
@@ -200,8 +228,9 @@ export default function WBJEECounsellingPage() {
       try {
         const data = await counsellingService.getCounsellorsByExam("wbjee");
         setCounsellors(data);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to fetch counsellors:", error);
+        setCounsellors([]);
       } finally {
         setLoadingCounsellors(false);
       }
@@ -231,94 +260,71 @@ export default function WBJEECounsellingPage() {
     <>
       <Navbar />
 
-      <PageHero
-        title="WBJEE Counselling"
-        subtitle="Expert"
-        description="Complete guidance for WBJEE seat allocation. Secure your seat in Jadavpur University, IIEST Shibpur, and top West Bengal engineering colleges."
-        badge="West Bengal Engineering Admissions"
-        showCTA
-        ctaText="View Pricing Plans"
-        ctaLink="#pricing"
-      />
+      {/* Compact Hero Header - Matches JEE Style */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2596be]/10 text-[#2596be] dark:text-[#60DFFF] text-sm font-medium mb-3">
+          <GraduationCap className="w-4 h-4" />
+          WBJEEB | Jadavpur | Decentralized
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">
+          <span className={THEME.gradientText}>
+            WBJEE Counselling Guidance
+          </span>
+        </h1>
+        <p className="text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-4">
+          Complete guidance for West Bengal Joint Entrance Examination counselling. Secure your seat in Jadavpur University, Calcutta University, and top Govt. Engineering Colleges.
+        </p>
+        <Link
+          href="#pricing"
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-semibold bg-[#2596be] text-white hover:bg-[#1e7ca0] transition-colors text-sm"
+        >
+          View Pricing Plans
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
 
-      {/* Top Colleges */}
+      {/* Stats/Institutes - Matches JEE "College Categories" Style */}
       <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
-              Top Colleges Through WBJEE
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${THEME.gradientText}`}>
+              West Bengal Engineering Ecosystem
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              Premier engineering institutions in West Bengal
+              Access the best engineering institutes in the state
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {topColleges.map((college, idx) => (
+            {wbjeeStats.map((stat, idx) => (
               <div
                 key={idx}
                 className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl text-center hover:shadow-lg transition-shadow"
               >
-                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center mx-auto mb-4">
-                  <Building2 className="w-6 h-6 text-white" />
+                <div className="text-3xl font-bold text-[#2596be] mb-1">
+                  {stat.count}
                 </div>
-                <div className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                  {college.name}
+                <div className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                  {stat.name}
                 </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
-                  {college.location}
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {stat.description}
                 </div>
-                <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                  {college.type}
-                </span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Popular Branches */}
+      {/* Counselling Phases - Matches JEE "Counselling Rounds" Style */}
       <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
-              Popular Branches & Cutoffs
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
-              Expected rank ranges for top branches in government colleges
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {branches.map((branch, idx) => (
-              <div
-                key={idx}
-                className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="text-lg font-bold text-gray-900 dark:text-white mb-2">
-                  {branch.name}
-                </div>
-                <div className="text-sm text-purple-600 dark:text-purple-400 font-medium mb-1">
-                  {branch.cutoff}
-                </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">
-                  {branch.seats}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Counselling Phases */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${THEME.gradientText}`}>
               Counselling Process Overview
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              Understand the WBJEE counselling phases and their timelines
+              Understand the WBJEEB counselling phases
             </p>
           </div>
 
@@ -330,10 +336,10 @@ export default function WBJEECounsellingPage() {
               >
                 {/* Icon & Timeline Badge */}
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-14 h-14 rounded-xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <div className={`w-14 h-14 rounded-xl ${THEME.heroGradient} flex items-center justify-center`}>
                     <phase.icon className="w-7 h-7 text-white" />
                   </div>
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-sm font-medium">
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2596be]/10 text-[#2596be] text-sm font-medium">
                     <Calendar className="w-3.5 h-3.5" />
                     {phase.timeline}
                   </div>
@@ -351,7 +357,7 @@ export default function WBJEECounsellingPage() {
                 <div className="space-y-2">
                   {phase.details.map((detail, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-purple-500 shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">
                         {detail}
                       </span>
@@ -364,15 +370,15 @@ export default function WBJEECounsellingPage() {
         </div>
       </section>
 
-      {/* Our Services */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      {/* Our Services - Matches JEE Services Style */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${THEME.gradientText}`}>
               Our WBJEE Counselling Services
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              Comprehensive support for West Bengal engineering admissions
+              Comprehensive support from GMR Rank to Final Admission
             </p>
           </div>
 
@@ -382,8 +388,8 @@ export default function WBJEECounsellingPage() {
                 key={idx}
                 className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl hover:shadow-lg hover:-translate-y-1 transition-all"
               >
-                <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-4">
-                  <service.icon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                <div className="w-12 h-12 rounded-xl bg-[#2596be]/10 flex items-center justify-center mb-4">
+                  <service.icon className="w-6 h-6 text-[#2596be]" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                   {service.title}
@@ -397,11 +403,14 @@ export default function WBJEECounsellingPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-8 px-4 sm:px-6 lg:px-8">
+      {/* Pricing Section - Blue Theme */}
+      <section
+        id="pricing"
+        className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20"
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${THEME.gradientText}`}>
               Choose Your Counselling Plan
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -411,7 +420,7 @@ export default function WBJEECounsellingPage() {
 
           {loadingPackages ? (
             <div className="flex justify-center items-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#2596be]" />
             </div>
           ) : packages.length === 0 ? (
             <div className="text-center py-16 text-gray-500">
@@ -424,14 +433,14 @@ export default function WBJEECounsellingPage() {
                   key={pkg._id}
                   className={`relative p-6 rounded-2xl border ${
                     pkg.isFeatured
-                      ? "border-purple-500 ring-2 ring-purple-500/20"
+                      ? "border-[#2596be] ring-2 ring-[#2596be]/20"
                       : "border-gray-200 dark:border-white/10"
                   } bg-white dark:bg-gray-900 hover:shadow-xl transition-all`}
                 >
                   {/* Featured Badge */}
                   {pkg.isFeatured && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <div className="px-4 py-1 rounded-full bg-linear-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold flex items-center gap-1">
+                      <div className="px-4 py-1 rounded-full bg-linear-to-r from-[#2596be] to-[#60DFFF] text-white text-sm font-semibold flex items-center gap-1">
                         <Sparkles className="w-3.5 h-3.5" />
                         Most Popular
                       </div>
@@ -470,7 +479,7 @@ export default function WBJEECounsellingPage() {
                         <span className="text-lg text-gray-400 line-through">
                           ₹{pkg.price.toLocaleString()}
                         </span>
-                        <span className="px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-xs font-semibold">
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
                           {Math.round(
                             ((pkg.price - pkg.discountPrice) / pkg.price) * 100,
                           )}
@@ -495,7 +504,7 @@ export default function WBJEECounsellingPage() {
                       {pkg.highlights.map((highlight, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-medium"
+                          className="px-3 py-1 rounded-full bg-[#2596be]/10 text-[#2596be] text-xs font-medium"
                         >
                           {highlight}
                         </span>
@@ -508,7 +517,7 @@ export default function WBJEECounsellingPage() {
                     {pkg.features.map((feature, idx) => (
                       <div key={idx} className="flex items-start gap-2">
                         {feature.included ? (
-                          <Check className="w-5 h-5 text-purple-500 shrink-0 mt-0.5" />
+                          <Check className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                         ) : (
                           <X className="w-5 h-5 text-gray-300 dark:text-gray-600 shrink-0 mt-0.5" />
                         )}
@@ -529,13 +538,11 @@ export default function WBJEECounsellingPage() {
                   {hasEnrollmentForPackage(pkg.slug) ? (
                     <button
                       onClick={() => {
-                        // Redirect to test-portal-client counselling page with SSO
                         const testPortalUrl = process.env.NEXT_PUBLIC_TEST_PORTAL_URL || "";
                         if (!testPortalUrl) {
                           console.error("NEXT_PUBLIC_TEST_PORTAL_URL is not configured");
                           return;
                         }
-                        // Import tokenManager dynamically
                         import("@/lib/utils/tokenManager").then(({ tokenManager }) => {
                           const token = tokenManager.getAuthToken();
                           const refreshToken = tokenManager.getRefreshToken();
@@ -549,8 +556,8 @@ export default function WBJEECounsellingPage() {
                       }}
                       className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
                         pkg.isFeatured
-                          ? "bg-purple-500 text-white hover:bg-purple-600"
-                          : "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 hover:bg-purple-200 dark:hover:bg-purple-900/50"
+                          ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                          : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/50"
                       }`}
                     >
                       <CheckCircle className="w-4 h-4" />
@@ -566,7 +573,7 @@ export default function WBJEECounsellingPage() {
                       }
                       className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
                         pkg.isFeatured
-                          ? "bg-linear-to-r from-purple-500 to-pink-500 text-white hover:opacity-90"
+                          ? "bg-linear-to-r from-[#2596be] to-[#4EA8DE] text-white hover:opacity-90"
                           : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20"
                       }`}
                     >
@@ -581,21 +588,21 @@ export default function WBJEECounsellingPage() {
         </div>
       </section>
 
-      {/* Expert Counsellors Section */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      {/* Expert Counsellors Section - Blue Theme */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${THEME.gradientText}`}>
               Meet Our WBJEE Expert Counsellors
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
-              Alumni from top WB colleges with years of counselling experience
+              Alumni from Jadavpur, Kalyani & Top Govt Colleges
             </p>
           </div>
 
           {loadingCounsellors ? (
             <div className="flex justify-center items-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#2596be]" />
             </div>
           ) : counsellors.length === 0 ? (
             <div className="text-center py-16 text-gray-500">
@@ -610,7 +617,7 @@ export default function WBJEECounsellingPage() {
                 >
                   {/* Counsellor Image & Info */}
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="w-16 h-16 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-bold overflow-hidden">
+                    <div className={`w-16 h-16 rounded-full ${THEME.heroGradient} flex items-center justify-center text-white text-xl font-bold overflow-hidden`}>
                       {counsellor.image ? (
                         <img
                           src={counsellor.image}
@@ -624,9 +631,9 @@ export default function WBJEECounsellingPage() {
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                         {counsellor.name}
-                        <BadgeCheck className="w-5 h-5 text-purple-500" />
+                        <BadgeCheck className="w-5 h-5 text-[#2596be]" />
                       </h3>
-                      <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">
+                      <p className="text-sm text-[#2596be] font-medium">
                         {counsellor.title}
                       </p>
                     </div>
@@ -642,7 +649,7 @@ export default function WBJEECounsellingPage() {
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {counsellor.stats.studentsHelped && (
                         <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
-                          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                          <div className="text-lg font-bold text-[#2596be]">
                             {counsellor.stats.studentsHelped.toLocaleString()}+
                           </div>
                           <div className="text-xs text-gray-500">
@@ -652,7 +659,7 @@ export default function WBJEECounsellingPage() {
                       )}
                       {counsellor.stats.experience && (
                         <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
-                          <div className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                          <div className="text-lg font-bold text-[#2596be]">
                             {counsellor.stats.experience}+
                           </div>
                           <div className="text-xs text-gray-500">
@@ -672,7 +679,7 @@ export default function WBJEECounsellingPage() {
                           .map((spec, idx) => (
                             <span
                               key={idx}
-                              className="px-2 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-medium"
+                              className="px-2 py-1 rounded-full bg-[#2596be]/10 text-[#2596be] text-xs font-medium"
                             >
                               {spec}
                             </span>
@@ -686,11 +693,11 @@ export default function WBJEECounsellingPage() {
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8">
+      {/* Timeline Section - Blue Theme */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${THEME.gradientText}`}>
               WBJEE Counselling Timeline 2026
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -700,7 +707,7 @@ export default function WBJEECounsellingPage() {
 
           <div className="relative">
             {/* Timeline Line */}
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-linear-to-b from-purple-500 to-pink-500" />
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-linear-to-b from-[#2596be] to-[#60DFFF]" />
 
             {/* Timeline Items */}
             <div className="space-y-8">
@@ -712,7 +719,7 @@ export default function WBJEECounsellingPage() {
                   }`}
                 >
                   {/* Dot */}
-                  <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-purple-500 border-4 border-white dark:border-gray-900 transform -translate-x-1/2 z-10" />
+                  <div className="absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-[#2596be] border-4 border-white dark:border-gray-900 transform -translate-x-1/2 z-10" />
 
                   {/* Content */}
                   <div
@@ -721,7 +728,7 @@ export default function WBJEECounsellingPage() {
                     }`}
                   >
                     <div className="p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 inline-block">
-                      <div className="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-1">
+                      <div className="text-sm font-semibold text-[#2596be] mb-1">
                         {item.date}
                       </div>
                       <div className="font-medium text-gray-900 dark:text-white">
@@ -737,10 +744,10 @@ export default function WBJEECounsellingPage() {
       </section>
 
       {/* FAQs Section */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
+      <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className={`text-2xl sm:text-3xl font-bold mb-2 ${THEME.gradientText}`}>
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400">
@@ -755,8 +762,8 @@ export default function WBJEECounsellingPage() {
                 className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <HelpCircle className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                  <div className="w-8 h-8 rounded-full bg-[#2596be]/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <HelpCircle className="w-4 h-4 text-[#2596be]" />
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 dark:text-white mb-2">
@@ -773,23 +780,22 @@ export default function WBJEECounsellingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-8 px-4 sm:px-6 lg:px-8">
+      {/* CTA Section - Blue Theme */}
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="p-8 md:p-12 rounded-3xl bg-linear-to-br from-purple-500 to-pink-500 text-white">
+          <div className={`p-8 md:p-12 rounded-3xl ${THEME.heroGradient} text-white`}>
             <GraduationCap className="w-16 h-16 mx-auto mb-6 opacity-90" />
             <h2 className="text-2xl sm:text-3xl font-bold mb-2">
-              Secure Your Seat in Top WB Colleges
+              Start Your WBJEE Counselling Journey
             </h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Don't miss the opportunity to study at Jadavpur University, IIEST
-              Shibpur, or other premier West Bengal engineering colleges. Let
-              our experts guide you.
+              Don't miss out on Jadavpur University or other top Govt. colleges. 
+              Get expert guidance from current students and alumni.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="#pricing"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold bg-white text-purple-600 hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
               >
                 <Star className="w-5 h-5" />
                 View Pricing Plans
