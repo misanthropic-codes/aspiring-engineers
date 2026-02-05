@@ -509,7 +509,7 @@ export default function JEECounsellingPage() {
                               : "text-gray-400 dark:text-gray-500"
                           }`}
                         >
-                          {feature.name}
+                          {feature.title || feature.name}
                         </span>
                       </div>
                     ))}
@@ -627,29 +627,46 @@ export default function JEECounsellingPage() {
                     {counsellor.bio}
                   </p>
 
-                  {/* Stats */}
-                  {counsellor.stats && (
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      {counsellor.stats.studentsHelped && (
-                        <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
-                          <div className="text-lg font-bold text-[#2596be]">
-                            {counsellor.stats.studentsHelped.toLocaleString()}+
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Students Helped
-                          </div>
+                  {/* Stats - Handle both direct API props and legacy stats object */}
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    {(counsellor.studentsGuided || counsellor.stats?.studentsHelped) && (
+                      <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
+                        <div className="text-lg font-bold text-[#2596be]">
+                          {(counsellor.studentsGuided || counsellor.stats?.studentsHelped || 0).toLocaleString()}+
                         </div>
-                      )}
-                      {counsellor.stats.experience && (
-                        <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
-                          <div className="text-lg font-bold text-[#2596be]">
-                            {counsellor.stats.experience}+
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Years Exp.
-                          </div>
+                        <div className="text-xs text-gray-500">
+                          Students Helped
                         </div>
-                      )}
+                      </div>
+                    )}
+                    {(counsellor.experience || counsellor.stats?.experience) && (
+                      <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
+                        <div className="text-lg font-bold text-[#2596be]">
+                          {(counsellor.experience || counsellor.stats?.experience || 0)}+
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Years Exp.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Languages - Added */}
+                  {counsellor.languages && counsellor.languages.length > 0 && (
+                    <div className="mb-4">
+                      <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Speaks
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {counsellor.languages.map((lang, idx) => (
+                          <span
+                            key={idx}
+                            className="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                          >
+                            {lang}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   )}
 
