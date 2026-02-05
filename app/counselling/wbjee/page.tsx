@@ -453,7 +453,7 @@ export default function WBJEECounsellingPage() {
                       {pkg.badges.map((badge, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-xs font-medium"
+                          className="px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 text-xs font-bold border border-amber-200 dark:border-amber-800"
                         >
                           {badge}
                         </span>
@@ -462,24 +462,24 @@ export default function WBJEECounsellingPage() {
                   )}
 
                   {/* Title & Description */}
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-50 mb-2">
                     {pkg.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
-                    {pkg.description}
+                  <p className="text-gray-700 dark:text-gray-300 text-sm mb-4 min-h-[40px] leading-relaxed">
+                    {pkg.shortDescription || pkg.description}
                   </p>
 
                   {/* Pricing */}
                   <div className="mb-6">
                     {pkg.discountPrice ? (
                       <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                        <span className="text-3xl font-bold text-[#2596be] dark:text-[#60DFFF]">
                           ₹{pkg.discountPrice.toLocaleString()}
                         </span>
-                        <span className="text-lg text-gray-400 line-through">
+                        <span className="text-lg text-gray-500 line-through decoration-red-500/50">
                           ₹{pkg.price.toLocaleString()}
                         </span>
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-xs font-bold shadow-xs">
                           {Math.round(
                             ((pkg.price - pkg.discountPrice) / pkg.price) * 100,
                           )}
@@ -487,15 +487,29 @@ export default function WBJEECounsellingPage() {
                         </span>
                       </div>
                     ) : (
-                      <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                      <span className="text-3xl font-bold text-[#2596be] dark:text-[#60DFFF]">
                         ₹{pkg.price.toLocaleString()}
                       </span>
                     )}
-                    {pkg.duration && (
-                      <p className="text-sm text-gray-500 mt-1">
-                        {pkg.duration}
-                      </p>
-                    )}
+                    
+                    {/* Session & Duration Info */}
+                    <div className="mt-2 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                       {pkg.maxSessions && (
+                        <div className="flex items-center gap-2 font-medium">
+                          <Users className="w-4 h-4 text-[#2596be]" />
+                          <span>
+                            {pkg.maxSessions} Live Session{pkg.maxSessions > 1 ? 's' : ''} 
+                            {pkg.sessionDuration && ` (${pkg.sessionDuration} mins each)`}
+                          </span>
+                        </div>
+                       )}
+                       {pkg.duration && (
+                        <div className="flex items-center gap-2 font-medium">
+                          <Calendar className="w-4 h-4 text-[#2596be]" />
+                          <span>Duration: {pkg.duration}</span>
+                        </div>
+                       )}
+                    </div>
                   </div>
 
                   {/* Highlights */}
@@ -504,7 +518,7 @@ export default function WBJEECounsellingPage() {
                       {pkg.highlights.map((highlight, idx) => (
                         <span
                           key={idx}
-                          className="px-3 py-1 rounded-full bg-[#2596be]/10 text-[#2596be] text-xs font-medium"
+                          className="px-3 py-1 rounded-full bg-[#2596be]/10 border border-[#2596be]/20 text-[#2596be] dark:text-[#60DFFF] text-xs font-bold"
                         >
                           {highlight}
                         </span>
@@ -513,22 +527,26 @@ export default function WBJEECounsellingPage() {
                   )}
 
                   {/* Features */}
-                  <div className="space-y-3 mb-6">
+                  <div className="space-y-3 mb-6 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-xl border border-gray-100 dark:border-gray-700/50">
                     {pkg.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
+                      <div key={idx} className="flex items-start gap-2.5">
                         {feature.included ? (
-                          <Check className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                          <div className="mt-0.5 w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
+                            <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                          </div>
                         ) : (
-                          <X className="w-5 h-5 text-gray-300 dark:text-gray-600 shrink-0 mt-0.5" />
+                          <div className="mt-0.5 w-5 h-5 rounded-full bg-gray-100 dark:bg-gray-700/50 flex items-center justify-center shrink-0">
+                            <X className="w-3 h-3 text-gray-400 dark:text-gray-500" />
+                          </div>
                         )}
                         <span
-                          className={`text-sm ${
+                          className={`text-sm leading-tight ${
                             feature.included
-                              ? "text-gray-700 dark:text-gray-300"
-                              : "text-gray-400 dark:text-gray-500"
+                              ? "text-gray-900 dark:text-gray-100 font-medium"
+                              : "text-gray-500 dark:text-gray-500"
                           }`}
                         >
-                          {feature.name}
+                          {feature.title || feature.name}
                         </span>
                       </div>
                     ))}
@@ -554,10 +572,10 @@ export default function WBJEECounsellingPage() {
                           window.location.href = ssoUrl;
                         });
                       }}
-                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
+                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-colors shadow-sm ${
                         pkg.isFeatured
-                          ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                          : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/50"
+                          ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                          : "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/50"
                       }`}
                     >
                       <CheckCircle className="w-4 h-4" />
@@ -571,10 +589,10 @@ export default function WBJEECounsellingPage() {
                           ? `/checkout?package=${pkg.slug}&type=counselling_package`
                           : `/login?redirect=/checkout?package=${pkg.slug}&type=counselling_package`
                       }
-                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
+                      className={`w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg ${
                         pkg.isFeatured
                           ? "bg-linear-to-r from-[#2596be] to-[#4EA8DE] text-white hover:opacity-90"
-                          : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20"
+                          : "bg-white dark:bg-white/10 text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/20"
                       }`}
                     >
                       {isAuthenticated ? "Buy Now" : "Login to Buy"}
@@ -613,11 +631,11 @@ export default function WBJEECounsellingPage() {
               {counsellors.slice(0, 6).map((counsellor) => (
                 <div
                   key={counsellor._id}
-                  className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-xl transition-all"
+                  className="p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-xl transition-all h-full flex flex-col"
                 >
                   {/* Counsellor Image & Info */}
                   <div className="flex items-start gap-4 mb-4">
-                    <div className={`w-16 h-16 rounded-full ${THEME.heroGradient} flex items-center justify-center text-white text-xl font-bold overflow-hidden`}>
+                    <div className={`w-16 h-16 rounded-full shrink-0 ${THEME.heroGradient} flex items-center justify-center text-white text-xl font-bold overflow-hidden shadow-md ring-2 ring-white dark:ring-gray-800`}>
                       {counsellor.image ? (
                         <img
                           src={counsellor.image}
@@ -628,58 +646,93 @@ export default function WBJEECounsellingPage() {
                         counsellor.name.charAt(0)
                       )}
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
                         {counsellor.name}
-                        <BadgeCheck className="w-5 h-5 text-[#2596be]" />
+                        {counsellor.isFeatured && (
+                          <BadgeCheck className="w-5 h-5 text-[#2596be] fill-[#2596be]/10" />
+                        )}
                       </h3>
-                      <p className="text-sm text-[#2596be] font-medium">
+                      <p className="text-sm text-[#2596be] dark:text-[#60DFFF] font-bold">
                         {counsellor.title}
                       </p>
+                      {counsellor.stats?.rating && (
+                         <div className="flex items-center gap-1 mt-1">
+                           <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                           <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                             {counsellor.stats.rating} ({counsellor.stats.totalReviews || 0} reviews)
+                           </span>
+                         </div>
+                      )}
                     </div>
                   </div>
 
                   {/* Bio */}
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
-                    {counsellor.bio}
-                  </p>
+                  <div className="mb-4">
+                     <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-3 leading-relaxed">
+                      {counsellor.shortBio || counsellor.bio}
+                    </p>
+                  </div>
 
-                  {/* Stats */}
-                  {counsellor.stats && (
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      {counsellor.stats.studentsHelped && (
-                        <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
-                          <div className="text-lg font-bold text-[#2596be]">
-                            {counsellor.stats.studentsHelped.toLocaleString()}+
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Students Helped
-                          </div>
+                  {/* Qualifications - Added based on API Response */}
+                  {counsellor.qualifications && counsellor.qualifications.length > 0 && (
+                     <div className="mb-4">
+                       <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Qualifications</h4>
+                       <div className="flex flex-wrap gap-2">
+                         {counsellor.qualifications.slice(0, 2).map((qual, idx) => (
+                           <div key={idx} className="flex items-center gap-1 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">
+                             <GraduationCap className="w-3 h-3 text-[#2596be]" />
+                             {qual}
+                           </div>
+                         ))}
+                       </div>
+                     </div>
+                  )}
+
+                  {/* Stats - Handle both direct API props and legacy stats object */}
+                  <div className="grid grid-cols-2 gap-3 mb-4 mt-auto">
+                    {(counsellor.studentsGuided || counsellor.stats?.studentsHelped) && (
+                      <div className="p-2.5 rounded-lg bg-[#2596be]/5 border border-[#2596be]/10 dark:bg-[#60DFFF]/5 dark:border-[#60DFFF]/10 text-center">
+                        <div className="text-lg font-bold text-[#2596be] dark:text-[#60DFFF]">
+                          {(counsellor.studentsGuided || counsellor.stats?.studentsHelped || 0).toLocaleString()}+
                         </div>
-                      )}
-                      {counsellor.stats.experience && (
-                        <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 text-center">
-                          <div className="text-lg font-bold text-[#2596be]">
-                            {counsellor.stats.experience}+
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Years Exp.
-                          </div>
+                        <div className="text-xs font-bold text-gray-600 dark:text-gray-400">
+                          Students
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
+                    {(counsellor.experience || counsellor.stats?.experience) && (
+                      <div className="p-2.5 rounded-lg bg-[#2596be]/5 border border-[#2596be]/10 dark:bg-[#60DFFF]/5 dark:border-[#60DFFF]/10 text-center">
+                        <div className="text-lg font-bold text-[#2596be] dark:text-[#60DFFF]">
+                          {(counsellor.experience || counsellor.stats?.experience || 0)}+
+                        </div>
+                        <div className="text-xs font-bold text-gray-600 dark:text-gray-400">
+                          Years Exp.
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Languages - Added based on API Response */}
+                  {counsellor.languages && counsellor.languages.length > 0 && (
+                     <div className="mb-4 border-t border-gray-100 dark:border-gray-800 pt-3">
+                       <span className="text-xs text-gray-500 dark:text-gray-500 font-medium mr-2">Speaks:</span>
+                       <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                         {counsellor.languages.join(", ")}
+                       </span>
+                     </div>
                   )}
 
                   {/* Specializations */}
                   {counsellor.specializations &&
                     counsellor.specializations.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 pt-2">
                         {counsellor.specializations
                           .slice(0, 3)
                           .map((spec, idx) => (
                             <span
                               key={idx}
-                              className="px-2 py-1 rounded-full bg-[#2596be]/10 text-[#2596be] text-xs font-medium"
+                              className="px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold border border-gray-200 dark:border-gray-700"
                             >
                               {spec}
                             </span>

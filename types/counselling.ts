@@ -3,8 +3,10 @@
 export type ExamType = "jee" | "neet" | "wbjee";
 
 // Feature within a counselling package
+// Feature within a counselling package
 export interface CounsellingFeature {
-  name: string;
+  name?: string; // Frontend legacy
+  title?: string; // API response
   description?: string;
   included: boolean;
 }
@@ -41,18 +43,29 @@ export interface Counsellor {
   _id: string;
   name: string;
   title: string;
+  email?: string;
+  phone?: string;
   image?: string;
   bio?: string;
   shortBio?: string;
   qualifications?: string[];
   specializations?: string[];
   examTypes: ExamType[];
+  
+  // API Top-level stats
+  experience?: number;
+  studentsGuided?: number;
+  rating?: number;
+  totalReviews?: number;
+
+  // Frontend Legacy Stats wrapper
   stats?: {
     experience?: number;
     studentsHelped?: number;
     rating?: number;
     totalReviews?: number;
   };
+
   languages?: string[];
   socialLinks?: {
     linkedin?: string;
@@ -60,6 +73,7 @@ export interface Counsellor {
   };
   isFeatured?: boolean;
   isActive?: boolean;
+  displayOrder?: number;
 }
 
 // Inquiry submission
