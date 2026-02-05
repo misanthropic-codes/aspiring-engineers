@@ -104,6 +104,7 @@ export interface AdmissionGuidancePayload {
   class12Status: "appearing" | "passed"; // Required
   tenthPercentage: string;    // Required
   twelfthPercentageExpected?: string; // Optional
+  collegeChoice: string;      // Required
   additionalMessage?: string; // Optional
 }
 

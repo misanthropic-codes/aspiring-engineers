@@ -127,6 +127,7 @@ export default function AdmissionGuidancePage() {
     tenthPercentage: "",
     twelfthPercentageExpected: "",
     homeState: "",
+    collegeChoice: "",
     additionalMessage: "",
   });
 
@@ -149,6 +150,7 @@ export default function AdmissionGuidancePage() {
         class12Status: formData.class12Status as "appearing" | "passed",
         tenthPercentage: formData.tenthPercentage,
         twelfthPercentageExpected: formData.twelfthPercentageExpected || undefined,
+        collegeChoice: formData.collegeChoice,
         additionalMessage: formData.additionalMessage || undefined,
       });
 
@@ -168,6 +170,7 @@ export default function AdmissionGuidancePage() {
         tenthPercentage: "",
         twelfthPercentageExpected: "",
         homeState: "",
+        collegeChoice: "",
         additionalMessage: "",
       });
       setSubmitted(false);
@@ -540,6 +543,25 @@ export default function AdmissionGuidancePage() {
                           placeholder="e.g., 80%"
                         />
                       </div>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="collegeChoice"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                      >
+                        Preferred College / Institute <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="collegeChoice"
+                        name="collegeChoice"
+                        required
+                        value={formData.collegeChoice}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                        placeholder="e.g., IIT Bombay, AIIMS Delhi"
+                      />
                     </div>
 
                     <div>

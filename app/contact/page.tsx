@@ -4,7 +4,8 @@ import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageHero from "@/components/layout/PageHero";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
+import apiClient from "@/lib/api-client";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -14,13 +15,32 @@ export default function ContactPage() {
     subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    alert("Thank you for contacting us! We'll get back to you soon.");
-    setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+    setIsSubmitting(true);
+
+    try {
+      // Map form data to API payload
+      const payload = {
+        fullName: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        subject: formData.subject,
+        message: formData.message,
+      };
+
+      await apiClient.post("/contact", payload);
+      
+      alert("Message sent successfully!");
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+    } catch (error: any) {
+      console.error("Failed to send message:", error);
+      alert(error.response?.data?.message || "Failed to send message. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -145,7 +165,7 @@ export default function ContactPage() {
                         htmlFor="name"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                       >
-                        Full Name *
+                        Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -164,7 +184,7 @@ export default function ContactPage() {
                         htmlFor="email"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                       >
-                        Email Address *
+                        Email Address <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="email"
@@ -203,7 +223,7 @@ export default function ContactPage() {
                         htmlFor="subject"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                       >
-                        Subject *
+                        Subject <span className="text-red-500">*</span>
                       </label>
                       <select
                         id="subject"
@@ -214,11 +234,14 @@ export default function ContactPage() {
                         className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                       >
                         <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="support">Technical Support</option>
-                        <option value="enrollment">Enrollment</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="other">Other</option>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Direct Admission">Direct Admission</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Payment Related Queries">Payment Related Queries</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Enrollment">Enrollment</option>
+                        <option value="Feedback">Feedback</option>
+                        <option value="Other">Other</option>
                       </select>
                     </div>
                   </div>
@@ -228,7 +251,7 @@ export default function ContactPage() {
                       htmlFor="message"
                       className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                     >
-                      Message *
+                      Message <span className="text-red-500">*</span>
                     </label>
                     <textarea
                       id="message"
@@ -244,10 +267,20 @@ export default function ContactPage() {
 
                   <button
                     type="submit"
-                    className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#2596be] text-white rounded-lg font-medium hover:bg-[#1e7ca0] transition-colors shadow-lg"
+                    disabled={isSubmitting}
+                    className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#2596be] text-white rounded-lg font-medium hover:bg-[#1e7ca0] transition-colors shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Send Message
-                    <Send size={18} />
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <Send size={18} />
+                      </>
+                    )}
                   </button>
                 </form>
               </div>

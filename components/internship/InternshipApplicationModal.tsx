@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { X, CheckCircle, Send, GraduationCap } from "lucide-react";
+import apiClient from "@/lib/api-client";
 
 interface InternshipApplicationModalProps {
   isOpen: boolean;
@@ -52,33 +53,45 @@ export default function InternshipApplicationModal({
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    console.log("Submitting Internship Application:", {
-      internship: selectedInternship,
-      ...formData,
-    });
+    try {
+      const payload = {
+        name: formData.name,
+        phone: formData.phone,
+        college: formData.college,
+        fathersName: formData.fathersName,
+        location: formData.location,
+        cgpa: formData.cgpa,
+        year: formData.year,
+        branch: formData.branch === "Other" ? formData.otherBranch : formData.branch,
+        internshipType: selectedInternship
+      };
 
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+      await apiClient.post("/internship/apply", payload);
 
-    setIsSubmitting(false);
-    setSubmitted(true);
+      setIsSubmitting(false);
+      setSubmitted(true);
 
-    // Close after success
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({
-        name: "",
-        phone: "",
-        college: "",
-        fathersName: "",
-        location: "",
-        cgpa: "",
-        year: "",
-        branch: "",
-        otherBranch: "",
-      });
-      onClose();
-    }, 2000);
+      // Close after success
+      setTimeout(() => {
+        setSubmitted(false);
+        setFormData({
+          name: "",
+          phone: "",
+          college: "",
+          fathersName: "",
+          location: "",
+          cgpa: "",
+          year: "",
+          branch: "",
+          otherBranch: "",
+        });
+        onClose();
+      }, 2000);
+    } catch (error: any) {
+      console.error("Failed to submit internship application:", error);
+      alert(error.response?.data?.message || "Failed to submit application. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   return (
