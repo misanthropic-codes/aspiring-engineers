@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (credentials: LoginCredentials) => Promise<void>;
+  login: (credentials: LoginCredentials, redirectPath?: string) => Promise<void>;
   register: (data: RegisterData) => Promise<RegisterResponse>;
   logout: () => Promise<void>;
   refreshSession: () => Promise<void>;
@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
-  const login = async (credentials: LoginCredentials) => {
+  const login = async (credentials: LoginCredentials, redirectPath?: string) => {
     try {
       const response: AuthResponse = await authService.login(credentials);
 
@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       storage.set(STORAGE_KEYS.USER, response.user);
 
       setUser(response.user);
-      router.push("/");
+      router.push(redirectPath || "/");
     } catch (error) {
       throw error;
     }

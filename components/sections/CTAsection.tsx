@@ -2,9 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import LoginModal from "@/components/auth/LoginModal";
 
 export default function CTASection() {
   const [darkMode, setDarkMode] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
     const update = () => {
@@ -20,6 +26,14 @@ export default function CTASection() {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      router.push("/counselling/admission-guidance");
+    } else {
+      setIsLoginModalOpen(true);
+    }
+  };
 
   return (
     <section className="relative py-24 px-4 sm:px-6 lg:px-8 overflow-visible">
@@ -62,19 +76,24 @@ export default function CTASection() {
         </p>
 
 
-        <Link href="/login">
-          <button
-            className="
-              h-12 px-12 text-lg font-semibold
-              bg-[#2596be] text-white rounded-lg shadow-xl
-              hover:scale-105 hover:bg-[#2596be]/90
-              transition-all
-            "
-          >
-            Get Started Today
-          </button>
-        </Link>
+        <button
+          onClick={handleGetStarted}
+          className="
+            h-12 px-12 text-lg font-semibold
+            bg-[#2596be] text-white rounded-lg shadow-xl
+            hover:scale-105 hover:bg-[#2596be]/90
+            transition-all
+          "
+        >
+          Get Started Today
+        </button>
       </div>
+
+      <LoginModal 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)} 
+        redirectPath="/counselling/admission-guidance"
+      />
     </section>
   );
 }
