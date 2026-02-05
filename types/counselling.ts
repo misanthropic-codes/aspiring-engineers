@@ -70,6 +70,9 @@ export interface CounsellingInquiryPayload {
   exam: string;
   rank?: string;
   category?: string;
+  candidateType?: "appearing" | "passed";
+  percentage10?: string;
+  percentage12?: string;
   state?: string;
   message?: string;
   source?: string;

@@ -123,6 +123,9 @@ export default function AdmissionGuidancePage() {
     exam: "",
     rank: "",
     category: "",
+    candidateType: "appearing",
+    percentage10: "",
+    percentage12: "",
     state: "",
     message: "",
   });
@@ -142,6 +145,9 @@ export default function AdmissionGuidancePage() {
         exam: formData.exam,
         rank: formData.rank,
         category: formData.category,
+        candidateType: formData.candidateType as "appearing" | "passed",
+        percentage10: formData.percentage10,
+        percentage12: formData.percentage12,
         state: formData.state,
         message: formData.message,
       });
@@ -158,6 +164,9 @@ export default function AdmissionGuidancePage() {
         exam: "",
         rank: "",
         category: "",
+        candidateType: "appearing",
+        percentage10: "",
+        percentage12: "",
         state: "",
         message: "",
       });
@@ -401,13 +410,12 @@ export default function AdmissionGuidancePage() {
                           htmlFor="rank"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                         >
-                          Rank / Score *
+                          Rank / Score (Optional)
                         </label>
                         <input
                           type="text"
                           id="rank"
                           name="rank"
-                          required
                           value={formData.rank}
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
@@ -456,6 +464,80 @@ export default function AdmissionGuidancePage() {
                           onChange={handleChange}
                           className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
                           placeholder="e.g., West Bengal"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Class 12th Status *
+                      </label>
+                      <div className="flex gap-4">
+                        <label className="inline-flex items-center">
+                          <input
+                            type="radio"
+                            name="candidateType"
+                            value="appearing"
+                            checked={formData.candidateType === "appearing"}
+                            onChange={handleChange}
+                            className="form-radio text-[#2596be] focus:ring-[#2596be]"
+                          />
+                          <span className="ml-2 text-gray-700 dark:text-gray-300">
+                            Appearing
+                          </span>
+                        </label>
+                        <label className="inline-flex items-center">
+                          <input
+                            type="radio"
+                            name="candidateType"
+                            value="passed"
+                            checked={formData.candidateType === "passed"}
+                            onChange={handleChange}
+                            className="form-radio text-[#2596be] focus:ring-[#2596be]"
+                          />
+                          <span className="ml-2 text-gray-700 dark:text-gray-300">
+                            Passed
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label
+                          htmlFor="percentage10"
+                          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                        >
+                          10th Percentage *
+                        </label>
+                        <input
+                          type="text"
+                          id="percentage10"
+                          name="percentage10"
+                          required
+                          value={formData.percentage10}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          placeholder="e.g., 85%"
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="percentage12"
+                          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                        >
+                          12th Percentage {formData.candidateType === "appearing" ? "(Expected)" : "*"}
+                        </label>
+                        <input
+                          type="text"
+                          id="percentage12"
+                          name="percentage12"
+                          required={formData.candidateType === "passed"}
+                          value={formData.percentage12}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          placeholder="e.g., 80%"
                         />
                       </div>
                     </div>

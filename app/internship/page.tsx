@@ -39,8 +39,11 @@ const internships = [
   },
 ];
 
+import InternshipApplicationModal from "@/components/internship/InternshipApplicationModal";
+
 export default function InternshipPage() {
   const [darkMode, setDarkMode] = useState(false);
+  const [selectedInternship, setSelectedInternship] = useState<string | null>(null);
 
   useEffect(() => {
     const update = () => {
@@ -99,6 +102,7 @@ export default function InternshipPage() {
               return (
                 <div
                   key={index}
+                  onClick={() => setSelectedInternship(internship.name)}
                   className={`
                     p-8 rounded-2xl backdrop-blur-2xl border 
                     cursor-pointer shadow-lg transition-all duration-300 group
@@ -156,6 +160,13 @@ export default function InternshipPage() {
         </section>
       </main>
       <Footer />
+
+      {/* Application Modal */}
+      <InternshipApplicationModal
+        isOpen={!!selectedInternship}
+        onClose={() => setSelectedInternship(null)}
+        selectedInternship={selectedInternship || ""}
+      />
     </>
   );
 }
