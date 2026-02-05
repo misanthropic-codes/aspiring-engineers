@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const exams = [
 
-  { name: "JEE Mains", icon: "/icons/jee-icon.svg" },
-  { name: "WBJEE", icon: "/icons/wbjee-icon.svg" },
-  { name: "NEET", icon: "/icons/neet-icon.svg" },
-  { name: "Boards", icon: "/icons/boards-icon.svg" },
+  { name: "JEE Mains", icon: "/icons/jee-icon.svg", path: "/counselling/jee" },
+  { name: "WBJEE", icon: "/icons/wbjee-icon.svg", path: "/counselling/wbjee" },
+  { name: "NEET", icon: "/icons/neet-icon.svg", path: "/counselling/neet" },
+  { name: "Boards", icon: "/icons/boards-icon.svg", path: "/boards" },
 ];
 
 export default function Exams() {
@@ -67,8 +68,9 @@ export default function Exams() {
       <div className="relative grid grid-cols-2 md:grid-cols-4 gap-8 max-w-7xl mx-auto">
         {exams.map((exam, index) => {
           return (
-            <div
+            <Link
               key={index}
+              href={exam.path}
               onMouseEnter={() => setHoveredId(index)}
               onMouseLeave={() => setHoveredId(null)}
               className={`
@@ -151,7 +153,7 @@ export default function Exams() {
               >
                 {exam.name}
               </h3>
-            </div>
+            </Link>
           );
         })}
       </div>
