@@ -78,7 +78,7 @@ const services = [
   {
     title: "College Prediction",
     description:
-      "AI-powered predictions using NEET cutoff data from past years to estimate your admission chances.",
+      "Predictive admission insights derived from analysis of five years of historical admission data.",
     icon: TrendingUp,
   },
   {
@@ -179,6 +179,11 @@ const courses = [
     name: "BHMS",
     duration: "5.5 years",
     description: "Bachelor of Homeopathic Medicine",
+  },
+  {
+    name: "BPT",
+    duration: "4.5 years",
+    description: "Bachelor of Physiotherapy",
   },
 ];
 

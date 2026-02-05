@@ -252,7 +252,7 @@ export default function AdmissionGuidancePage() {
               <div className="grid grid-cols-3 gap-3 p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl mb-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-[#2596be]">
-                    10,000+
+                    1,000+
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Students Guided
@@ -265,7 +265,7 @@ export default function AdmissionGuidancePage() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#2596be]">500+</div>
+                  <div className="text-2xl font-bold text-[#2596be]">100+</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Partner Colleges
                   </div>

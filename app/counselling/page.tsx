@@ -66,8 +66,8 @@ const counsellingTypes = [
 ];
 
 const stats = [
-  { value: "10,000+", label: "Students Counselled" },
-  { value: "500+", label: "Partner Colleges" },
+  { value: "1000+", label: "Students Counselled" },
+  { value: "100+", label: "Partner Colleges" },
   { value: "98%", label: "Satisfaction Rate" },
   { value: "24/7", label: "Support Available" },
 ];
@@ -104,7 +104,7 @@ export default function CounsellingPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-6 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-sm font-medium mb-3">
           <CheckCircle className="w-4 h-4" />
-          Trusted by 10,000+ Students
+          Trusted by 1000+ Students
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">
           <span className="bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">

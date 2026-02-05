@@ -98,7 +98,7 @@ const services = [
   {
     title: "College Prediction",
     description:
-      "Accurate predictions based on 5 years of WBJEE cutoff data for Jadavpur & other top colleges.",
+      "Predictive admission insights derived from analysis of five years of historical admission data.",
     icon: TrendingUp,
   },
   {

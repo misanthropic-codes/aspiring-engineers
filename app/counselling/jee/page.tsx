@@ -85,7 +85,7 @@ const services = [
   {
     title: "College Prediction",
     description:
-      "AI-powered predictions using 5 years of cutoff data to estimate your admission chances in various colleges.",
+      "Predictive admission insights derived from analysis of five years of historical admission data.",
     icon: TrendingUp,
   },
   {
