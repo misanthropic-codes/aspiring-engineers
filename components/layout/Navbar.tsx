@@ -723,13 +723,13 @@ export default function Navbar(): JSX.Element {
             <div className="hidden sm:flex items-center gap-2">
               <Link
                 href="/login"
-                className="px-4 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+                className="px-4 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors whitespace-nowrap"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-2 rounded-full bg-[#2596be] text-white text-sm font-semibold hover:bg-[#1e7ca0] transition-colors"
+                className="px-4 py-2 rounded-full bg-[#2596be] text-white text-sm font-semibold hover:bg-[#1e7ca0] transition-colors whitespace-nowrap"
               >
                 Sign Up
               </Link>
