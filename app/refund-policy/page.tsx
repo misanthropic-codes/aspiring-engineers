@@ -11,7 +11,7 @@ export default function RefundPolicyPage() {
       
       <PageHero
         title="Refund Policy"
-        description="Last updated: January 20, 2026"
+        description="Last updated: February 20, 2026"
       />
 
       <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -154,7 +154,7 @@ export default function RefundPolicyPage() {
               </p>
             </div>
 
-            <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5">
+            <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 mb-8">
               <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">10. Contact Us</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 For any questions regarding refunds or this policy, please contact us:
@@ -163,7 +163,20 @@ export default function RefundPolicyPage() {
                 <li><strong>Email:</strong> support@aspiringengineers.com</li>
                 <li><strong>Phone:</strong> +91 9002912888</li>
                 <li><strong>Address:</strong> Hemanti Block, Kshudiram Nagar, Haldia, West Bengal - 721657, P.O: Hatiberia BO, P.S: Haldia, Dist: Purba Medinipur, Ward No. 24</li>
+                <li><strong>Legal Entity Name:</strong> Sourav Suman (Proprietor – Aspiring Engineers)</li>
               </ul>
+            </div>
+
+            <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Processing fee charged by payment gateways (if any) may be deducted from refundable amount.
+              </p>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Refunds are processed only to the original payment source.
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">
+                For any payment related concern, users must contact support before initiating a dispute with the bank or payment provider.
+              </p>
             </div>
 
           </div>

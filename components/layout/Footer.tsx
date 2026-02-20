@@ -341,7 +341,7 @@ export default function Footer() {
                       : "text-gray-700 hover:text-[#2596be]"
                   }`}
                 >
-                  aspiringengineersofficial@gmail.com
+                  support@aspiringengineers.com
                 </a>
               </div>
             </div>

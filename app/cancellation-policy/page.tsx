@@ -11,7 +11,7 @@ export default function CancellationPolicyPage() {
       
       <PageHero
         title="Cancellation Policy"
-        description="Last updated: January 20, 2026"
+        description="Last updated: February 20, 2026"
       />
 
       <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -22,6 +22,9 @@ export default function CancellationPolicyPage() {
               <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">1. Introduction</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 This Cancellation Policy outlines the terms and conditions under which you may cancel your subscription, booking, or purchase of services from Aspiring Engineers. We understand that circumstances change, and we aim to provide a fair and transparent cancellation process.
+              </p>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                All products offered by Aspiring Engineers are digital educational services delivered instantly after purchase. Therefore cancellation after activation is limited.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
                 By using our services, you agree to the terms of this Cancellation Policy.
@@ -35,7 +38,7 @@ export default function CancellationPolicyPage() {
                 If you wish to cancel your test series subscription before it has been activated (i.e., before accessing any content):
               </p>
               <ul className="list-disc pl-6 text-gray-600 dark:text-gray-400 mb-4 space-y-2">
-                <li>Full cancellation is available within <strong>24 hours</strong> of purchase</li>
+                <li>Cancellation may be requested within <strong>24 hours</strong> only if no content has been accessed and no test attempt has been started</li>
                 <li>You will receive a <strong>100% refund</strong> of the purchase amount</li>
                 <li>Cancellation can be requested via email at support@aspiringengineers.com</li>
               </ul>
@@ -44,8 +47,7 @@ export default function CancellationPolicyPage() {
                 Once you have accessed any content from the test series:
               </p>
               <ul className="list-disc pl-6 text-gray-600 dark:text-gray-400 space-y-2">
-                <li>Cancellation requests within <strong>7 days</strong> with less than 20% content accessed may be eligible for a partial refund</li>
-                <li>Cancellation requests after 7 days or with more than 20% content accessed are <strong>not eligible</strong> for refunds</li>
+                <li>Once any test attempt is submitted or more than 10% of the content is accessed, the service is considered consumed and cancellation with refund will not be available</li>
                 <li>Access to the purchased content will continue until the subscription period ends</li>
               </ul>
             </div>
@@ -82,6 +84,9 @@ export default function CancellationPolicyPage() {
                   </tr>
                 </tbody>
               </table>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Once a counselling session has been attended or guidance delivered, the service is considered completed and non-cancellable.
+              </p>
               <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-200">3.2 Package Sessions</h3>
               <p className="text-gray-600 dark:text-gray-400">
                 For counselling packages with multiple sessions, the same cancellation rules apply per session. Unused sessions in a package may be rescheduled within the validity period of the package.
@@ -139,14 +144,21 @@ export default function CancellationPolicyPage() {
             </div>
 
             <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">7. Force Majeure</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">7. Payment Disputes</h2>
+              <p className="text-gray-600 dark:text-gray-400">
+                Users must contact support before raising any payment dispute or chargeback. Unauthorized chargebacks after successful service delivery may lead to permanent account suspension.
+              </p>
+            </div>
+
+            <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 mb-8">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">8. Force Majeure</h2>
               <p className="text-gray-600 dark:text-gray-400">
                 In the event of circumstances beyond our reasonable control, including but not limited to natural disasters, pandemics, government actions, or technical failures affecting our ability to deliver services, we may cancel or reschedule sessions or extend subscription periods as appropriate. In such cases, we will work with affected users to find suitable alternatives or provide appropriate refunds.
               </p>
             </div>
 
             <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">8. Effect of Cancellation</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">9. Effect of Cancellation</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 Upon successful cancellation:
               </p>
@@ -159,14 +171,14 @@ export default function CancellationPolicyPage() {
             </div>
 
             <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 mb-8">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">9. Changes to This Policy</h2>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">10. Changes to This Policy</h2>
               <p className="text-gray-600 dark:text-gray-400">
                 We reserve the right to modify this Cancellation Policy at any time. Changes will be effective upon posting to our website. The policy in effect at the time of your purchase will govern that particular transaction.
               </p>
             </div>
 
-            <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">10. Contact Us</h2>
+            <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 mb-8">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">11. Contact Us</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 For any questions about cancellations or this policy, please contact us:
               </p>
@@ -174,7 +186,17 @@ export default function CancellationPolicyPage() {
                 <li><strong>Email:</strong> support@aspiringengineers.com</li>
                 <li><strong>Phone:</strong> +91 9002912888</li>
                 <li><strong>Address:</strong> Hemanti Block, Kshudiram Nagar, Haldia, West Bengal - 721657, P.O: Hatiberia BO, P.S: Haldia, Dist: Purba Medinipur, Ward No. 24</li>
+                <li><strong>Legal Entity Name:</strong> Sourav Suman (Proprietor – Aspiring Engineers)</li>
               </ul>
+            </div>
+
+            <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Refunds are processed only to the original payment source.
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">
+                For any payment related concern, users must contact support before initiating a dispute with the bank or payment provider.
+              </p>
             </div>
 
           </div>
