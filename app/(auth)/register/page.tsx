@@ -7,6 +7,7 @@ import Link from "next/link";
 import { isValidEmail, isValidPassword } from "@/lib/utils/validators";
 import { ExamType } from "@/types";
 import OTPModal from "@/components/OTPModal";
+import * as analytics from "@/lib/analytics";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -83,6 +84,7 @@ export default function RegisterPage() {
         ...registrationData,
         examTargets,
       });
+      analytics.event("signup_success", "conversion", "user_signup");
       // Registration successful - show OTP modal for email verification
       setShowOTPModal(true);
     } catch (err: any) {

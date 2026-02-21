@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import LoginModal from "@/components/auth/LoginModal";
+import * as analytics from "@/lib/analytics";
 
 export default function CTASection() {
   const [darkMode, setDarkMode] = useState(false);
@@ -28,6 +29,7 @@ export default function CTASection() {
   }, []);
 
   const handleGetStarted = () => {
+    analytics.event("cta_click", "engagement", "main_cta");
     if (isAuthenticated) {
       router.push("/counselling/admission-guidance");
     } else {

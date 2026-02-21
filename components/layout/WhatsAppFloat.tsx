@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import * as analytics from "@/lib/analytics";
 
 export default function WhatsAppFloat() {
   return (
@@ -10,6 +11,7 @@ export default function WhatsAppFloat() {
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 bg-[#25D366] rounded-full shadow-lg hover:scale-110 transition-transform duration-300 group hover:shadow-[#25D366]/40 cursor-pointer animate-in fade-in zoom-in"
       aria-label="Chat with us on WhatsApp"
+      onClick={() => analytics.event("whatsapp_click", "engagement", "floating_button")}
     >
       {/* Pulse Effect */}
       <span className="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75 animate-ping group-hover:animate-none"></span>
