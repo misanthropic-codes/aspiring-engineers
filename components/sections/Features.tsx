@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { BookOpen, Target, Users, BarChart } from "lucide-react";
+import { motion } from "framer-motion";
 
 const features = [
   {
@@ -61,7 +62,13 @@ export default function Features() {
       ></div>
 
       {/* Heading */}
-      <div className="relative max-w-7xl mx-auto text-center mb-16">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6 }}
+        className="relative max-w-7xl mx-auto text-center mb-16"
+      >
         <h2
           className={`
             text-4xl font-bold mb-4 tracking-tight
@@ -79,7 +86,7 @@ export default function Features() {
         >
           Empowering the Next Generation of Engineers and Doctors
         </p>
-      </div>
+      </motion.div>
 
       {/* Grid */}
       <div className="relative grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
@@ -87,8 +94,12 @@ export default function Features() {
           const Icon = feature.icon;
 
           return (
-            <div
+            <motion.div
               key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
               onMouseEnter={() => setHoveredId(i)}
               onMouseLeave={() => setHoveredId(null)}
               className={`
@@ -172,7 +183,7 @@ export default function Features() {
               >
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           );
         })}
       </div>

@@ -78,6 +78,7 @@ export interface Package {
   examTypes: string[];
   subjects: string[];
   thumbnail?: string;
+  banner?: string;
   features: string[];
   validityDays: number;
   totalTests: number;
@@ -251,6 +252,12 @@ export interface TeamMember {
   expertise: string[];
   displayOrder: number;
   isActive: boolean;
+  bio?: string;
+  socialLinks?: {
+    linkedin?: string;
+    twitter?: string;
+    github?: string;
+  };
   createdAt: string;
   updatedAt: string;
   __v?: number;

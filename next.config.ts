@@ -5,11 +5,18 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "api.theaspiringengineers.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "aspiringengstorage.blob.core.windows.net",
+        pathname: "/**",
       },
       {
         protocol: "http",
         hostname: "localhost",
+        pathname: "/**",
       },
     ],
   },

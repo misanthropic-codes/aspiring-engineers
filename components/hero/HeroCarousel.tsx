@@ -175,6 +175,7 @@ export default function HeroCarousel({
                   src={item.image}
                   alt={item.title}
                   fill
+                  unoptimized
                   className="object-cover transition-transform duration-500 group-hover/card:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />

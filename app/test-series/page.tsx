@@ -243,11 +243,38 @@ export default function TestSeriesPage() {
   );
 }
 
+// Helper to format exam types (e.g., "JEE_MAIN" -> "JEE Main")
+function formatExamType(exam: string): string {
+  if (!exam) return "";
+  
+  // Handle specific known cases
+  const knownCases: Record<string, string> = {
+    "JEE_MAIN": "JEE Main",
+    "JEE_ADVANCED": "JEE Advanced",
+    "NEET": "NEET",
+    "WBJEE": "WBJEE",
+    "BITSAT": "BITSAT",
+    "COMEDK": "COMEDK"
+  };
+  
+  if (knownCases[exam.toUpperCase()]) {
+    return knownCases[exam.toUpperCase()];
+  }
+  
+  // Generic fallback: replace underscores and title case
+  return exam
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
 // Test Series Card Component
 function TestSeriesCard({ package: pkg, darkMode }: { package: Package; darkMode: boolean }) {
   const discountPercent = pkg.discountPrice 
     ? Math.round(((pkg.price - pkg.discountPrice) / pkg.price) * 100) 
     : 0;
+  
+  const imageUrl = pkg.banner || pkg.thumbnail;
 
   return (
     <div className={`group rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] ${
@@ -256,10 +283,10 @@ function TestSeriesCard({ package: pkg, darkMode }: { package: Package; darkMode
         : 'bg-white border-gray-200 hover:border-[#2596be]'
     }`}>
       {/* Thumbnail */}
-      <div className="relative h-48 overflow-hidden">
-        {pkg.thumbnail ? (
+      <div className="relative h-48 overflow-hidden bg-gray-100 dark:bg-gray-800">
+        {imageUrl ? (
           <img 
-            src={pkg.thumbnail} 
+            src={imageUrl} 
             alt={pkg.title}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
@@ -279,13 +306,13 @@ function TestSeriesCard({ package: pkg, darkMode }: { package: Package; darkMode
         )}
 
         {/* Exam Type Badges */}
-        <div className="absolute bottom-4 left-4 flex gap-2">
-          {pkg.examTypes.slice(0, 2).map((exam, idx) => (
+        <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+          {pkg.examTypes.slice(0, 3).map((exam, idx) => (
             <span 
               key={idx}
-              className="px-2 py-1 bg-black/50 backdrop-blur-sm text-white text-xs font-medium rounded-md"
+              className="px-2 py-1 bg-black/60 backdrop-blur-md border border-white/10 text-white text-xs font-semibold rounded-md shadow-sm"
             >
-              {exam}
+              {formatExamType(exam)}
             </span>
           ))}
         </div>

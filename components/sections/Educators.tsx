@@ -1,6 +1,20 @@
 "use client";
 import React, { JSX, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Send,
+  Instagram,
+  Linkedin,
+  Youtube,
+  X, // Added X icon for modal close
+  Github, // Added Github icon
+  Twitter
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
 import { teamService } from "@/services/team.service";
 import { TeamMember } from "@/types";
 
@@ -37,6 +51,12 @@ interface Educator {
   title: string;
   image: string;
   expertise: string[];
+  bio?: string;
+  socialLinks?: {
+    linkedin?: string;
+    twitter?: string;
+    github?: string;
+  };
 }
 
 // Convert API TeamMember to local Educator interface
@@ -46,6 +66,8 @@ const teamMemberToEducator = (member: TeamMember): Educator => ({
   title: member.title,
   image: member.image,
   expertise: member.expertise,
+  bio: member.bio,
+  socialLinks: member.socialLinks,
 });
 
 export default function EducatorsShowcase({
@@ -58,6 +80,7 @@ export default function EducatorsShowcase({
   );
   const [isLoading, setIsLoading] = useState(!initialEducators);
   const [hoveredId, setHoveredId] = useState<number | string | null>(null);
+  const [selectedEducator, setSelectedEducator] = useState<Educator | null>(null);
   const [darkMode, setDarkMode] = useState(false);
 
   // Fetch team members from API
@@ -93,6 +116,29 @@ export default function EducatorsShowcase({
     });
     setDarkMode(document.documentElement.classList.contains("dark"));
     return () => observer.disconnect();
+  }, []);
+
+  // Prevent scrolling when modal is open
+  useEffect(() => {
+    if (selectedEducator) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedEducator]);
+
+  // Handle escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedEducator(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
@@ -297,6 +343,11 @@ export default function EducatorsShowcase({
 
                     {/* CTA button */}
                     <motion.button
+                      onClick={() => setSelectedEducator(educator)}
+                      aria-label={`View profile of ${educator.name}`}
+                      aria-expanded={selectedEducator?.id === educator.id}
+                      aria-controls="profile-modal"
+                      role="button"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className={`
@@ -342,6 +393,134 @@ export default function EducatorsShowcase({
           </div>
         </div>
       )}
+
+      {/* Profile Modal */}
+      <AnimatePresence>
+        {selectedEducator && (
+          <div 
+          id="profile-modal"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+        >
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedEducator(null)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          />
+
+          {/* Modal Content */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className={`
+              relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl z-10
+              ${darkMode ? "bg-gray-900 border border-gray-800" : "bg-white border border-gray-100"}
+            `}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedEducator(null)}
+              className={`
+                absolute top-4 right-4 p-2 rounded-full transition-colors z-20
+                focus:outline-none focus:ring-2 focus:ring-[#2596be]
+                ${darkMode ? "bg-gray-800/50 hover:bg-gray-700/50 text-gray-400" : "bg-gray-100 hover:bg-gray-200 text-gray-600"}
+              `}
+              aria-label="Close profile modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="p-8 sm:p-10 relative z-10">
+              {/* Profile Image & Essential Info */}
+              <div className="flex flex-col sm:flex-row gap-8 items-center sm:items-start">
+                <div className="relative w-32 h-32 sm:w-40 sm:h-40 shrink-0 mx-auto sm:mx-0">
+                  <div className={`absolute inset-0 rounded-full scale-105 bg-gradient-to-br from-[#2596be] to-[#4EA8DE] opacity-20`} />
+                  <img
+                    src={selectedEducator.image}
+                    alt={selectedEducator.name}
+                    className={`relative w-full h-full rounded-full object-cover ring-4 ${darkMode ? "ring-gray-800" : "ring-gray-100"}`}
+                  />
+                </div>
+                
+                <div className="flex-1 text-center sm:text-left sm:mt-4">
+                  <h2 id="modal-title" className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
+                    {selectedEducator.name}
+                  </h2>
+                  <p className={`text-xl font-medium ${darkMode ? "text-[#60DFFF]" : "text-[#2596be]"}`}>
+                    {selectedEducator.title}
+                  </p>
+                </div>
+              </div>
+
+              {/* Bio Section */}
+              <div className="mt-8">
+                <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  About
+                </h3>
+                <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                  {selectedEducator.bio || `${selectedEducator.name} is a dedicated ${selectedEducator.title} with extensive experience helping students achieve their academic goals. They specialize in simplifying complex concepts and providing strategic guidance for competitive exams.`}
+                </p>
+              </div>
+
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                {/* Expertise */}
+                <div>
+                  <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                    Areas of Expertise
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedEducator.expertise.map((skill, idx) => (
+                      <span
+                        key={idx}
+                        className={`
+                          inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                          ${darkMode ? "bg-gray-800 text-[#60DFFF]" : "bg-blue-50 text-[#2596be]"}
+                        `}
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Social Links (only if exist) */}
+                {selectedEducator.socialLinks && Object.values(selectedEducator.socialLinks).some(Boolean) && (
+                  <div>
+                    <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                      Connect
+                    </h3>
+                    <div className="flex gap-3">
+                      {selectedEducator.socialLinks.linkedin && (
+                        <a href={selectedEducator.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}>
+                          <Linkedin className="w-5 h-5" />
+                        </a>
+                      )}
+                      {selectedEducator.socialLinks.twitter && (
+                        <a href={selectedEducator.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}>
+                          <Twitter className="w-5 h-5" />
+                        </a>
+                      )}
+                      {selectedEducator.socialLinks.github && (
+                        <a href={selectedEducator.socialLinks.github} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}>
+                          <Github className="w-5 h-5" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

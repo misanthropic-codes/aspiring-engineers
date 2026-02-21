@@ -200,7 +200,7 @@ export default function Footer() {
           {/* JEE Links */}
           <div>
             <h3
-              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+              className={`text-base font-semibold capitalize tracking-wide mb-4 ${
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
@@ -227,7 +227,7 @@ export default function Footer() {
           {/* NEET Links */}
           <div>
             <h3
-              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+              className={`text-base font-semibold capitalize tracking-wide mb-4 ${
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
@@ -254,7 +254,7 @@ export default function Footer() {
           {/* Internship Links */}
           <div>
             <h3
-              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+              className={`text-base font-semibold capitalize tracking-wide mb-4 ${
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
@@ -281,7 +281,7 @@ export default function Footer() {
           {/* Company Links */}
           <div>
             <h3
-              className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
+              className={`text-base font-semibold capitalize tracking-wide mb-4 ${
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
