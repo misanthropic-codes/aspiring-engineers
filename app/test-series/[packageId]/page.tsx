@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import apiClient from "@/lib/api-client";
 import { PackageDetail, PackageDetailResponse } from "@/types";
@@ -100,12 +101,10 @@ export default function PackageDetailPage() {
   useEffect(() => {
     const handleVisibilityChange = async () => {
       if (document.visibilityState === 'visible' && isAuthenticated && packageData) {
-        console.log('🔄 Page visible again, re-checking access...');
         setCheckingAccess(true);
         const access = await paymentService.checkAccess(packageData._id);
         setHasAccess(access);
         setCheckingAccess(false);
-        console.log('✅ Access check updated:', access);
       }
     };
 
@@ -138,8 +137,6 @@ export default function PackageDetailPage() {
     setPurchaseSuccess(false);
 
     try {
-      console.log("🛒 Starting purchase for:", packageData._id);
-
       // Step 1: Create Cashfree order with customer details
       const orderResponse = await paymentService.createOrder({
         amount: packageData.discountPrice || packageData.price,
@@ -155,13 +152,9 @@ export default function PackageDetailPage() {
         throw new Error(orderResponse.message || "Failed to create order");
       }
 
-      console.log("✅ Order created:", orderResponse.data.orderId);
-
       // Step 2: Initialize Cashfree SDK
       const { initializeCashfree } = await import("@/lib/cashfree");
       const cashfree = await initializeCashfree();
-
-      console.log("✅ Cashfree SDK initialized");
 
       // Step 3: Open Cashfree checkout
       // Using _self (full page redirect) to ensure returnUrl works
@@ -170,8 +163,6 @@ export default function PackageDetailPage() {
         redirectTarget: "_self" as const,
       };
 
-      console.log("🚀 Opening Cashfree checkout...");
-      
       // Open Cashfree checkout modal
       // User will be redirected to returnUrl after payment completion
       cashfree.checkout(checkoutOptions);
@@ -184,6 +175,16 @@ export default function PackageDetailPage() {
       setPurchaseError(err.message || "Payment failed. Please try again.");
       setPurchasing(false);
     }
+  };
+
+  const getFallbackBanner = () => {
+    const exams = packageData?.examTypes || [];
+    if (exams.length === 0) return "/banners/jee.png";
+    const exam = exams[0].toLowerCase();
+    if (exam.includes("neet")) return "/banners/neet.png";
+    if (exam.includes("wbjee")) return "/banners/wbjee.png";
+    if (exam.includes("board")) return "/banners/boards.png";
+    return "/banners/jee.png";
   };
 
   return (
@@ -251,45 +252,35 @@ export default function PackageDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Header */}
               <div
-                className={`p-6 rounded-2xl border ${
+                className={`flex flex-col rounded-2xl border overflow-hidden ${
                   darkMode
                     ? "bg-white/5 border-white/10"
                     : "bg-white border-gray-200"
                 }`}
               >
-                {/* Thumbnail */}
-                {packageData.thumbnail ? (
-                  <img
-                    src={packageData.thumbnail}
-                    alt={packageData.title}
-                    className="w-full h-64 object-cover rounded-xl mb-6"
+                {/* Banner / Thumbnail */}
+                <div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-white/10">
+                  <Image
+                    src={packageData.banner || packageData.thumbnail || getFallbackBanner()}
+                    alt={packageData.title || "Test Series Banner"}
+                    fill
+                    unoptimized
+                    priority
+                    className="object-cover"
                   />
-                ) : (
-                  <div
-                    className={`w-full h-64 flex items-center justify-center rounded-xl mb-6 ${
-                      darkMode
-                        ? "bg-linear-to-br from-[#2596be]/20 to-[#4EA8DE]/20"
-                        : "bg-linear-to-br from-[#2596be]/10 to-[#4EA8DE]/10"
-                    }`}
-                  >
-                    <BookOpen
-                      className={`w-24 h-24 ${
-                        darkMode ? "text-[#2596be]" : "text-[#2596be]/60"
-                      }`}
-                    />
-                  </div>
-                )}
+                </div>
 
-                {/* Badges */}
+                {/* Content Area below banner */}
+                <div className="p-6">
+                  {/* Badges */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {packageData.examTypes.map((exam, idx) => (
                     <span
                       key={idx}
                       className="px-3 py-1 bg-[#2596be]/10 text-[#2596be] text-sm font-medium rounded-full"
                     >
-                      {exam}
+                      {exam.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </span>
                   ))}
                   {packageData.status === "active" && (
@@ -382,6 +373,7 @@ export default function PackageDetailPage() {
                       Students
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
 
@@ -640,16 +632,6 @@ export default function PackageDetailPage() {
                     </>
                   )}
 
-                  <button
-                    className={`w-full py-3 px-4 font-semibold rounded-xl border transition-colors flex items-center justify-center gap-2 ${
-                      darkMode
-                        ? "border-white/20 text-white hover:bg-white/10"
-                        : "border-gray-300 text-gray-700 hover:bg-gray-100"
-                    }`}
-                  >
-                    <BookOpen className="w-5 h-5" />
-                    Try Free Test
-                  </button>
                 </div>
 
                 {/* Additional Info */}
