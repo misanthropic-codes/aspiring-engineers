@@ -11,6 +11,7 @@ import {
   Instagram,
   Linkedin,
   Youtube,
+  ChevronRight,
 } from "lucide-react";
 import { getSiteSettings, SiteSettings } from "@/services/siteSettings";
 
@@ -211,13 +212,16 @@ export default function Footer() {
                 <li key={idx}>
                   <Link
                     href={link.href}
-                    className={`text-sm transition-colors ${
+                    className={`group flex items-center text-sm transition-colors ${
                       darkMode
                         ? "text-gray-400 hover:text-[#60DFFF]"
                         : "text-gray-600 hover:text-[#2596be]"
                     }`}
                   >
-                    {link.label}
+                    <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
+                      <ChevronRight className="w-4 h-4 shrink-0" />
+                    </span>
+                    <span>{link.label}</span>
                   </Link>
                 </li>
               ))}
@@ -238,13 +242,16 @@ export default function Footer() {
                 <li key={idx}>
                   <Link
                     href={link.href}
-                    className={`text-sm transition-colors ${
+                    className={`group flex items-center text-sm transition-colors ${
                       darkMode
                         ? "text-gray-400 hover:text-[#60DFFF]"
                         : "text-gray-600 hover:text-[#2596be]"
                     }`}
                   >
-                    {link.label}
+                    <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
+                      <ChevronRight className="w-4 h-4 shrink-0" />
+                    </span>
+                    <span>{link.label}</span>
                   </Link>
                 </li>
               ))}
@@ -265,13 +272,16 @@ export default function Footer() {
                 <li key={idx}>
                   <Link
                     href={link.href}
-                    className={`text-sm transition-colors ${
+                    className={`group flex items-center text-sm transition-colors ${
                       darkMode
                         ? "text-gray-400 hover:text-[#60DFFF]"
                         : "text-gray-600 hover:text-[#2596be]"
                     }`}
                   >
-                    {link.label}
+                    <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
+                      <ChevronRight className="w-4 h-4 shrink-0" />
+                    </span>
+                    <span>{link.label}</span>
                   </Link>
                 </li>
               ))}
@@ -292,13 +302,16 @@ export default function Footer() {
                 <li key={idx}>
                   <Link
                     href={link.href}
-                    className={`text-sm transition-colors ${
+                    className={`group flex items-center text-sm transition-colors ${
                       darkMode
                         ? "text-gray-400 hover:text-[#60DFFF]"
                         : "text-gray-600 hover:text-[#2596be]"
                     }`}
                   >
-                    {link.label}
+                    <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
+                      <ChevronRight className="w-4 h-4 shrink-0" />
+                    </span>
+                    <span>{link.label}</span>
                   </Link>
                 </li>
               ))}
@@ -439,13 +452,16 @@ export default function Footer() {
                 <Link
                   key={idx}
                   href={link.href}
-                  className={`text-sm transition-colors ${
+                  className={`group flex items-center text-sm transition-colors ${
                     darkMode
                       ? "text-gray-400 hover:text-[#60DFFF]"
                       : "text-gray-600 hover:text-[#2596be]"
                   }`}
                 >
-                  {link.label}
+                  <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
+                    <ChevronRight className="w-4 h-4 shrink-0" />
+                  </span>
+                  <span>{link.label}</span>
                 </Link>
               ))}
             </div>
