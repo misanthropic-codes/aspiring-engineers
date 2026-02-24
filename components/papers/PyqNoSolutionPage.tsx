@@ -59,8 +59,8 @@ export default function PyqNoSolutionPage({
   useEffect(() => {
     const fetchPapers = async () => {
       try {
-        const data = await getPapers({ category, limit: 100 });
-        setPapers(data.filter((p) => p.type === "without-solution"));
+        const data = await getPapers({ category, type: "no-solution", page: 1, limit: 100 });
+        setPapers(data);
       } catch (error) {
         console.error("Failed to load papers", error);
       } finally {

@@ -44,6 +44,7 @@ const buildQueryString = (params: Record<string, any>) => {
 
 export const getPapers = async (params?: { 
   category?: string; 
+  type?: string;
   board?: string;
   subject?: string;
   year?: number;
