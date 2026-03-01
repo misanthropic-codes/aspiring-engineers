@@ -4,9 +4,10 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import { tokenManager } from "./utils/tokenManager";
+import { logger } from "./logger";
 
 if (!process.env.NEXT_PUBLIC_API_URL) {
-  console.warn(
+  logger.warn(
     "⚠️ NEXT_PUBLIC_API_URL is not set. Please configure it in your .env file."
   );
 }
@@ -48,14 +49,11 @@ const refreshAuthToken = async (): Promise<string | null> => {
   const refreshToken = tokenManager.getRefreshToken();
 
   if (!refreshToken) {
-    console.log("❌ No refresh token available");
     return null;
   }
 
   for (let attempt = 1; attempt <= MAX_REFRESH_RETRIES; attempt++) {
     try {
-      console.log(`🔄 Token refresh attempt ${attempt}/${MAX_REFRESH_RETRIES}`);
-
       const response = await axios.post<{
         accessToken: string;
         refreshToken?: string;
@@ -69,11 +67,10 @@ const refreshAuthToken = async (): Promise<string | null> => {
         tokenManager.setRefreshToken(newRefreshToken);
       }
 
-      console.log(`✅ Token refreshed successfully on attempt ${attempt}`);
       refreshAttempts = 0; // Reset counter on success
       return accessToken;
     } catch (error) {
-      console.error(`❌ Token refresh attempt ${attempt} failed:`, error);
+      logger.error(`Token refresh attempt ${attempt}/${MAX_REFRESH_RETRIES} failed:`, error);
 
       if (attempt < MAX_REFRESH_RETRIES) {
         // Wait before retrying (exponential backoff)
@@ -82,7 +79,6 @@ const refreshAuthToken = async (): Promise<string | null> => {
     }
   }
 
-  console.log("❌ All token refresh attempts failed");
   return null;
 };
 
@@ -151,7 +147,6 @@ apiClient.interceptors.response.use(
           tokenManager.clearTokens();
 
           if (typeof window !== "undefined") {
-            console.log("🚪 Redirecting to login page...");
             window.location.href = "/login";
           }
           return Promise.reject(error);

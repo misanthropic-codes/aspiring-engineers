@@ -1,4 +1,5 @@
 // LocalStorage wrapper with type safety and error handling
+import { logger } from "../logger";
 
 const STORAGE_PREFIX = 'aspiring_engineers_';
 
@@ -12,7 +13,7 @@ export const storage = {
       if (!item) return defaultValue || null;
       return JSON.parse(item) as T;
     } catch (error) {
-      console.error(`Error reading from localStorage for key "${key}":`, error);
+      logger.error(`Error reading from localStorage for key "${key}":`, error);
       return defaultValue || null;
     }
   },
@@ -24,7 +25,7 @@ export const storage = {
     try {
       window.localStorage.setItem(STORAGE_PREFIX + key, JSON.stringify(value));
     } catch (error) {
-      console.error(`Error writing to localStorage for key "${key}":`, error);
+      logger.error(`Error writing to localStorage for key "${key}":`, error);
     }
   },
 
@@ -35,7 +36,7 @@ export const storage = {
     try {
       window.localStorage.removeItem(STORAGE_PREFIX + key);
     } catch (error) {
-      console.error(`Error removing from localStorage for key "${key}":`, error);
+      logger.error(`Error removing from localStorage for key "${key}":`, error);
     }
   },
 
@@ -51,7 +52,7 @@ export const storage = {
         }
       });
     } catch (error) {
-      console.error('Error clearing localStorage:', error);
+      logger.error('Error clearing localStorage:', error);
     }
   },
 };

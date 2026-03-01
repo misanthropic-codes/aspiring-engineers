@@ -9,7 +9,7 @@ import {
   Briefcase,
   ArrowRight,
 } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 
 const journeyStages = [
   {
@@ -81,6 +81,54 @@ const journeyStages = [
     href: "/internship",
   },
 ];
+
+// Typewriter component
+function TypewriterText({
+  text,
+  darkMode,
+  delay = 0,
+}: {
+  text: string;
+  darkMode: boolean;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const [displayed, setDisplayed] = useState("");
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    if (!isInView) return;
+    const timeout = setTimeout(() => setStarted(true), delay * 1000);
+    return () => clearTimeout(timeout);
+  }, [isInView, delay]);
+
+  useEffect(() => {
+    if (!started) return;
+    setDisplayed("");
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+      if (i >= text.length) clearInterval(interval);
+    }, 22);
+    return () => clearInterval(interval);
+  }, [started, text]);
+
+  return (
+    <p
+      ref={ref}
+      className={`text-sm md:text-base leading-relaxed min-h-[4.5rem] ${
+        darkMode ? "text-gray-300" : "text-gray-600"
+      }`}
+    >
+      {displayed}
+      {started && displayed.length < text.length && (
+        <span className="inline-block w-0.5 h-4 ml-0.5 align-middle bg-current animate-pulse" />
+      )}
+    </p>
+  );
+}
 
 export default function Features() {
   const [darkMode, setDarkMode] = useState(false);
@@ -202,13 +250,7 @@ export default function Features() {
                 </p>
 
                 {/* Description */}
-                <p
-                  className={`text-base md:text-lg leading-relaxed mb-6 ${
-                    darkMode ? "text-gray-400" : "text-gray-700"
-                  }`}
-                >
-                  {stage.description}
-                </p>
+               
 
                 {/* Features Grid */}
                 <div className="grid grid-cols-2 gap-3 mb-8">
@@ -288,28 +330,12 @@ export default function Features() {
                       {stage.title}
                     </h4>
 
-                    {/* Visual Elements */}
-                    <div className="space-y-4">
-                      {[...Array(3)].map((_, i) => (
-                        <div
-                          key={i}
-                          className={`h-3 rounded-full bg-linear-to-r ${stage.bgGradient} relative overflow-hidden`}
-                          style={{ width: `${100 - i * 15}%` }}
-                        >
-                          <motion.div
-                            initial={{ x: "-100%" }}
-                            whileInView={{ x: "100%" }}
-                            viewport={{ once: true }}
-                            transition={{
-                              duration: 2,
-                              delay: i * 0.2 + index * 0.3,
-                              ease: "easeInOut",
-                            }}
-                            className={`absolute inset-0 bg-linear-to-r ${stage.color} opacity-50`}
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    {/* Typewriter Description — replaces the loading bar animation */}
+                    <TypewriterText
+                      text={stage.description}
+                      darkMode={darkMode}
+                      delay={0.3 + index * 0.1}
+                    />
 
                     {/* Decorative Corner */}
                     <div

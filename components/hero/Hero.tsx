@@ -115,7 +115,7 @@ export default function Hero() {
             darkMode ? "text-gray-300" : "text-gray-600"
           }`}
         >
-          One Platform. Every Exam. Complete Success
+          From School to career - One platform , one clear direction
         </p>
 
         <p
@@ -139,26 +139,11 @@ export default function Hero() {
                 transition
               "
             >
-              Start Free Trial <ChevronRight className="w-5 h-5" />
+              Start Exploring  <ChevronRight className="w-5 h-5" />
             </Button>
           </Link>
 
-          {/* SECONDARY – OUTLINE */}
-          <Link href="/test-series">
-            <Button
-              variant="outline"
-              size="lg"
-              className={`
-                h-10 px-8 text-lg font-medium
-                border-2 text-[#2596be]
-                hover:bg-[#2596be]/10
-                transition
-                ${darkMode ? "border-[#2596be]" : "border-[#2596be]"}
-              `}
-            >
-              View Test Series
-            </Button>
-          </Link>
+          
         </div>
 
         {/* HERO CAROUSEL */}

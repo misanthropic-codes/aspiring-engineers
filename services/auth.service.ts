@@ -2,6 +2,7 @@ import apiClient, { handleApiError } from "@/lib/api-client";
 import { LoginCredentials, RegisterData, AuthResponse, User } from "@/types";
 import { storage, STORAGE_KEYS } from "@/lib/utils/storage";
 import { tokenManager } from "@/lib/utils/tokenManager";
+import { logger } from "@/lib/logger";
 
 /**
  * Authentication Service
@@ -60,9 +61,6 @@ export const authService = {
         "/auth/register",
         data
       );
-
-      // Success message from API
-      console.log("✅ Registration successful:", response.data.message);
 
       // Return the registration response (user needs to verify email next)
       return {
@@ -197,7 +195,7 @@ export const authService = {
       );
     } catch (error) {
       // Ignore logout errors, still clear local storage
-      console.error("Logout API error:", error);
+      logger.error("Logout API error:", error);
     }
   },
 

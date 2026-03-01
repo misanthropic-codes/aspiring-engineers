@@ -1,4 +1,5 @@
 import { load } from '@cashfreepayments/cashfree-js';
+import { logger } from './logger';
 
 /**
  * Initialize Cashfree SDK
@@ -13,7 +14,7 @@ export const initializeCashfree = async () => {
     });
     return cashfree;
   } catch (error) {
-    console.error('Failed to initialize Cashfree:', error);
+    logger.error('Failed to initialize Cashfree:', error);
     throw new Error('Payment system initialization failed');
   }
 };
