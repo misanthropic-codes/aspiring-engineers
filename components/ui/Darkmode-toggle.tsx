@@ -84,7 +84,7 @@ export function ModeToggle() {
             ref={buttonRef}
             variant="ghost"
             size="icon"
-            className="bg-transparent hover:bg-[#2596be]/20 border-none dark:text-white text-gray-700"
+            className="bg-transparent hover:bg-[var(--color-brand)]/20 border-none dark:text-white text-gray-700"
           >
             <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
             <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
@@ -93,23 +93,23 @@ export function ModeToggle() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="bg-white dark:bg-[#102631] border-gray-200 dark:border-[#2596be]/30"
+          className="bg-white dark:bg-gray-900 border-gray-200 dark:border-[var(--color-brand)]/30"
         >
           <DropdownMenuItem
             onClick={() => handleThemeChange("light")}
-            className="hover:bg-[#2596be]/10 dark:hover:bg-[#2596be]/20 cursor-pointer"
+            className="hover:bg-[var(--color-brand)]/10 dark:hover:bg-[var(--color-brand)]/20 cursor-pointer"
           >
             Light
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => handleThemeChange("dark")}
-            className="hover:bg-[#2596be]/10 dark:hover:bg-[#2596be]/20 cursor-pointer"
+            className="hover:bg-[var(--color-brand)]/10 dark:hover:bg-[var(--color-brand)]/20 cursor-pointer"
           >
             Dark
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => handleThemeChange("system")}
-            className="hover:bg-[#2596be]/10 dark:hover:bg-[#2596be]/20 cursor-pointer"
+            className="hover:bg-[var(--color-brand)]/10 dark:hover:bg-[var(--color-brand)]/20 cursor-pointer"
           >
             System
           </DropdownMenuItem>

@@ -4,6 +4,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
@@ -36,20 +37,14 @@ export default function PyqPageLayout({
   stats,
   children,
 }: PyqPageLayoutProps) {
-  const [darkMode, setDarkMode] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const update = () => {
-      setDarkMode(document.documentElement.classList.contains("dark"));
-    };
-    update();
-    const observer = new MutationObserver(update);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
+    setMounted(true);
   }, []);
+
+  const darkMode = mounted && resolvedTheme === "dark";
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-950" : "bg-gray-50"}`}>

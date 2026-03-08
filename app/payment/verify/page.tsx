@@ -72,12 +72,12 @@ function PaymentVerifyContent() {
   }, [searchParams, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#071219] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[var(--color-dark-bg)] px-4">
       <div className="max-w-md w-full bg-white dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10 p-8 text-center">
         {/* Status Icon */}
         <div className="mb-6">
           {status === "verifying" && (
-            <Loader2 className="w-16 h-16 mx-auto text-[#2596be] animate-spin" />
+            <Loader2 className="w-16 h-16 mx-auto text-[var(--color-brand)] animate-spin" />
           )}
           {status === "success" && (
             <CheckCircle className="w-16 h-16 mx-auto text-green-500" />
@@ -115,8 +115,8 @@ export default function PaymentVerifyPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#071219]">
-          <Loader2 className="w-12 h-12 animate-spin text-[#2596be]" />
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[var(--color-dark-bg)]">
+          <Loader2 className="w-12 h-12 animate-spin text-[var(--color-brand)]" />
         </div>
       }
     >

@@ -163,7 +163,7 @@ export default function Features() {
       <div
         className="
           absolute inset-0 pointer-events-none 
-          bg-linear-to-br from-[#2596be]/10 to-[#4EA8DE]/15 
+          bg-linear-to-br from-[var(--color-brand)]/10 to-[var(--color-brand-accent)]/15 
           blur-3xl opacity-70
         "
       ></div>
@@ -179,7 +179,7 @@ export default function Features() {
         <h2
           className={`
             text-4xl md:text-5xl font-bold mb-4 tracking-tight
-            ${darkMode ? "text-white" : "text-[#2596be]"}
+            ${darkMode ? "text-white" : "text-[var(--color-brand)]"}
           `}
         >
           Your Complete Journey to Success
@@ -347,7 +347,7 @@ export default function Features() {
 
               {/* Connecting Line for Desktop */}
               {index < journeyStages.length - 1 && (
-                <div className="hidden lg:block absolute left-1/2 bottom-0 w-0.5 h-32 bg-linear-to-b from-[#2596be]/50 to-transparent transform translate-y-full -translate-x-1/2" />
+                <div className="hidden lg:block absolute left-1/2 bottom-0 w-0.5 h-32 bg-linear-to-b from-[var(--color-brand)]/50 to-transparent transform translate-y-full -translate-x-1/2" />
               )}
             </motion.div>
           );

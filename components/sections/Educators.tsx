@@ -150,11 +150,11 @@ export default function EducatorsShowcase({
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div
           className={`absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#2596be]/10" : "bg-[#2596be]/20"}`}
+            ${darkMode ? "bg-[var(--color-brand)]/10" : "bg-[var(--color-brand)]/20"}`}
         />
         <div
           className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#4EA8DE]/15" : "bg-[#4EA8DE]/25"}`}
+            ${darkMode ? "bg-[var(--color-brand-accent)]/15" : "bg-[var(--color-brand-accent)]/25"}`}
         />
       </div>
 
@@ -166,7 +166,7 @@ export default function EducatorsShowcase({
         >
           The People Who Power Your Preparation
         </h2>
-        <div className="w-20 h-1 bg-gradient-to-r from-[#2596be] to-[#4EA8DE] mx-auto rounded-full" />
+        <div className="w-20 h-1 bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)] mx-auto rounded-full" />
         <p
           className={`mt-4 text-lg max-w-2xl mx-auto transition-colors
             ${darkMode ? "text-gray-300" : "text-gray-600"}`}
@@ -179,7 +179,7 @@ export default function EducatorsShowcase({
       {isLoading ? (
         <div className="max-w-7xl mx-auto flex justify-center py-12">
           <div className="flex flex-col items-center gap-4">
-            <div className="w-8 h-8 border-4 border-[#2596be]/30 border-t-[#2596be] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-[var(--color-brand)]/30 border-t-brand rounded-full animate-spin" />
             <p
               className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}
             >
@@ -217,9 +217,9 @@ export default function EducatorsShowcase({
                 }
                 ${
                   hoveredId === educator.id && darkMode
-                    ? "shadow-[#2596be]/30 border-[#2596be]/60 bg-gray-900/60"
+                    ? "shadow-[var(--color-brand)]/30 border-[var(--color-brand)]/60 bg-gray-900/60"
                     : hoveredId === educator.id
-                      ? "shadow-[#2596be]/20 border-[#4EA8DE]/60 bg-white/60"
+                      ? "shadow-[var(--color-brand)]/20 border-[var(--color-brand-accent)]/60 bg-white/60"
                       : ""
                 }
               `}
@@ -232,8 +232,8 @@ export default function EducatorsShowcase({
                         className={`absolute inset-0 rounded-2xl pointer-events-none
                         ${
                           darkMode
-                            ? "bg-gradient-to-br from-[#2596be]/5 to-[#4EA8DE]/5"
-                            : "bg-gradient-to-br from-[#2596be]/3 to-[#4EA8DE]/3"
+                            ? "bg-gradient-to-br from-[var(--color-brand)]/5 to-[var(--color-brand-accent)]/5"
+                            : "bg-gradient-to-br from-[var(--color-brand)]/3 to-[var(--color-brand-accent)]/3"
                         }`}
                       />
                     )}
@@ -246,8 +246,8 @@ export default function EducatorsShowcase({
                       ${
                         hoveredId === educator.id
                           ? darkMode
-                            ? "bg-gradient-to-br from-[#2596be]/30 to-[#4EA8DE]/30 scale-110 blur-md"
-                            : "bg-gradient-to-br from-[#2596be]/20 to-[#4EA8DE]/20 scale-110 blur-md"
+                            ? "bg-gradient-to-br from-[var(--color-brand)]/30 to-[var(--color-brand-accent)]/30 scale-110 blur-md"
+                            : "bg-gradient-to-br from-[var(--color-brand)]/20 to-[var(--color-brand-accent)]/20 scale-110 blur-md"
                           : "scale-100 opacity-0"
                       }
                     `}
@@ -255,7 +255,7 @@ export default function EducatorsShowcase({
                       {/* Gradient background */}
                       <div
                         className={`
-                      absolute inset-0 rounded-full bg-gradient-to-br from-[#2596be] to-[#4EA8DE]
+                      absolute inset-0 rounded-full bg-gradient-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)]
                       transition-all duration-300
                       ${hoveredId === educator.id ? "scale-105" : "scale-100"}
                     `}
@@ -278,9 +278,9 @@ export default function EducatorsShowcase({
                         className={`text-2xl font-bold mb-2 transition-colors
                         ${
                           hoveredId === educator.id && darkMode
-                            ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#60DFFF]"
+                            ? "text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-light)]"
                             : hoveredId === educator.id
-                              ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#4EA8DE]"
+                              ? "text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)]"
                               : darkMode
                                 ? "text-white"
                                 : "text-gray-900"
@@ -293,10 +293,10 @@ export default function EducatorsShowcase({
                         ${
                           darkMode
                             ? hoveredId === educator.id
-                              ? "text-[#60DFFF]/80"
+                              ? "text-[var(--color-brand-light)]/80"
                               : "text-gray-400"
                             : hoveredId === educator.id
-                              ? "text-[#2596be]"
+                              ? "text-[var(--color-brand)]"
                               : "text-gray-600"
                         }`}
                       >
@@ -311,10 +311,10 @@ export default function EducatorsShowcase({
                         ${
                           darkMode
                             ? hoveredId === educator.id
-                              ? "text-[#60DFFF]/70"
+                              ? "text-[var(--color-brand-light)]/70"
                               : "text-gray-400"
                             : hoveredId === educator.id
-                              ? "text-[#2596be]"
+                              ? "text-[var(--color-brand)]"
                               : "text-gray-500"
                         }`}
                       >
@@ -329,9 +329,9 @@ export default function EducatorsShowcase({
                             backdrop-blur-sm transition-all duration-300
                             ${
                               hoveredId === educator.id && darkMode
-                                ? "bg-[#2596be]/30 text-[#60DFFF] border border-[#2596be]/50"
+                                ? "bg-[var(--color-brand)]/30 text-[var(--color-brand-light)] border border-[var(--color-brand)]/50"
                                 : hoveredId === educator.id
-                                  ? "bg-[#2596be]/15 text-[#2596be] border border-[#2596be]/30"
+                                  ? "bg-[var(--color-brand)]/15 text-[var(--color-brand)] border border-[var(--color-brand)]/30"
                                   : darkMode
                                     ? "bg-gray-800/60 text-gray-300 border border-gray-700/50"
                                     : "bg-gray-100/60 text-gray-700 border border-gray-200/50"
@@ -358,7 +358,7 @@ export default function EducatorsShowcase({
                       transition-all duration-300
                       ${
                         hoveredId === educator.id
-                          ? "bg-gradient-to-r from-[#2596be] to-[#4EA8DE] text-white shadow-xl shadow-[#2596be]/40"
+                          ? "bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)] text-white shadow-xl shadow-[var(--color-brand)]/40"
                           : darkMode
                             ? "bg-gray-800/60 text-gray-300 hover:bg-gray-700/60 border border-gray-700/50"
                             : "bg-gray-100/60 text-gray-700 hover:bg-gray-200/60 border border-gray-200/50"
@@ -367,7 +367,7 @@ export default function EducatorsShowcase({
                     >
                       {hoveredId === educator.id && (
                         <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-[#60DFFF]/20 to-transparent"
+                          className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-light)]/20 to-transparent"
                           animate={{
                             x: ["-100%", "100%"],
                           }}
@@ -385,7 +385,7 @@ export default function EducatorsShowcase({
                   {/* Decorative accent */}
                   <div
                     className={`
-                  absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#2596be] to-[#4EA8DE]
+                  absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)]
                   transition-opacity duration-300
                   ${hoveredId === educator.id ? "opacity-100" : "opacity-0"}
                 `}
@@ -432,7 +432,7 @@ export default function EducatorsShowcase({
                 onClick={() => setSelectedEducator(null)}
                 className={`
                 absolute top-4 right-4 p-2 rounded-full transition-colors z-20
-                focus:outline-none focus:ring-2 focus:ring-[#2596be]
+                focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]
                 ${darkMode ? "bg-gray-800/50 hover:bg-gray-700/50 text-gray-400" : "bg-gray-100 hover:bg-gray-200 text-gray-600"}
               `}
                 aria-label="Close profile modal"
@@ -445,7 +445,7 @@ export default function EducatorsShowcase({
                 <div className="flex flex-col sm:flex-row gap-8 items-center sm:items-start">
                   <div className="relative w-32 h-32 sm:w-40 sm:h-40 shrink-0 mx-auto sm:mx-0">
                     <div
-                      className={`absolute inset-0 rounded-full scale-105 bg-gradient-to-br from-[#2596be] to-[#4EA8DE] opacity-20`}
+                      className={`absolute inset-0 rounded-full scale-105 bg-gradient-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)] opacity-20`}
                     />
                     <img
                       src={selectedEducator.image}
@@ -462,7 +462,7 @@ export default function EducatorsShowcase({
                       {selectedEducator.name}
                     </h2>
                     <p
-                      className={`text-xl font-medium ${darkMode ? "text-[#60DFFF]" : "text-[#2596be]"}`}
+                      className={`text-xl font-medium ${darkMode ? "text-[var(--color-brand-light)]" : "text-[var(--color-brand)]"}`}
                     >
                       {selectedEducator.title}
                     </p>
@@ -498,7 +498,7 @@ export default function EducatorsShowcase({
                           key={idx}
                           className={`
                           inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                          ${darkMode ? "bg-gray-800 text-[#60DFFF]" : "bg-blue-50 text-[#2596be]"}
+                          ${darkMode ? "bg-gray-800 text-[var(--color-brand-light)]" : "bg-blue-50 text-[var(--color-brand)]"}
                         `}
                         >
                           {skill}

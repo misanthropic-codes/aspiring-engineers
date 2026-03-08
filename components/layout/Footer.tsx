@@ -13,23 +13,19 @@ import {
   Youtube,
   ArrowRight,
 } from "lucide-react";
-import { getSiteSettings, SiteSettings } from "@/services/siteSettings";
+import { useTheme } from "next-themes";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export default function Footer() {
-  const [darkMode, setDarkMode] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { settings, isLoading } = useSiteSettings();
 
   useEffect(() => {
-    const updateTheme = () => {
-      setDarkMode(document.documentElement.classList.contains("dark"));
-    };
-    updateTheme();
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
+    setMounted(true);
   }, []);
+
+  const darkMode = mounted && resolvedTheme === "dark";
 
   const defaultFooterLinks = {
     jee: [
@@ -79,51 +75,46 @@ export default function Footer() {
   });
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      const settings = await getSiteSettings();
-      if (settings) {
-        // Patch footer links
-        const newLinks = { ...defaultFooterLinks };
+    if (settings) {
+      // Patch footer links
+      const newLinks = { ...defaultFooterLinks };
 
-        // Group API links
-        const apiGroups: Record<string, { label: string; href: string }[]> = {};
+      // Group API links
+      const apiGroups: Record<string, { label: string; href: string }[]> = {};
 
-        settings.footerLinks.forEach((link) => {
-          const group = link.group.toLowerCase();
-          if (!apiGroups[group]) {
-            apiGroups[group] = [];
-          }
-          apiGroups[group].push({ label: link.label, href: link.url });
-        });
-
-        // Override default groups if API data exists
-        Object.keys(apiGroups).forEach((group) => {
-          // Map API group names to our keys if needed, or just use as is if they match
-          // We assume 'company' maps to 'company', etc.
-          if (group in newLinks) {
-            // @ts-ignore - Dynamic key access
-            newLinks[group as keyof typeof newLinks] = apiGroups[group];
-          }
-        });
-
-        setFooterLinks(newLinks);
-
-        // Patch social links
-        if (settings.socialLinks) {
-          setSocialUrls((prev) => ({
-            ...prev,
-            ...settings.socialLinks,
-            telegram:
-              settings.socialLinks.telegram ||
-              settings.socialLinks.twitter ||
-              prev.telegram,
-          }));
+      settings.footerLinks.forEach((link) => {
+        const group = link.group.toLowerCase();
+        if (!apiGroups[group]) {
+          apiGroups[group] = [];
         }
-      }
-    };
+        apiGroups[group].push({ label: link.label, href: link.url });
+      });
 
-    fetchSettings();
-  }, []);
+      // Override default groups if API data exists
+      Object.keys(apiGroups).forEach((group) => {
+        // Map API group names to our keys if needed, or just use as is if they match
+        // We assume 'company' maps to 'company', etc.
+        if (group in newLinks) {
+          // @ts-ignore - Dynamic key access
+          newLinks[group as keyof typeof newLinks] = apiGroups[group];
+        }
+      });
+
+      setFooterLinks(newLinks);
+
+      // Patch social links
+      if (settings.socialLinks) {
+        setSocialUrls((prev) => ({
+          ...prev,
+          ...settings.socialLinks,
+          telegram:
+            settings.socialLinks.telegram ||
+            settings.socialLinks.twitter ||
+            prev.telegram,
+        }));
+      }
+    }
+  }, [settings]);
 
   const socialLinks = [
     { icon: Facebook, href: socialUrls.facebook, label: "Facebook" },
@@ -132,6 +123,46 @@ export default function Footer() {
     { icon: Linkedin, href: socialUrls.linkedin, label: "LinkedIn" },
     { icon: Youtube, href: socialUrls.youtube, label: "YouTube" },
   ];
+
+  // Show skeleton while loading
+  if (isLoading) {
+    return (
+      <footer
+        className={`
+          relative mt-20 border-t backdrop-blur-2xl transition-all
+          ${
+            darkMode
+              ? "bg-gray-900/50 border-gray-800"
+              : "bg-white/90 border-gray-200"
+          }
+        `}
+      >
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div
+                  className={`h-4 rounded mb-4 ${
+                    darkMode ? "bg-gray-800" : "bg-gray-200"
+                  }`}
+                />
+                <div className="space-y-3">
+                  {[...Array(3)].map((_, j) => (
+                    <div
+                      key={j}
+                      className={`h-3 rounded ${
+                        darkMode ? "bg-gray-800" : "bg-gray-200"
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer
@@ -148,11 +179,11 @@ export default function Footer() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className={`absolute -top-40 left-0 w-96 h-96 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#2596be]/5" : "bg-[#2596be]/10"}`}
+            ${darkMode ? "bg-[var(--color-brand)]/5" : "bg-[var(--color-brand)]/10"}`}
         />
         <div
           className={`absolute -bottom-40 right-0 w-96 h-96 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#4EA8DE]/5" : "bg-[#4EA8DE]/10"}`}
+            ${darkMode ? "bg-[var(--color-brand-accent)]/5" : "bg-[var(--color-brand-accent)]/10"}`}
         />
       </div>
 
@@ -198,8 +229,8 @@ export default function Footer() {
                     transition-all duration-300
                     ${
                       darkMode
-                        ? "bg-gray-800/50 text-gray-400 hover:bg-[#2596be]/20 hover:text-[#60DFFF]"
-                        : "bg-gray-100 text-gray-600 hover:bg-[#2596be]/10 hover:text-[#2596be]"
+                        ? "bg-gray-800/50 text-gray-400 hover:bg-[var(--color-brand)]/20 hover:text-[var(--color-brand-light)]"
+                        : "bg-gray-100 text-gray-600 hover:bg-[var(--color-brand)]/10 hover:text-[var(--color-brand)]"
                     }
                   `}
                 >
@@ -225,8 +256,8 @@ export default function Footer() {
                     href={link.href}
                     className={`group flex items-center text-sm transition-colors ${
                       darkMode
-                        ? "text-gray-400 hover:text-[#60DFFF]"
-                        : "text-gray-600 hover:text-[#2596be]"
+                        ? "text-gray-400 hover:text-[var(--color-brand-light)]"
+                        : "text-gray-600 hover:text-[var(--color-brand)]"
                     }`}
                   >
                     <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
@@ -255,8 +286,8 @@ export default function Footer() {
                     href={link.href}
                     className={`group flex items-center text-sm transition-colors ${
                       darkMode
-                        ? "text-gray-400 hover:text-[#60DFFF]"
-                        : "text-gray-600 hover:text-[#2596be]"
+                        ? "text-gray-400 hover:text-[var(--color-brand-light)]"
+                        : "text-gray-600 hover:text-[var(--color-brand)]"
                     }`}
                   >
                     <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
@@ -285,8 +316,8 @@ export default function Footer() {
                     href={link.href}
                     className={`group flex items-center text-sm transition-colors ${
                       darkMode
-                        ? "text-gray-400 hover:text-[#60DFFF]"
-                        : "text-gray-600 hover:text-[#2596be]"
+                        ? "text-gray-400 hover:text-[var(--color-brand-light)]"
+                        : "text-gray-600 hover:text-[var(--color-brand)]"
                     }`}
                   >
                     <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
@@ -315,8 +346,8 @@ export default function Footer() {
                     href={link.href}
                     className={`group flex items-center text-sm transition-colors ${
                       darkMode
-                        ? "text-gray-400 hover:text-[#60DFFF]"
-                        : "text-gray-600 hover:text-[#2596be]"
+                        ? "text-gray-400 hover:text-[var(--color-brand-light)]"
+                        : "text-gray-600 hover:text-[var(--color-brand)]"
                     }`}
                   >
                     <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">
@@ -345,7 +376,7 @@ export default function Footer() {
               >
                 <Mail
                   className={`w-5 h-5 ${
-                    darkMode ? "text-[#60DFFF]" : "text-[#2596be]"
+                    darkMode ? "text-[var(--color-brand-light)]" : "text-[var(--color-brand)]"
                   }`}
                 />
               </div>
@@ -361,8 +392,8 @@ export default function Footer() {
                   href="mailto:aspiringengineersofficial@gmail.com"
                   className={`text-sm ${
                     darkMode
-                      ? "text-gray-300 hover:text-[#60DFFF]"
-                      : "text-gray-700 hover:text-[#2596be]"
+                      ? "text-gray-300 hover:text-[var(--color-brand-light)]"
+                      : "text-gray-700 hover:text-[var(--color-brand)]"
                   }`}
                 >
                   aspiringengineersofficial@gmail.com
@@ -378,7 +409,7 @@ export default function Footer() {
               >
                 <Phone
                   className={`w-5 h-5 ${
-                    darkMode ? "text-[#60DFFF]" : "text-[#2596be]"
+                    darkMode ? "text-[var(--color-brand-light)]" : "text-[var(--color-brand)]"
                   }`}
                 />
               </div>
@@ -394,8 +425,8 @@ export default function Footer() {
                   href="tel:+919002912888"
                   className={`text-sm ${
                     darkMode
-                      ? "text-gray-300 hover:text-[#60DFFF]"
-                      : "text-gray-700 hover:text-[#2596be]"
+                      ? "text-gray-300 hover:text-[var(--color-brand-light)]"
+                      : "text-gray-700 hover:text-[var(--color-brand)]"
                   }`}
                 >
                   +91 9002912888
@@ -411,7 +442,7 @@ export default function Footer() {
               >
                 <MapPin
                   className={`w-5 h-5 ${
-                    darkMode ? "text-[#60DFFF]" : "text-[#2596be]"
+                    darkMode ? "text-[var(--color-brand-light)]" : "text-[var(--color-brand)]"
                   }`}
                 />
               </div>
@@ -465,8 +496,8 @@ export default function Footer() {
                   href={link.href}
                   className={`group flex items-center text-sm transition-colors ${
                     darkMode
-                      ? "text-gray-400 hover:text-[#60DFFF]"
-                      : "text-gray-600 hover:text-[#2596be]"
+                      ? "text-gray-400 hover:text-[var(--color-brand-light)]"
+                      : "text-gray-600 hover:text-[var(--color-brand)]"
                   }`}
                 >
                   <span className="max-w-0 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:max-w-[20px] group-hover:opacity-100 group-hover:mr-1 flex items-center">

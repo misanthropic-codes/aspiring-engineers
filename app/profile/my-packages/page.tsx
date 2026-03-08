@@ -63,30 +63,30 @@ export default function MyPackagesPage() {
   if (loading) {
     return (
       <div
-        className={`min-h-screen ${darkMode ? "bg-[#071219]" : "bg-gray-50"}`}
+        className={`min-h-screen ${darkMode ? "bg-[var(--color-dark-bg)]" : "bg-gray-50"}`}
       >
         <Navbar />
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-12 h-12 animate-spin text-[#2596be]" />
+          <Loader2 className="w-12 h-12 animate-spin text-[var(--color-brand)]" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-[#071219]" : "bg-gray-50"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-[var(--color-dark-bg)]" : "bg-gray-50"}`}>
       <Navbar />
 
       {/* Background decorations */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div
           className={`absolute top-40 left-10 w-96 h-96 rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#2596be]/5" : "bg-[#2596be]/10"
+            darkMode ? "bg-[var(--color-brand)]/5" : "bg-[var(--color-brand)]/10"
           }`}
         />
         <div
           className={`absolute bottom-40 right-10 w-[500px] h-[500px] rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#4EA8DE]/5" : "bg-[#4EA8DE]/10"
+            darkMode ? "bg-[var(--color-brand-accent)]/5" : "bg-[var(--color-brand-accent)]/10"
           }`}
         />
       </div>
@@ -127,7 +127,7 @@ export default function MyPackagesPage() {
             }`}
           >
             <div className="flex items-center gap-3">
-              <Package className="w-10 h-10 text-[#2596be]" />
+              <Package className="w-10 h-10 text-[var(--color-brand)]" />
               <div>
                 <p
                   className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}
@@ -262,7 +262,7 @@ export default function MyPackagesPage() {
                 <div className="flex gap-2">
                   <Link
                     href={`/test-series/${pkg.productId}`}
-                    className="flex-1 py-2 px-4 bg-[#2596be] text-white text-center rounded-lg hover:bg-[#1e7ca0] transition-colors text-sm font-semibold"
+                    className="flex-1 py-2 px-4 bg-[var(--color-brand)] text-white text-center rounded-lg hover:bg-[var(--color-brand-hover)] transition-colors text-sm font-semibold"
                   >
                     View Package
                   </Link>
@@ -313,7 +313,7 @@ export default function MyPackagesPage() {
             </p>
             <Link
               href="/test-series"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#2596be] text-white rounded-lg hover:bg-[#1e7ca0] transition-colors font-semibold"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-brand)] text-white rounded-lg hover:bg-[var(--color-brand-hover)] transition-colors font-semibold"
             >
               Browse Packages
             </Link>

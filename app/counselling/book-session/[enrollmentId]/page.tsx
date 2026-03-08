@@ -167,7 +167,7 @@ export default function BookSessionPage() {
         <Navbar />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-[#2596be] mx-auto mb-4" />
+            <Loader2 className="w-8 h-8 animate-spin text-[var(--color-brand)] mx-auto mb-4" />
             <p className="text-gray-600 dark:text-gray-400">
               Loading enrollment details...
             </p>
@@ -193,7 +193,7 @@ export default function BookSessionPage() {
             <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
             <button
               onClick={() => router.push("/profile/my-enrollments")}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold bg-[#2596be] text-white hover:bg-[#2596be]/90 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand)]/90 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Enrollments
@@ -240,7 +240,7 @@ export default function BookSessionPage() {
           <div className="mb-8">
             <button
               onClick={() => router.push("/profile/my-enrollments")}
-              className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-[#2596be] mb-4"
+              className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-[var(--color-brand)] mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Enrollments
@@ -274,7 +274,7 @@ export default function BookSessionPage() {
                       max={getMaxDate()}
                       value={preferredDate}
                       onChange={(e) => setPreferredDate(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                     />
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
@@ -295,7 +295,7 @@ export default function BookSessionPage() {
                         onClick={() => setPreferredTimeSlot(slot)}
                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                           preferredTimeSlot === slot
-                            ? "bg-[#2596be] text-white"
+                            ? "bg-[var(--color-brand)] text-white"
                             : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                         }`}
                       >
@@ -316,7 +316,7 @@ export default function BookSessionPage() {
                       required
                       value={meetingPreference}
                       onChange={(e) => setMeetingPreference(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent appearance-none"
+                      className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent appearance-none"
                     >
                       {meetingPlatforms.map((platform) => (
                         <option key={platform.value} value={platform.value}>
@@ -338,7 +338,7 @@ export default function BookSessionPage() {
                     value={agenda}
                     onChange={(e) => setAgenda(e.target.value)}
                     placeholder="What would you like to discuss? (e.g., College selection, branch guidance, JoSAA counselling process)"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent resize-none"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                     Be specific about your questions to help us prepare better
@@ -358,7 +358,7 @@ export default function BookSessionPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3 px-4 bg-[#2596be] text-white font-semibold rounded-lg hover:bg-[#2596be]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 bg-[var(--color-brand)] text-white font-semibold rounded-lg hover:bg-[var(--color-brand)]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {submitting ? (
                     <>
@@ -410,7 +410,7 @@ export default function BookSessionPage() {
                     <p className="text-sm text-gray-500 dark:text-gray-500 mb-1">
                       Sessions Remaining
                     </p>
-                    <p className="font-semibold text-[#2596be]">
+                    <p className="font-semibold text-[var(--color-brand)]">
                       {enrollment?.sessionsRemaining} /{" "}
                       {enrollment?.packageSnapshot.maxSessions}
                     </p>

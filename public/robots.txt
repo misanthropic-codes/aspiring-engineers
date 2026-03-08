@@ -1,0 +1,14 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin/auth pages
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /profile/
+Disallow: /payment/
+Disallow: /checkout
+
+# Sitemap
+Sitemap: https://aspiringengineers.in/sitemap.xml

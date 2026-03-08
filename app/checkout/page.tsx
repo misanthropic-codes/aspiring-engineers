@@ -141,20 +141,20 @@ function CheckoutContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#071219]">
-        <Loader2 className="h-12 w-12 animate-spin text-[#2596be]" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[var(--color-dark-bg)]">
+        <Loader2 className="h-12 w-12 animate-spin text-[var(--color-brand)]" />
       </div>
     );
   }
 
   if (error && !packageData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#071219] px-4">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[var(--color-dark-bg)] px-4">
         <div className="max-w-md w-full bg-white dark:bg-white/5 rounded-2xl border border-gray-200 dark:border-white/10 p-8 text-center">
           <p className="text-red-500 mb-4">{error}</p>
           <button
             onClick={() => router.push("/test-series")}
-            className="px-6 py-3 bg-[#2596be] text-white rounded-lg hover:bg-[#1e7ca0] transition-colors"
+            className="px-6 py-3 bg-[var(--color-brand)] text-white rounded-lg hover:bg-[var(--color-brand-hover)] transition-colors"
           >
             Back to Packages
           </button>
@@ -169,7 +169,7 @@ function CheckoutContent() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#071219] py-8 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-[var(--color-dark-bg)] py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
           Checkout
@@ -220,7 +220,7 @@ function CheckoutContent() {
                     {packageData?.examTypes?.map((exam: string) => (
                       <span
                         key={exam}
-                        className="px-2 py-1 bg-[#2596be]/10 text-[#2596be] text-xs font-medium rounded-full"
+                        className="px-2 py-1 bg-[var(--color-brand)]/10 text-[var(--color-brand)] text-xs font-medium rounded-full"
                       >
                         {exam.toUpperCase()}
                       </span>
@@ -358,7 +358,7 @@ function CheckoutContent() {
                 <button
                   onClick={handlePayment}
                   disabled={isProcessing}
-                  className="w-full py-3 px-4 bg-[#2596be] text-white font-semibold rounded-lg hover:bg-[#1e7ca0] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 bg-[var(--color-brand)] text-white font-semibold rounded-lg hover:bg-[var(--color-brand-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isProcessing ? (
                     <>
@@ -387,8 +387,8 @@ export default function CheckoutPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#071219]">
-          <Loader2 className="h-12 w-12 animate-spin text-[#2596be]" />
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[var(--color-dark-bg)]">
+          <Loader2 className="h-12 w-12 animate-spin text-[var(--color-brand)]" />
         </div>
       }
     >

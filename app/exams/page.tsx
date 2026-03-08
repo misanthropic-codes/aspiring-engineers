@@ -41,8 +41,8 @@ const examCategories: ExamCategory[] = [
       "Gateway to NITs, IIITs and other top engineering colleges. Comprehensive preparation with PYQs and mock tests.",
     icon: Atom,
     href: "/exams/jee",
-    color: "#2596be",
-    bgGradient: "from-[#2596be]/20 to-[#60DFFF]/10",
+    color: "var(--color-brand)",
+    bgGradient: "from-[var(--color-brand)]/20 to-[var(--color-brand-light)]/10",
     features: ["Physics", "Chemistry", "Mathematics"],
     category: "jee-main",
   },
@@ -276,8 +276,7 @@ export default function ExamsPage() {
                 darkMode ? "text-white" : "text-gray-900"
               }`}
             >
-              Why Choose{" "}
-              <span className="text-[#2596be]">Aspiring Engineers?</span>
+              Why Choose <span className="text-[var(--color-brand)]">Aspiring Engineers?</span>
             </h2>
             <p className={darkMode ? "text-gray-400" : "text-gray-600"}>
               Everything you need to crack your dream exam
@@ -316,8 +315,8 @@ export default function ExamsPage() {
                     : "bg-white border-gray-200"
                 }`}
               >
-                <div className="w-14 h-14 rounded-xl bg-[#2596be]/10 flex items-center justify-center mb-6">
-                  <feature.icon className="w-7 h-7 text-[#2596be]" />
+                <div className="w-14 h-14 rounded-xl bg-[var(--color-brand)]/10 flex items-center justify-center mb-6">
+                  <feature.icon className="w-7 h-7 text-[var(--color-brand)]" />
                 </div>
                 <h3
                   className={`text-xl font-bold mb-3 ${

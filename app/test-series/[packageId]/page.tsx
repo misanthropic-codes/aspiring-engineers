@@ -194,19 +194,19 @@ export default function PackageDetailPage() {
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-[#071219]" : "bg-gray-50"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-[var(--color-dark-bg)]" : "bg-gray-50"}`}>
       <Navbar />
 
       {/* Background decorations */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div
           className={`absolute top-40 left-10 w-96 h-96 rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#2596be]/5" : "bg-[#2596be]/10"
+            darkMode ? "bg-[var(--color-brand)]/5" : "bg-[var(--color-brand)]/10"
           }`}
         />
         <div
           className={`absolute bottom-40 right-10 w-[500px] h-[500px] rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#4EA8DE]/5" : "bg-[#4EA8DE]/10"
+            darkMode ? "bg-[var(--color-brand-accent)]/5" : "bg-[var(--color-brand-accent)]/10"
           }`}
         />
       </div>
@@ -228,7 +228,7 @@ export default function PackageDetailPage() {
         {/* Loading State */}
         {loading && (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#2596be] border-t-transparent"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-[var(--color-brand)] border-t-transparent"></div>
           </div>
         )}
 
@@ -246,7 +246,7 @@ export default function PackageDetailPage() {
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-[#2596be] text-white rounded-lg hover:bg-[#1e7ca0] transition-colors"
+              className="mt-4 px-4 py-2 bg-[var(--color-brand)] text-white rounded-lg hover:bg-[var(--color-brand-hover)] transition-colors"
             >
               Retry
             </button>
@@ -288,7 +288,7 @@ export default function PackageDetailPage() {
                     {packageData.examTypes.map((exam, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-[#2596be]/10 text-[#2596be] text-sm font-medium rounded-full"
+                        className="px-3 py-1 bg-[var(--color-brand)]/10 text-[var(--color-brand)] text-sm font-medium rounded-full"
                       >
                         {exam
                           .replace(/_/g, " ")
@@ -482,10 +482,10 @@ export default function PackageDetailPage() {
                         <div className="flex items-center gap-4">
                           <div
                             className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                              darkMode ? "bg-[#2596be]/20" : "bg-[#2596be]/10"
+                              darkMode ? "bg-[var(--color-brand)]/20" : "bg-[var(--color-brand)]/10"
                             }`}
                           >
-                            <span className="text-[#2596be] font-semibold">
+                            <span className="text-[var(--color-brand)] font-semibold">
                               {idx + 1}
                             </span>
                           </div>
@@ -616,7 +616,7 @@ export default function PackageDetailPage() {
                       <button
                         onClick={handlePurchase}
                         disabled={purchasing || checkingAccess}
-                        className="w-full py-3 px-4 bg-[#2596be] text-white font-semibold rounded-xl shadow-lg hover:bg-[#1e7ca0] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full py-3 px-4 bg-[var(--color-brand)] text-white font-semibold rounded-xl shadow-lg hover:bg-[var(--color-brand-hover)] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                       >
                         {purchasing ? (
                           <>

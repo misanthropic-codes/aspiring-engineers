@@ -424,7 +424,10 @@ export default function CollegeListPage() {
   const carouselItems: BannerItem[] = colleges
     .filter((c) => c.featured)
     .map((college) => ({
-      image: college.type === "engineering" ? "/banners/jee.png" : "/banners/neet.png",
+      image:
+        college.type === "engineering"
+          ? "/banners/jee.png"
+          : "/banners/neet.png",
       title: college.shortName,
       link: college.website || "#",
     }));
@@ -450,12 +453,13 @@ export default function CollegeListPage() {
         {/* Centered Header with Gradient */}
         <div className="text-center pt-12 pb-6">
           <h1 className="text-4xl sm:text-5xl font-bold mb-3">
-            <span className="bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
               Explore Colleges
             </span>
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Browse {colleges.length}+ top engineering and medical institutions across India
+            Browse {colleges.length}+ top engineering and medical institutions
+            across India
           </p>
         </div>
 
@@ -475,7 +479,7 @@ export default function CollegeListPage() {
                 placeholder="Search colleges by name, location..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
               />
             </div>
 
@@ -502,7 +506,7 @@ export default function CollegeListPage() {
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
               >
                 {typeFilters.map((filter) => (
                   <option key={filter.value} value={filter.value}>
@@ -514,7 +518,7 @@ export default function CollegeListPage() {
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
               >
                 {categoryFilters.map((filter) => (
                   <option key={filter.value} value={filter.value}>
@@ -526,7 +530,7 @@ export default function CollegeListPage() {
               <select
                 value={stateFilter}
                 onChange={(e) => setStateFilter(e.target.value)}
-                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                className="px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
               >
                 {stateFilters.map((filter) => (
                   <option key={filter.value} value={filter.value}>
@@ -553,8 +557,6 @@ export default function CollegeListPage() {
           </div>
         </div>
 
-
-
         {/* College List - Dense Grid */}
         <div className="pb-8">
           {filteredColleges.length === 0 ? (
@@ -568,7 +570,7 @@ export default function CollegeListPage() {
               </p>
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-[#2596be] text-white hover:bg-[#1e7ca0] transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hover)] transition-colors"
               >
                 Clear All Filters
               </button>
@@ -678,7 +680,7 @@ export default function CollegeListPage() {
                         {college.acceptedExams.map((exam) => (
                           <span
                             key={exam}
-                            className="px-2 py-1 rounded-lg text-xs font-medium bg-[#2596be]/10 text-[#2596be]"
+                            className="px-2 py-1 rounded-lg text-xs font-medium bg-[var(--color-brand)]/10 text-[var(--color-brand)]"
                           >
                             {exam}
                           </span>
@@ -689,7 +691,7 @@ export default function CollegeListPage() {
                           href={college.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-sm text-[#2596be] hover:underline"
+                          className="inline-flex items-center gap-1 text-sm text-[var(--color-brand)] hover:underline"
                         >
                           Visit Website
                           <ExternalLink className="w-3.5 h-3.5" />

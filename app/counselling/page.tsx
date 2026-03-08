@@ -107,16 +107,18 @@ export default function CounsellingPage() {
           Trusted by 1000+ Students
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-          <span className="bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
             Expert College Counselling
           </span>
         </h1>
         <p className="text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-4">
-          Navigate the complex admission process with confidence. Our expert counsellors help you secure seats in top engineering and medical colleges.
+          Navigate the complex admission process with confidence. Our expert
+          counsellors help you secure seats in top engineering and medical
+          colleges.
         </p>
         <Link
           href="/contact"
-          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-semibold bg-[#2596be] text-white hover:bg-[#1e7ca0] transition-colors text-sm"
+          className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-semibold bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hover)] transition-colors text-sm"
         >
           Book Free Consultation
           <ArrowRight className="w-4 h-4" />
@@ -127,7 +129,7 @@ export default function CounsellingPage() {
       <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
               Choose Your Counselling Path
             </h2>
             <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -141,7 +143,7 @@ export default function CounsellingPage() {
               <Link
                 key={type.id}
                 href={type.href}
-                className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-2xl hover:shadow-[#2596be]/20 transition-all duration-300 hover:-translate-y-2"
+                className="group relative rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 hover:shadow-2xl hover:shadow-[var(--color-brand)]/20 transition-all duration-300 hover:-translate-y-2"
               >
                 {/* Gradient Header */}
                 <div className={`h-2 bg-gradient-to-r ${type.color}`} />
@@ -155,10 +157,10 @@ export default function CounsellingPage() {
                   </div>
 
                   {/* Title & Subtitle */}
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-[#2596be] transition-colors">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-[var(--color-brand)] transition-colors">
                     {type.title}
                   </h3>
-                  <p className="text-sm text-[#2596be] font-medium mb-2">
+                  <p className="text-sm text-[var(--color-brand)] font-medium mb-2">
                     {type.subtitle}
                   </p>
 
@@ -180,7 +182,7 @@ export default function CounsellingPage() {
                   </div>
 
                   {/* CTA */}
-                  <div className="flex items-center gap-2 text-[#2596be] font-semibold group-hover:gap-3 transition-all">
+                  <div className="flex items-center gap-2 text-[var(--color-brand)] font-semibold group-hover:gap-3 transition-all">
                     <span>Learn More</span>
                     <ArrowRight className="w-4 h-4" />
                   </div>
@@ -197,7 +199,7 @@ export default function CounsellingPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, idx) => (
               <div key={idx} className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent mb-2">
+                <div className="text-4xl sm:text-5xl font-bold bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent mb-2">
                   {stat.value}
                 </div>
                 <div className="text-gray-600 dark:text-gray-400 font-medium">
@@ -213,7 +215,7 @@ export default function CounsellingPage() {
       <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
               Why Choose Our Counselling?
             </h2>
             <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -229,8 +231,8 @@ export default function CounsellingPage() {
                 className="p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-[#2596be]/10 flex items-center justify-center flex-shrink-0">
-                    <Star className="w-4 h-4 text-[#2596be]" />
+                  <div className="w-8 h-8 rounded-full bg-[var(--color-brand)]/10 flex items-center justify-center flex-shrink-0">
+                    <Star className="w-4 h-4 text-[var(--color-brand)]" />
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">
@@ -250,7 +252,7 @@ export default function CounsellingPage() {
       {/* CTA Section */}
       <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-[#2596be] to-[#4EA8DE] text-white">
+          <div className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)] text-white">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3">
               Ready to Secure Your Dream College?
             </h2>
@@ -261,7 +263,7 @@ export default function CounsellingPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white text-[var(--color-brand)] hover:bg-gray-100 transition-colors"
               >
                 <Users className="w-5 h-5" />
                 Book Free Consultation

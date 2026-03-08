@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getPapers, Paper } from "@/services/papers";
-import { logger } from "@/lib/logger";
+import { Paper } from "@/services/papers";
+import { usePapers } from "@/hooks/usePapers";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -39,8 +39,12 @@ export default function PyqNoSolutionPage({
   breadcrumbs,
   category,
 }: PyqNoSolutionPageProps) {
-  const [papers, setPapers] = useState<Paper[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { papers, isLoading: loading } = usePapers({
+    category,
+    type: "no-solution",
+    page: 1,
+    limit: 100,
+  });
   const [darkMode, setDarkMode] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
@@ -56,26 +60,6 @@ export default function PyqNoSolutionPage({
     });
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    const fetchPapers = async () => {
-      try {
-        const data = await getPapers({
-          category,
-          type: "no-solution",
-          page: 1,
-          limit: 100,
-        });
-        setPapers(data);
-      } catch (error) {
-        logger.error("Failed to load papers", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPapers();
-  }, [category]);
 
   // Calculate real stats from papers data
   const stats = React.useMemo(() => {

@@ -88,19 +88,19 @@ export default function TestSeriesPage() {
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-[#071219]" : "bg-gray-50"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-[var(--color-dark-bg)]" : "bg-gray-50"}`}>
       <Navbar />
 
       {/* Background decorations */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div
           className={`absolute top-40 left-10 w-96 h-96 rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#2596be]/5" : "bg-[#2596be]/10"
+            darkMode ? "bg-[var(--color-brand)]/5" : "bg-[var(--color-brand)]/10"
           }`}
         />
         <div
           className={`absolute bottom-40 right-10 w-[500px] h-[500px] rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#4EA8DE]/5" : "bg-[#4EA8DE]/10"
+            darkMode ? "bg-[var(--color-brand-accent)]/5" : "bg-[var(--color-brand-accent)]/10"
           }`}
         />
       </div>
@@ -138,14 +138,14 @@ export default function TestSeriesPage() {
                 placeholder="Search test series..."
                 className={`w-full pl-12 pr-4 py-3 rounded-xl border transition-colors ${
                   darkMode
-                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be]"
-                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be]"
+                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)]"
+                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)]"
                 }`}
               />
             </div>
             <button
               type="submit"
-              className="px-6 py-3 bg-[#2596be] text-white font-semibold rounded-xl hover:bg-[#1e7ca0] transition-colors"
+              className="px-6 py-3 bg-[var(--color-brand)] text-white font-semibold rounded-xl hover:bg-[var(--color-brand-hover)] transition-colors"
             >
               Search
             </button>
@@ -162,7 +162,7 @@ export default function TestSeriesPage() {
                 }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedExam === exam
-                    ? "bg-[#2596be] text-white"
+                    ? "bg-[var(--color-brand)] text-white"
                     : darkMode
                       ? "bg-white/5 text-gray-400 hover:bg-white/10"
                       : "bg-gray-100 text-gray-600 hover:bg-gray-200"
@@ -177,7 +177,7 @@ export default function TestSeriesPage() {
         {/* Loading State */}
         {loading && (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#2596be] border-t-transparent"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-[var(--color-brand)] border-t-transparent"></div>
           </div>
         )}
 
@@ -195,7 +195,7 @@ export default function TestSeriesPage() {
             </p>
             <button
               onClick={() => window.location.reload()}
-              className="mt-4 px-4 py-2 bg-[#2596be] text-white rounded-lg hover:bg-[#1e7ca0] transition-colors"
+              className="mt-4 px-4 py-2 bg-[var(--color-brand)] text-white rounded-lg hover:bg-[var(--color-brand-hover)] transition-colors"
             >
               Retry
             </button>
@@ -241,7 +241,7 @@ export default function TestSeriesPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 currentPage === 1
                   ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-[#2596be]/10"
+                  : "hover:bg-[var(--color-brand)]/10"
               } ${darkMode ? "text-gray-400" : "text-gray-600"}`}
             >
               Previous
@@ -253,7 +253,7 @@ export default function TestSeriesPage() {
                 onClick={() => setCurrentPage(page)}
                 className={`w-10 h-10 rounded-lg font-medium transition-colors ${
                   currentPage === page
-                    ? "bg-[#2596be] text-white"
+                    ? "bg-[var(--color-brand)] text-white"
                     : darkMode
                       ? "text-gray-400 hover:bg-white/10"
                       : "text-gray-600 hover:bg-gray-100"
@@ -269,7 +269,7 @@ export default function TestSeriesPage() {
               className={`px-4 py-2 rounded-lg transition-colors ${
                 currentPage === totalPages
                   ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-[#2596be]/10"
+                  : "hover:bg-[var(--color-brand)]/10"
               } ${darkMode ? "text-gray-400" : "text-gray-600"}`}
             >
               Next
@@ -324,8 +324,8 @@ function TestSeriesCard({
     <div
       className={`group rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] ${
         darkMode
-          ? "bg-white/5 border-white/10 hover:border-[#2596be]/50"
-          : "bg-white border-gray-200 hover:border-[#2596be]"
+          ? "bg-white/5 border-white/10 hover:border-[var(--color-brand)]/50"
+          : "bg-white border-gray-200 hover:border-[var(--color-brand)]"
       }`}
     >
       {/* Thumbnail */}
@@ -340,12 +340,12 @@ function TestSeriesCard({
           <div
             className={`w-full h-full flex items-center justify-center ${
               darkMode
-                ? "bg-gradient-to-br from-[#2596be]/20 to-[#4EA8DE]/20"
-                : "bg-gradient-to-br from-[#2596be]/10 to-[#4EA8DE]/10"
+                ? "bg-gradient-to-br from-[var(--color-brand)]/20 to-[var(--color-brand-accent)]/20"
+                : "bg-gradient-to-br from-[var(--color-brand)]/10 to-[var(--color-brand-accent)]/10"
             }`}
           >
             <BookOpen
-              className={`w-16 h-16 ${darkMode ? "text-[#2596be]" : "text-[#2596be]/60"}`}
+              className={`w-16 h-16 ${darkMode ? "text-[var(--color-brand)]" : "text-[var(--color-brand)]/60"}`}
             />
           </div>
         )}
@@ -413,7 +413,7 @@ function TestSeriesCard({
               key={idx}
               className={`text-xs flex items-start gap-2 ${darkMode ? "text-gray-400" : "text-gray-600"}`}
             >
-              <span className="text-[#2596be] mt-0.5">✓</span>
+              <span className="text-[var(--color-brand)] mt-0.5">✓</span>
               <span className="line-clamp-1">{feature}</span>
             </li>
           ))}
@@ -446,7 +446,7 @@ function TestSeriesCard({
 
           <Link
             href={`/test-series/${pkg._id}`}
-            className="flex items-center gap-1 px-4 py-2 bg-[#2596be] text-white text-sm font-semibold rounded-lg hover:bg-[#1e7ca0] transition-colors"
+            className="flex items-center gap-1 px-4 py-2 bg-[var(--color-brand)] text-white text-sm font-semibold rounded-lg hover:bg-[var(--color-brand-hover)] transition-colors"
           >
             View <ChevronRight className="w-4 h-4" />
           </Link>

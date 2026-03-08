@@ -59,7 +59,7 @@ export const authService = {
     try {
       const response = await apiClient.post<ApiRegisterResponse>(
         "/auth/register",
-        data
+        data,
       );
 
       // Return the registration response (user needs to verify email next)
@@ -82,7 +82,7 @@ export const authService = {
     try {
       const response = await apiClient.post<ApiLoginResponse>(
         "/auth/login",
-        credentials
+        credentials,
       );
 
       const apiToken = response.data.data.token;
@@ -154,7 +154,7 @@ export const authService = {
    * POST /auth/refresh
    */
   refreshToken: async (
-    refreshToken: string
+    refreshToken: string,
   ): Promise<{ accessToken: string; refreshToken?: string }> => {
     try {
       const response = await apiClient.post<{
@@ -191,7 +191,7 @@ export const authService = {
     try {
       await apiClient.post<{ success: boolean; message: string }>(
         "/auth/logout",
-        {}
+        {},
       );
     } catch (error) {
       // Ignore logout errors, still clear local storage
@@ -207,9 +207,39 @@ export const authService = {
     try {
       const response = await apiClient.patch<{ success: boolean; user: User }>(
         "/auth/profile",
-        data
+        data,
       );
       return response.data.user;
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  /**
+   * Request password reset
+   * POST /auth/forgot-password
+   */
+  requestPasswordReset: async (email: string): Promise<void> => {
+    try {
+      await apiClient.post<{ success: boolean; message: string }>(
+        "/auth/forgot-password",
+        { email },
+      );
+    } catch (error) {
+      throw new Error(handleApiError(error));
+    }
+  },
+
+  /**
+   * Reset password with token
+   * POST /auth/reset-password
+   */
+  resetPassword: async (token: string, newPassword: string): Promise<void> => {
+    try {
+      await apiClient.post<{ success: boolean; message: string }>(
+        "/auth/reset-password",
+        { token, newPassword },
+      );
     } catch (error) {
       throw new Error(handleApiError(error));
     }

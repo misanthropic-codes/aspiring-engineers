@@ -24,7 +24,7 @@ interface PaperListProps {
 }
 
 const categoryColors = {
-  "jee-main": "#2596be",
+  "jee-main": "var(--color-brand)",
   "jee-advanced": "#9333ea",
   wbjee: "#059669",
   neet: "#dc2626",

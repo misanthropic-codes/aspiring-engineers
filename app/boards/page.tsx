@@ -19,7 +19,7 @@ const CLASSES = [
     title: "Class 10",
     description: "Board exam preparation resources for Class 10 students",
     icon: BookOpen,
-    color: "#2596be",
+    color: "var(--color-brand)",
     links: [
       { label: "Previous Year Papers", href: "/boards/10/pyq", count: "50+" },
       {
@@ -86,7 +86,7 @@ export default function BoardsPage() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(135deg, #2596be30 0%, transparent 50%, #8B5CF630 100%)",
+                "linear-gradient(135deg, var(--color-brand) 0%, transparent 50%, #8B5CF630 100%)",
             }}
           />
         </div>
@@ -109,7 +109,7 @@ export default function BoardsPage() {
             <ChevronRight
               className={`w-4 h-4 ${darkMode ? "text-gray-600" : "text-gray-400"}`}
             />
-            <span className="text-[#2596be] font-medium">Boards</span>
+            <span className="text-[var(--color-brand)] font-medium">Boards</span>
           </motion.nav>
 
           {/* Title */}
@@ -119,9 +119,9 @@ export default function BoardsPage() {
             transition={{ delay: 0.1 }}
             className="text-center mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2596be]/20 mb-4">
-              <GraduationCap className="w-4 h-4 text-[#2596be]" />
-              <span className="text-sm font-medium text-[#2596be]">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-brand)]/20 mb-4">
+              <GraduationCap className="w-4 h-4 text-[var(--color-brand)]" />
+              <span className="text-sm font-medium text-[var(--color-brand)]">
                 Board Exam Resources
               </span>
             </div>

@@ -4,14 +4,18 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { isValidEmail, isValidPassword } from "@/lib/utils/validators";
 import { ExamType } from "@/types";
 import OTPModal from "@/components/OTPModal";
 import * as analytics from "@/lib/analytics";
+import { Eye, EyeOff } from "lucide-react";
+import { parsePhoneNumber, isValidPhoneNumber } from "libphonenumber-js";
 
 export default function RegisterPage() {
   const { register } = useAuth();
   const router = useRouter();
+  const { resolvedTheme } = useTheme();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,22 +28,17 @@ export default function RegisterPage() {
   const [examTargets, setExamTargets] = useState<ExamType[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [showOTPModal, setShowOTPModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [countryCode, setCountryCode] = useState("+91");
 
   useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setDarkMode(document.documentElement.classList.contains("dark"));
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    setDarkMode(document.documentElement.classList.contains("dark"));
-    return () => observer.disconnect();
+    setMounted(true);
   }, []);
+
+  const darkMode = mounted && resolvedTheme === "dark";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +51,7 @@ export default function RegisterPage() {
 
     if (!isValidPassword(formData.password)) {
       setError(
-        "Password must be at least 8 characters with uppercase, lowercase, and number"
+        "Password must be at least 8 characters with uppercase, lowercase, and number",
       );
       return;
     }
@@ -62,7 +61,16 @@ export default function RegisterPage() {
       return;
     }
 
-    if (!formData.phone || formData.phone.length < 10) {
+    // Validate phone number with libphonenumber-js
+    if (!formData.phone) {
+      setError("Please enter a phone number");
+      return;
+    }
+
+    // Combine country code with phone number
+    const fullPhoneNumber = `${countryCode}${formData.phone.replace(/^\+/, "")}`;
+
+    if (!isValidPhoneNumber(fullPhoneNumber)) {
       setError("Please enter a valid phone number");
       return;
     }
@@ -79,9 +87,16 @@ export default function RegisterPage() {
 
     try {
       setLoading(true);
+
+      // Normalize phone number to E.164 format before submission
+      const fullPhoneNumber = `${countryCode}${formData.phone.replace(/^\+/, "")}`;
+      const phoneNumber = parsePhoneNumber(fullPhoneNumber);
+      const normalizedPhone = phoneNumber.format("E.164");
+
       const { confirmPassword, ...registrationData } = formData;
       await register({
         ...registrationData,
+        phone: normalizedPhone, // Use normalized phone number
         examTargets,
       });
       analytics.event("signup_success", "conversion", "user_signup");
@@ -106,32 +121,36 @@ export default function RegisterPage() {
     // Allow user to close but warn them
     setShowOTPModal(false);
     setError(
-      "Please verify your email to complete registration. Check your inbox for the verification code."
+      "Please verify your email to complete registration. Check your inbox for the verification code.",
     );
   };
 
   const toggleExam = (exam: ExamType) => {
     setExamTargets((prev) =>
-      prev.includes(exam) ? prev.filter((e) => e !== exam) : [...prev, exam]
+      prev.includes(exam) ? prev.filter((e) => e !== exam) : [...prev, exam],
     );
   };
 
   return (
     <div
       className={`min-h-screen flex items-center justify-center p-4 relative overflow-hidden ${
-        darkMode ? "bg-[#071219]" : "bg-gray-50"
+        darkMode ? "bg-[var(--color-dark-bg)]" : "bg-gray-50"
       }`}
     >
       {/* Background blobs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
           className={`absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#2596be]/10" : "bg-[#2596be]/20"
+            darkMode
+              ? "bg-[var(--color-brand)]/10"
+              : "bg-[var(--color-brand)]/20"
           }`}
         />
         <div
           className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl transition-all ${
-            darkMode ? "bg-[#4EA8DE]/15" : "bg-[#4EA8DE]/25"
+            darkMode
+              ? "bg-[var(--color-brand-accent)]/15"
+              : "bg-[var(--color-brand-accent)]/25"
           }`}
         />
       </div>
@@ -146,13 +165,13 @@ export default function RegisterPage() {
         >
           <div className="text-center mb-6 sm:mb-8">
             <Link href="/" className="inline-block mb-4">
-              <span className="font-clash text-3xl font-bold text-[#2596be]">
+              <span className="font-clash text-3xl font-bold text-[var(--color-brand)]">
                 AE
               </span>
             </Link>
             <h1
               className={`text-2xl sm:text-3xl font-bold mb-2 ${
-                darkMode ? "text-white" : "text-[#2596be]"
+                darkMode ? "text-white" : "text-[var(--color-brand)]"
               }`}
             >
               Create Account
@@ -185,6 +204,7 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name and Email - 2 column grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
@@ -203,8 +223,8 @@ export default function RegisterPage() {
                   required
                   className={`w-full px-4 py-3 rounded-lg border transition-colors ${
                     darkMode
-                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
                   }`}
                   placeholder="John Doe"
                 />
@@ -227,13 +247,16 @@ export default function RegisterPage() {
                   required
                   className={`w-full px-4 py-3 rounded-lg border transition-colors ${
                     darkMode
-                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
                   }`}
                   placeholder="your@email.com"
                 />
               </div>
+            </div>
 
+            {/* Password and Confirm Password - 2 column grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   className={`block text-sm font-medium mb-2 ${
@@ -242,20 +265,40 @@ export default function RegisterPage() {
                 >
                   Password *
                 </label>
-                <input
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                  required
-                  className={`w-full px-4 py-3 rounded-lg border transition-colors ${
-                    darkMode
-                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                  }`}
-                  placeholder="••••••••"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    required
+                    className={`w-full px-4 py-3 pr-12 rounded-lg border transition-colors ${
+                      darkMode
+                        ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                        : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                    }`}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                    className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors ${
+                      darkMode
+                        ? "text-gray-400 hover:text-gray-300 hover:bg-white/5"
+                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                    }`}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div>
@@ -266,49 +309,124 @@ export default function RegisterPage() {
                 >
                   Confirm Password *
                 </label>
-                <input
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      confirmPassword: e.target.value,
-                    })
-                  }
-                  required
-                  className={`w-full px-4 py-3 rounded-lg border transition-colors ${
-                    darkMode
-                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                  }`}
-                  placeholder="••••••••"
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={formData.confirmPassword}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                    required
+                    className={`w-full px-4 py-3 pr-12 rounded-lg border transition-colors ${
+                      darkMode
+                        ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                        : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                    }`}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    aria-label={
+                      showConfirmPassword ? "Hide password" : "Show password"
+                    }
+                    className={`absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md transition-colors ${
+                      darkMode
+                        ? "text-gray-400 hover:text-gray-300 hover:bg-white/5"
+                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                    }`}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
+            </div>
 
-              <div>
-                <label
-                  className={`block text-sm font-medium mb-2 ${
-                    darkMode ? "text-gray-300" : "text-gray-700"
+            {/* Phone Number - Full width */}
+            <div>
+              <label
+                className={`block text-sm font-medium mb-2 ${
+                  darkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                Phone Number *
+              </label>
+              <div className="flex gap-2">
+                <select
+                  value={countryCode}
+                  onChange={(e) => setCountryCode(e.target.value)}
+                  className={`px-3 py-3 rounded-lg border transition-colors w-[110px] ${
+                    darkMode
+                      ? "bg-white/5 border-white/10 text-white focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                      : "bg-white border-gray-200 text-gray-900 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
                   }`}
                 >
-                  Phone Number *
-                </label>
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+82">🇰🇷 +82</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+966">🇸🇦 +966</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+7">🇷🇺 +7</option>
+                  <option value="+55">🇧🇷 +55</option>
+                  <option value="+27">🇿🇦 +27</option>
+                  <option value="+234">🇳🇬 +234</option>
+                  <option value="+20">🇪🇬 +20</option>
+                  <option value="+60">🇲🇾 +60</option>
+                  <option value="+62">🇮🇩 +62</option>
+                  <option value="+63">🇵🇭 +63</option>
+                  <option value="+84">🇻🇳 +84</option>
+                  <option value="+66">🇹🇭 +66</option>
+                  <option value="+880">🇧🇩 +880</option>
+                  <option value="+92">🇵🇰 +92</option>
+                  <option value="+94">🇱🇰 +94</option>
+                  <option value="+977">🇳🇵 +977</option>
+                </select>
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
+                  onChange={(e) => {
+                    // Remove any non-digit characters
+                    const value = e.target.value.replace(/[^\d]/g, "");
+                    setFormData({ ...formData, phone: value });
+                  }}
                   required
-                  className={`w-full px-4 py-3 rounded-lg border transition-colors ${
+                  className={`flex-1 px-4 py-3 rounded-lg border transition-colors ${
                     darkMode
-                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
                   }`}
-                  placeholder="+919876543210"
+                  placeholder="9876543210"
                 />
               </div>
+              {formData.phone && (
+                <p
+                  className={`text-xs mt-1.5 ${
+                    darkMode ? "text-gray-500" : "text-gray-500"
+                  }`}
+                >
+                  Complete number: {countryCode} {formData.phone}
+                </p>
+              )}
+            </div>
 
+            {/* Date of Birth and Target Year - 2 column grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   className={`block text-sm font-medium mb-2 ${
@@ -326,39 +444,40 @@ export default function RegisterPage() {
                   required
                   className={`w-full px-4 py-3 rounded-lg border transition-colors ${
                     darkMode
-                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
                   }`}
                 />
               </div>
-            </div>
 
-            <div>
-              <label
-                className={`block text-sm font-medium mb-2 ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                Target Year *
-              </label>
-              <input
-                type="number"
-                value={formData.targetYear}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    targetYear: parseInt(e.target.value),
-                  })
-                }
-                required
-                min={new Date().getFullYear()}
-                max={new Date().getFullYear() + 5}
-                className={`w-full px-4 py-3 rounded-lg border transition-colors ${
-                  darkMode
-                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                }`}
-              />
+              <div>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    darkMode ? "text-gray-300" : "text-gray-700"
+                  }`}
+                >
+                  Target Year *
+                </label>
+                <input
+                  type="number"
+                  value={formData.targetYear}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      targetYear: parseInt(e.target.value),
+                    })
+                  }
+                  required
+                  min={new Date().getFullYear()}
+                  max={new Date().getFullYear() + 5}
+                  className={`w-full px-4 py-3 rounded-lg border transition-colors ${
+                    darkMode
+                      ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                      : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                  }`}
+                  placeholder={new Date().getFullYear().toString()}
+                />
+              </div>
             </div>
 
             <div>
@@ -385,11 +504,11 @@ export default function RegisterPage() {
                     className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                       examTargets.includes(exam)
                         ? darkMode
-                          ? "bg-[#2596be]/20 text-[#60DFFF] border-2 border-[#2596be]"
-                          : "bg-[#2596be]/10 text-[#2596be] border-2 border-[#2596be]"
+                          ? "bg-[var(--color-brand)]/20 text-[var(--color-brand-light)] border-2 border-[var(--color-brand)]"
+                          : "bg-[var(--color-brand)]/10 text-[var(--color-brand)] border-2 border-[var(--color-brand)]"
                         : darkMode
-                        ? "bg-white/5 text-gray-400 border-2 border-white/10 hover:bg-white/10"
-                        : "bg-gray-100 text-gray-600 border-2 border-gray-200 hover:bg-gray-200"
+                          ? "bg-white/5 text-gray-400 border-2 border-white/10 hover:bg-white/10"
+                          : "bg-gray-100 text-gray-600 border-2 border-gray-200 hover:bg-gray-200"
                     }`}
                   >
                     {exam.replace("_", " ")}
@@ -401,7 +520,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 bg-[#2596be] text-white font-semibold rounded-lg shadow-lg hover:bg-[#1e7ca0] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-4 bg-[var(--color-brand)] text-white font-semibold rounded-lg shadow-lg hover:bg-[var(--color-brand-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>
@@ -419,8 +538,8 @@ export default function RegisterPage() {
               href="/login"
               className={`text-sm font-semibold ${
                 darkMode
-                  ? "text-[#60DFFF] hover:text-[#2596be]"
-                  : "text-[#2596be] hover:text-[#1e7ca0]"
+                  ? "text-[var(--color-brand-light)] hover:text-[var(--color-brand)]"
+                  : "text-[var(--color-brand)] hover:text-[var(--color-brand-hover)]"
               }`}
             >
               Sign in
@@ -435,7 +554,6 @@ export default function RegisterPage() {
         onClose={handleOTPClose}
         onVerifySuccess={handleOTPVerifySuccess}
         email={formData.email}
-        darkMode={darkMode}
       />
     </div>
   );

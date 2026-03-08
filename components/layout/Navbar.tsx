@@ -20,6 +20,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { tokenManager } from "@/lib/utils/tokenManager";
 import { logger } from "@/lib/logger";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -188,41 +189,35 @@ export default function Navbar(): JSX.Element {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openIds, setOpenIds] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>(MENU);
+  const [mounted, setMounted] = useState(false);
+  const { settings, isLoading } = useSiteSettings();
 
   useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const { getSiteSettings } = await import("@/services/siteSettings");
-        const settings = await getSiteSettings();
-        if (settings?.navbarLinks && settings.navbarLinks.length > 0) {
-          // Map API response to MenuItem structure if needed
-          // Assuming API structure matches MenuItem closely enough or we map it
-          // API NavbarLink: { label, url, order, isActive, children }
-          // UI MenuItem: { id, label, href, children }
-
-          const mapToMenuItem = (links: any[]): MenuItem[] => {
-            return links
-              .filter((link) => link.isActive)
-              .sort((a, b) => a.order - b.order)
-              .map((link, index) => ({
-                id: link._id || `nav-${index}-${link.label}`,
-                label: link.label,
-                href: link.url,
-                children: link.children
-                  ? mapToMenuItem(link.children)
-                  : undefined,
-              }));
-          };
-
-          setMenuItems(mapToMenuItem(settings.navbarLinks));
-        }
-      } catch (error) {
-        logger.error("Failed to load site settings", error);
-      }
-    };
-
-    fetchSettings();
+    setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (settings?.navbarLinks && settings.navbarLinks.length > 0) {
+      // Map API response to MenuItem structure if needed
+      // Assuming API structure matches MenuItem closely enough or we map it
+      // API NavbarLink: { label, url, order, isActive, children }
+      // UI MenuItem: { id, label, href, children }
+
+      const mapToMenuItem = (links: any[]): MenuItem[] => {
+        return links
+          .filter((link) => link.isActive)
+          .sort((a, b) => a.order - b.order)
+          .map((link, index) => ({
+            id: link._id || `nav-${index}-${link.label}`,
+            label: link.label,
+            href: link.url,
+            children: link.children ? mapToMenuItem(link.children) : undefined,
+          }));
+      };
+
+      setMenuItems(mapToMenuItem(settings.navbarLinks));
+    }
+  }, [settings]);
 
   // refs
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -253,6 +248,7 @@ export default function Navbar(): JSX.Element {
           start: "top top",
           end: "+=140",
           scrub: true,
+          markers: false,
         },
         backgroundColor: "var(--navbar-backdrop)",
         borderColor: "var(--navbar-border)",
@@ -260,12 +256,10 @@ export default function Navbar(): JSX.Element {
         duration: 0.3,
         ease: "power1.out",
       });
-    });
+    }, el); // Scope context to navbar element
 
     return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-      ScrollTrigger.refresh();
+      ctx.revert(); // This automatically kills all scoped triggers
     };
   }, [pathname]);
 
@@ -543,7 +537,7 @@ export default function Navbar(): JSX.Element {
             ref={(el) => {
               desktopDropdownRefs.current[item.id] = el;
             }}
-            className={`absolute left-0 top-full mt-3 z-50 origin-top-left rounded-lg border border-bg-700 bg-white dark:bg-[#071219] p-4 shadow-2xl backdrop-blur-xl ${
+            className={`absolute left-0 top-full mt-3 z-50 origin-top-left rounded-lg border border-bg-700 bg-white dark:bg-[var(--color-dark-bg)] p-4 shadow-2xl backdrop-blur-xl ${
               hasFlatChildren ? "w-56" : "w-136"
             }`}
             style={{ display: "none" }}
@@ -555,7 +549,7 @@ export default function Navbar(): JSX.Element {
                   <li key={child.id}>
                     <Link
                       href={child.href || "#"}
-                      className="block hover:underline py-1 hover:text-[#2596be] transition-colors"
+                      className="block hover:underline py-1 hover:text-[var(--color-brand)] transition-colors"
                     >
                       {child.label}
                     </Link>
@@ -648,9 +642,10 @@ export default function Navbar(): JSX.Element {
             onClick={toggleSwitchTheme}
             className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md"
             aria-label="Toggle theme"
+            suppressHydrationWarning
           >
             <span className="sr-only">Toggle theme</span>
-            {isDarkMode ? (
+            {mounted && isDarkMode ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"
@@ -664,6 +659,23 @@ export default function Navbar(): JSX.Element {
                 className="lucide lucide-moon"
               >
                 <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+              </svg>
+            ) : mounted ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-sun"
+              >
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2"></path>
+                <path d="M12 20v2"></path>
               </svg>
             ) : (
               <svg
@@ -732,7 +744,7 @@ export default function Navbar(): JSX.Element {
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-2 rounded-full bg-[#2596be] text-white text-sm font-semibold hover:bg-[#1e7ca0] transition-colors whitespace-nowrap"
+                className="px-4 py-2 rounded-full bg-[var(--color-brand)] text-white text-sm font-semibold hover:bg-[var(--color-brand-hover)] transition-colors whitespace-nowrap"
               >
                 Sign Up
               </Link>
@@ -779,8 +791,9 @@ export default function Navbar(): JSX.Element {
             <button
               onClick={toggleSwitchTheme}
               className="inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/60"
+              suppressHydrationWarning
             >
-              {isDarkMode ? (
+              {mounted && isDarkMode ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -794,6 +807,23 @@ export default function Navbar(): JSX.Element {
                   className="lucide lucide-moon"
                 >
                   <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                </svg>
+              ) : mounted ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-sun"
+                >
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <path d="M12 2v2"></path>
+                  <path d="M12 20v2"></path>
                 </svg>
               ) : (
                 <svg
@@ -852,7 +882,7 @@ export default function Navbar(): JSX.Element {
                 <Link
                   href="/register"
                   onClick={() => setMobileOpen(false)}
-                  className="w-full px-4 py-3 rounded-xl bg-[#2596be] text-center text-white text-sm font-semibold hover:bg-[#1e7ca0] transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-[var(--color-brand)] text-center text-white text-sm font-semibold hover:bg-[var(--color-brand-hover)] transition-colors"
                 >
                   Sign Up
                 </Link>

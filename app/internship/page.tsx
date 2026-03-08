@@ -84,7 +84,7 @@ export default function InternshipPage() {
           <div
             className="
               absolute inset-0 pointer-events-none
-              bg-linear-to-br from-[#2596be]/5 to-[#4EA8DE]/10
+              bg-linear-to-br from-[var(--color-brand)]/5 to-[var(--color-brand-accent)]/10
               blur-3xl opacity-60
             "
           ></div>
@@ -93,7 +93,7 @@ export default function InternshipPage() {
             <h1
               className={`
                 text-5xl md:text-6xl font-extrabold mb-6 tracking-tight pb-2
-                bg-clip-text text-transparent bg-gradient-to-r from-[#2596be] to-[#4EA8DE]
+                bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)]
               `}
             >
               Industry Ready Internships
@@ -134,7 +134,7 @@ export default function InternshipPage() {
                   <div
                     className="
                     w-16 h-16 mb-6 rounded-2xl 
-                    bg-linear-to-br from-[#2596be] to-[#4EA8DE]
+                    bg-linear-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)]
                     flex items-center justify-center shadow-lg
                     transition-all duration-300 group-hover:scale-110 group-hover:rotate-3
                   "
@@ -165,7 +165,7 @@ export default function InternshipPage() {
                   <div
                     className={`
                     font-semibold text-sm flex items-center gap-2
-                     text-[#2596be] group-hover:translate-x-1 transition-transform
+                     text-[var(--color-brand)] group-hover:translate-x-1 transition-transform
                   `}
                   >
                     Learn More
