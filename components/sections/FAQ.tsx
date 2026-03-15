@@ -60,7 +60,7 @@ export default function FAQ() {
       <div
         className="
           absolute inset-0 pointer-events-none 
-          bg-linear-to-bl from-[#2596be]/10 to-[#4EA8DE]/5 
+          bg-linear-to-bl from-[var(--color-brand)]/10 to-[var(--color-brand-accent)]/5 
           blur-3xl opacity-60
         "
       ></div>
@@ -70,7 +70,7 @@ export default function FAQ() {
           <h2
             className={`
               text-4xl font-bold mb-4 tracking-tight
-              ${darkMode ? "text-white" : "text-[#2596be]"}
+              ${darkMode ? "text-white" : "text-[var(--color-brand)]"}
             `}
           >
             Frequently Asked Questions
@@ -99,7 +99,7 @@ export default function FAQ() {
                       ? "bg-white/5 border-white/10" 
                       : "bg-white/90 border-gray-200"
                   }
-                  ${isOpen ? (darkMode ? "ring-1 ring-[#2596be]/50 shadow-lg shadow-[#2596be]/10" : "ring-1 ring-[#2596be]/30 shadow-lg shadow-blue-500/5") : ""}
+                  ${isOpen ? (darkMode ? "ring-1 ring-[var(--color-brand)]/50 shadow-lg shadow-[var(--color-brand)]/10" : "ring-1 ring-[var(--color-brand)]/30 shadow-lg shadow-blue-500/5") : ""}
                 `}
               >
                 <button
@@ -116,7 +116,7 @@ export default function FAQ() {
                   <ChevronDown 
                     className={`
                       w-5 h-5 shrink-0 transition-transform duration-300
-                      ${isOpen ? "rotate-180 text-[#2596be]" : (darkMode ? "text-gray-500" : "text-gray-400")}
+                      ${isOpen ? "rotate-180 text-[var(--color-brand)]" : (darkMode ? "text-gray-500" : "text-gray-400")}
                     `}
                   />
                 </button>

@@ -43,7 +43,7 @@ export default function CTASection() {
       <div
         className="
           absolute inset-0 pointer-events-none
-          bg-linear-to-br from-[#2596be]/10 to-[#4EA8DE]/15
+          bg-linear-to-br from-[var(--color-brand)]/10 to-[var(--color-brand-accent)]/15
           blur-3xl opacity-80
         "
       ></div>
@@ -62,7 +62,7 @@ export default function CTASection() {
         <h2
           className={`
             text-4xl font-bold mb-6 tracking-tight
-            ${darkMode ? "text-white" : "text-[#2596be]"}
+            ${darkMode ? "text-white" : "text-[var(--color-brand)]"}
           `}
         >
           Ready to Begin Your Journey?
@@ -82,8 +82,8 @@ export default function CTASection() {
           onClick={handleGetStarted}
           className="
             h-12 px-12 text-lg font-semibold
-            bg-[#2596be] text-white rounded-lg shadow-xl
-            hover:scale-105 hover:bg-[#2596be]/90
+            bg-[var(--color-brand)] text-white rounded-lg shadow-xl
+            hover:scale-105 hover:bg-[var(--color-brand)]/90
             transition-all
           "
         >

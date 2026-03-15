@@ -66,7 +66,7 @@ function CardInner({
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-[#2596be] font-semibold">
+          <p className="text-xs uppercase tracking-[0.2em] text-[var(--color-brand)] font-semibold">
             {block.badge}
           </p>
           <h3
@@ -75,7 +75,7 @@ function CardInner({
             {block.title}
           </h3>
         </div>
-        <div className="h-10 w-10 rounded-xl bg-[#2596be]/10 text-[#2596be] flex items-center justify-center text-sm font-bold shrink-0">
+        <div className="h-10 w-10 rounded-xl bg-[var(--color-brand)]/10 text-[var(--color-brand)] flex items-center justify-center text-sm font-bold shrink-0">
           0{index + 1}
         </div>
       </div>
@@ -124,7 +124,7 @@ function CardInner({
         )}
 
         {block.type === "graph" && (
-          <div className="flex-1 flex flex-col rounded-xl bg-gradient-to-br from-[#2596be]/10 to-[#60DFFF]/10 p-4 gap-3">
+          <div className="flex-1 flex flex-col rounded-xl bg-gradient-to-br from-[var(--color-brand)]/10 to-[var(--color-brand-light)]/10 p-4 gap-3">
             <div className="grid grid-cols-3 gap-2 shrink-0">
               {[
                 { label: "Avg Score", val: "54.3" },
@@ -140,7 +140,7 @@ function CardInner({
                   >
                     {s.label}
                   </div>
-                  <div className="text-sm font-bold text-[#2596be]">
+                  <div className="text-sm font-bold text-[var(--color-brand)]">
                     {s.val}
                   </div>
                 </div>
@@ -151,7 +151,7 @@ function CardInner({
                 {[28, 38, 32, 52, 60, 55, 68, 72, 75].map((bar, idx) => (
                   <div
                     key={idx}
-                    className="flex-1 rounded-md bg-[#2596be]/70"
+                    className="flex-1 rounded-md bg-[var(--color-brand)]/70"
                     style={{ height: `${bar}%` }}
                   />
                 ))}
@@ -165,7 +165,7 @@ function CardInner({
         )}
 
         {block.type === "booking" && (
-          <div className="flex-1 flex flex-col rounded-xl bg-[#2596be]/5 border border-[#2596be]/10 p-4 gap-4">
+          <div className="flex-1 flex flex-col rounded-xl bg-[var(--color-brand)]/5 border border-[var(--color-brand)]/10 p-4 gap-4">
             <div className="flex-1 flex flex-col justify-between gap-2">
               {[
                 {
@@ -210,7 +210,7 @@ function CardInner({
                     <p className="text-[11px] text-gray-400">
                       {mentor.slots} slots
                     </p>
-                    <button className="text-[11px] text-[#2596be] font-semibold">
+                    <button className="text-[11px] text-[var(--color-brand)] font-semibold">
                       Book →
                     </button>
                   </div>
@@ -227,7 +227,7 @@ function CardInner({
                 {["3:00 PM", "4:30 PM", "6:00 PM", "8:15 PM"].map((slot) => (
                   <div
                     key={slot}
-                    className={`rounded-lg text-[11px] text-center py-2 font-medium ${darkMode ? "bg-white/5 text-gray-300" : "bg-[#2596be]/10 text-[#2596be]"}`}
+                    className={`rounded-lg text-[11px] text-center py-2 font-medium ${darkMode ? "bg-white/5 text-gray-300" : "bg-[var(--color-brand)]/10 text-[var(--color-brand)]"}`}
                   >
                     {slot}
                   </div>
@@ -238,9 +238,9 @@ function CardInner({
         )}
 
         {block.type === "breakdown" && (
-          <div className="flex-1 flex flex-col rounded-xl border border-[#2596be]/20 p-4 gap-4">
+          <div className="flex-1 flex flex-col rounded-xl border border-[var(--color-brand)]/20 p-4 gap-4">
             <div
-              className={`flex items-center justify-between rounded-xl p-3 shrink-0 ${darkMode ? "bg-white/5" : "bg-[#2596be]/5"}`}
+              className={`flex items-center justify-between rounded-xl p-3 shrink-0 ${darkMode ? "bg-white/5" : "bg-[var(--color-brand)]/5"}`}
             >
               <div>
                 <p className="text-[11px] text-gray-500 mb-0.5">Total Score</p>
@@ -258,7 +258,7 @@ function CardInner({
                 <p className="text-[11px] text-gray-500 mb-0.5">
                   Rank estimate
                 </p>
-                <p className="text-2xl font-bold text-[#2596be] leading-none">
+                <p className="text-2xl font-bold text-[var(--color-brand)] leading-none">
                   #4,210
                 </p>
               </div>
@@ -269,19 +269,19 @@ function CardInner({
                   label: "Physics",
                   value: 78,
                   score: "62/80",
-                  color: "bg-[#2596be]",
+                  color: "bg-[var(--color-brand)]",
                 },
                 {
                   label: "Chemistry",
                   value: 66,
                   score: "53/80",
-                  color: "bg-[#2596be]/80",
+                  color: "bg-[var(--color-brand)]/80",
                 },
                 {
                   label: "Mathematics",
                   value: 36,
                   score: "29/80",
-                  color: "bg-[#2596be]/60",
+                  color: "bg-[var(--color-brand)]/60",
                 },
                 {
                   label: "Accuracy",
@@ -297,7 +297,7 @@ function CardInner({
                     >
                       {row.label}
                     </span>
-                    <span className="text-[#2596be] font-semibold">
+                    <span className="text-[var(--color-brand)] font-semibold">
                       {row.score}
                     </span>
                   </div>
@@ -428,7 +428,7 @@ export default function Counselling() {
       id="counselling"
       className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-visible"
     >
-      <div className="absolute inset-0 opacity-80 pointer-events-none bg-gradient-to-br from-[#2596be]/15 to-[#4EA8DE]/20 blur-3xl" />
+      <div className="absolute inset-0 opacity-80 pointer-events-none bg-gradient-to-br from-[var(--color-brand)]/15 to-[var(--color-brand-accent)]/20 blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-[1.05fr_1fr] gap-12 lg:gap-16 items-stretch">
@@ -504,7 +504,7 @@ export default function Counselling() {
                   onClick={() => setActiveIndex(i)}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
                     i === activeIndex
-                      ? "w-6 bg-[#2596be]"
+                      ? "w-6 bg-[var(--color-brand)]"
                       : "w-1.5 bg-gray-300 dark:bg-white/20"
                   }`}
                 />
@@ -516,7 +516,7 @@ export default function Counselling() {
           <div className="order-1 lg:order-2 flex flex-col justify-between">
             <div>
               <h2
-                className={`text-4xl font-bold mb-6 tracking-tight ${darkMode ? "text-white" : "text-[#2596be]"}`}
+                className={`text-4xl font-bold mb-6 tracking-tight ${darkMode ? "text-white" : "text-[var(--color-brand)]"}`}
               >
                 Expert College Counselling
               </h2>
@@ -531,7 +531,7 @@ export default function Counselling() {
               <div className="space-y-4 mb-8">
                 {counsellingPoints.map((item, i) => (
                   <div key={i} className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-[#2596be] flex items-center justify-center shadow-md shrink-0">
+                    <div className="w-7 h-7 rounded-full bg-[var(--color-brand)] flex items-center justify-center shadow-md shrink-0">
                       <CheckCircle className="w-4 h-4 text-white" />
                     </div>
                     <span
@@ -544,7 +544,7 @@ export default function Counselling() {
               </div>
 
               <Link href="/counselling">
-                <button className="h-11 px-8 text-lg bg-[#2596be] text-white rounded-lg shadow-xl hover:scale-105 hover:bg-[#2596be]/90 transition">
+                <button className="h-11 px-8 text-lg bg-[var(--color-brand)] text-white rounded-lg shadow-xl hover:scale-105 hover:bg-[var(--color-brand)]/90 transition">
                   Book Counselling Session
                 </button>
               </Link>
@@ -566,7 +566,7 @@ export default function Counselling() {
                         : "bg-white/80 border-gray-200"
                     }`}
                   >
-                    <div className="h-10 w-10 rounded-xl bg-[#2596be]/10 text-[#2596be] flex items-center justify-center shrink-0">
+                    <div className="h-10 w-10 rounded-xl bg-[var(--color-brand)]/10 text-[var(--color-brand)] flex items-center justify-center shrink-0">
                       <Icon className="w-5 h-5" />
                     </div>
                     <div>

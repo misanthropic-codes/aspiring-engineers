@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, CheckCircle, Send, GraduationCap } from "lucide-react";
 import apiClient from "@/lib/api-client";
+import { logger } from "@/lib/logger";
 
 interface InternshipApplicationModalProps {
   isOpen: boolean;
@@ -10,7 +11,13 @@ interface InternshipApplicationModalProps {
   selectedInternship: string;
 }
 
-const yearOptions = ["1st Year", "2nd Year", "3rd Year", "4th Year", "Graduated"];
+const yearOptions = [
+  "1st Year",
+  "2nd Year",
+  "3rd Year",
+  "4th Year",
+  "Graduated",
+];
 const branchOptions = [
   "Computer Science & Engineering (CSE)",
   "Electronics & Communication (ECE)",
@@ -44,7 +51,7 @@ export default function InternshipApplicationModal({
   if (!isOpen) return null;
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -62,8 +69,9 @@ export default function InternshipApplicationModal({
         location: formData.location,
         cgpa: formData.cgpa,
         year: formData.year,
-        branch: formData.branch === "Other" ? formData.otherBranch : formData.branch,
-        internshipType: selectedInternship
+        branch:
+          formData.branch === "Other" ? formData.otherBranch : formData.branch,
+        internshipType: selectedInternship,
       };
 
       await apiClient.post("/internship/apply", payload);
@@ -88,8 +96,11 @@ export default function InternshipApplicationModal({
         onClose();
       }, 2000);
     } catch (error: any) {
-      console.error("Failed to submit internship application:", error);
-      alert(error.response?.data?.message || "Failed to submit application. Please try again.");
+      logger.error("Failed to submit internship application:", error);
+      alert(
+        error.response?.data?.message ||
+          "Failed to submit application. Please try again.",
+      );
       setIsSubmitting(false);
     }
   };
@@ -114,7 +125,7 @@ export default function InternshipApplicationModal({
 
         <div className="p-6 md:p-8">
           <div className="mb-6">
-            <h2 className="text-2xl font-bold bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent mb-2">
+            <h2 className="text-2xl font-bold bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent mb-2">
               Apply for {selectedInternship} Internship
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
@@ -148,7 +159,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                     placeholder="John Doe"
                   />
                 </div>
@@ -162,7 +173,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                     placeholder="+91 9876543210"
                   />
                 </div>
@@ -180,7 +191,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.college}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                     placeholder="Enter your college name"
                   />
                 </div>
@@ -197,7 +208,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.fathersName}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                     placeholder="Parent's Name"
                   />
                 </div>
@@ -211,7 +222,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.location}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                     placeholder="e.g., Kolkata, WB"
                   />
                 </div>
@@ -228,7 +239,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.year}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                   >
                     <option value="">Select Year</option>
                     {yearOptions.map((opt) => (
@@ -247,7 +258,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.branch}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                   >
                     <option value="">Select Branch</option>
                     {branchOptions.map((opt) => (
@@ -270,7 +281,7 @@ export default function InternshipApplicationModal({
                     required
                     value={formData.otherBranch}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                     placeholder="Enter your branch name"
                   />
                 </div>
@@ -286,7 +297,7 @@ export default function InternshipApplicationModal({
                   required
                   value={formData.cgpa}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent outline-hidden"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent outline-hidden"
                   placeholder="e.g., 8.5 or 85%"
                 />
               </div>
@@ -295,7 +306,7 @@ export default function InternshipApplicationModal({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2596be] text-white rounded-lg font-semibold hover:bg-[#1e7ca0] transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-[#2596be]/20"
+                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--color-brand)] text-white rounded-lg font-semibold hover:bg-[var(--color-brand-hover)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-[var(--color-brand)]/20"
                 >
                   {isSubmitting ? (
                     <>

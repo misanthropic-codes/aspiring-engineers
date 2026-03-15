@@ -43,8 +43,8 @@ export default function ContentCard({
     <div
       className={`relative p-6 rounded-2xl border backdrop-blur-xl hover:scale-[1.02] transition-all duration-300 h-full ${
         darkMode
-          ? "bg-white/5 border-white/10 hover:bg-white/10 hover:shadow-2xl hover:shadow-[#2596be]/20"
-          : "bg-white/80 border-gray-200 hover:bg-white hover:shadow-2xl hover:shadow-[#2596be]/10"
+          ? "bg-white/5 border-white/10 hover:bg-white/10 hover:shadow-2xl hover:shadow-[var(--color-brand)]/20"
+          : "bg-white/80 border-gray-200 hover:bg-white hover:shadow-2xl hover:shadow-[var(--color-brand)]/10"
       }`}
     >
       {/* Badge */}
@@ -53,8 +53,8 @@ export default function ContentCard({
           <span
             className={`px-3 py-1 rounded-full text-xs font-semibold ${
               darkMode
-                ? "bg-[#2596be]/20 text-[#60DFFF]"
-                : "bg-[#2596be]/10 text-[#2596be]"
+                ? "bg-[var(--color-brand)]/20 text-[var(--color-brand-light)]"
+                : "bg-[var(--color-brand)]/10 text-[var(--color-brand)]"
             }`}
           >
             {badge}
@@ -66,11 +66,11 @@ export default function ContentCard({
       {Icon && (
         <div
           className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
-            darkMode ? "bg-[#2596be]/20" : "bg-[#2596be]/10"
+            darkMode ? "bg-[var(--color-brand)]/20" : "bg-[var(--color-brand)]/10"
           }`}
         >
           <Icon
-            className={darkMode ? "text-[#60DFFF]" : "text-[#2596be]"}
+            className={darkMode ? "text-[var(--color-brand-light)]" : "text-[var(--color-brand)]"}
             size={24}
           />
         </div>
@@ -126,8 +126,8 @@ export default function ContentCard({
           onClick={action.onClick}
           className={`mt-4 w-full py-2 px-4 rounded-lg font-medium transition-colors ${
             darkMode
-              ? "bg-[#2596be]/20 text-[#60DFFF] hover:bg-[#2596be]/30"
-              : "bg-[#2596be]/10 text-[#2596be] hover:bg-[#2596be]/20"
+              ? "bg-[var(--color-brand)]/20 text-[var(--color-brand-light)] hover:bg-[var(--color-brand)]/30"
+              : "bg-[var(--color-brand)]/10 text-[var(--color-brand)] hover:bg-[var(--color-brand)]/20"
           }`}
         >
           {action.label}

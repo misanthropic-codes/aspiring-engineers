@@ -72,7 +72,7 @@ export default function LoginModal({ isOpen, onClose, redirectPath }: LoginModal
       {/* Modal Content */}
       <div
         className={`relative w-full max-w-md rounded-2xl shadow-2xl transform transition-all ${
-          darkMode ? "bg-[#071219] border border-white/10" : "bg-white"
+          darkMode ? "bg-[var(--color-dark-bg)] border border-white/10" : "bg-white"
         }`}
       >
         {/* Close Button */}
@@ -88,7 +88,7 @@ export default function LoginModal({ isOpen, onClose, redirectPath }: LoginModal
           <div className="text-center mb-8">
             <h2
               className={`text-2xl font-bold mb-2 ${
-                darkMode ? "text-white" : "text-[#2596be]"
+                darkMode ? "text-white" : "text-[var(--color-brand)]"
               }`}
             >
               Welcome Back
@@ -138,8 +138,8 @@ export default function LoginModal({ isOpen, onClose, redirectPath }: LoginModal
                 required
                 className={`w-full px-4 py-2.5 rounded-lg border transition-colors outline-hidden ${
                   darkMode
-                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
                 }`}
                 placeholder="your@email.com"
               />
@@ -159,8 +159,8 @@ export default function LoginModal({ isOpen, onClose, redirectPath }: LoginModal
                   href="/forgot-password"
                   className={`text-xs font-medium ${
                     darkMode
-                      ? "text-[#60DFFF] hover:text-[#2596be]"
-                      : "text-[#2596be] hover:text-[#1e7ca0]"
+                      ? "text-[var(--color-brand-light)] hover:text-[var(--color-brand)]"
+                      : "text-[var(--color-brand)] hover:text-[var(--color-brand-hover)]"
                   }`}
                 >
                   Forgot?
@@ -173,8 +173,8 @@ export default function LoginModal({ isOpen, onClose, redirectPath }: LoginModal
                 required
                 className={`w-full px-4 py-2.5 rounded-lg border transition-colors outline-hidden ${
                   darkMode
-                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
-                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[#2596be] focus:ring-1 focus:ring-[#2596be]"
+                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
                 }`}
                 placeholder="••••••••"
               />
@@ -184,7 +184,7 @@ export default function LoginModal({ isOpen, onClose, redirectPath }: LoginModal
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 px-4 bg-[#2596be] text-white font-semibold rounded-lg shadow-lg hover:bg-[#1e7ca0] transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+              className="w-full py-2.5 px-4 bg-[var(--color-brand)] text-white font-semibold rounded-lg shadow-lg hover:bg-[var(--color-brand-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
               {loading ? "Signing in..." : "Sign In & Continue"}
             </button>
@@ -203,8 +203,8 @@ export default function LoginModal({ isOpen, onClose, redirectPath }: LoginModal
               href="/register"
               className={`text-sm font-semibold ${
                 darkMode
-                  ? "text-[#60DFFF] hover:text-[#2596be]"
-                  : "text-[#2596be] hover:text-[#1e7ca0]"
+                  ? "text-[var(--color-brand-light)] hover:text-[var(--color-brand)]"
+                  : "text-[var(--color-brand)] hover:text-[var(--color-brand-hover)]"
               }`}
             >
               Sign up

@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageHero from "@/components/layout/PageHero";
 import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
+import { logger } from "@/lib/logger";
 import apiClient from "@/lib/api-client";
 
 export default function ContactPage() {
@@ -36,7 +37,7 @@ export default function ContactPage() {
       alert("Message sent successfully!");
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch (error: any) {
-      console.error("Failed to send message:", error);
+      logger.error("Failed to send message:", error);
       alert(
         error.response?.data?.message ||
           "Failed to send message. Please try again.",
@@ -68,7 +69,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Information */}
             <div className="lg:col-span-1">
-              <h2 className="text-2xl font-bold mb-6 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold mb-6 bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
                 Get In Touch
               </h2>
 
@@ -95,20 +96,20 @@ export default function ContactPage() {
                 ].map((contact, idx) => (
                   <div
                     key={idx}
-                    className="group p-6 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[#2596be]/30 dark:hover:border-[#2596be]/50 hover:bg-white dark:hover:bg-white/10"
+                    className="group p-6 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[var(--color-brand)]/30 dark:hover:border-[var(--color-brand)]/50 hover:bg-white dark:hover:bg-white/10"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2596be] to-[#4EA8DE] flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-[#2596be]/20">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)] flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-[var(--color-brand)]/20">
                         <contact.icon className="text-white" size={20} />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 dark:text-white mb-1 transition-colors group-hover:text-[#2596be] dark:group-hover:text-[#60DFFF]">
+                        <h3 className="font-semibold text-gray-900 dark:text-white mb-1 transition-colors group-hover:text-[var(--color-brand)] dark:group-hover:text-[var(--color-brand-light)]">
                           {contact.title}
                         </h3>
                         {contact.href ? (
                           <a
                             href={contact.href}
-                            className="text-[#2596be] dark:text-[#60DFFF] hover:underline transition-all"
+                            className="text-[var(--color-brand)] dark:text-[var(--color-brand-light)] hover:underline transition-all"
                           >
                             {contact.value}
                           </a>
@@ -160,7 +161,7 @@ export default function ContactPage() {
             {/* Contact Form */}
             <div className="lg:col-span-2">
               <div className="p-8 rounded-2xl backdrop-blur-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5">
-                <h2 className="text-2xl font-bold mb-6 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+                <h2 className="text-2xl font-bold mb-6 bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
                   Send Us a Message
                 </h2>
 
@@ -180,7 +181,7 @@ export default function ContactPage() {
                         required
                         value={formData.name}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[#2596be]/50 focus:ring-2 focus:ring-[#2596be] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[var(--color-brand)]/50 focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none"
                         placeholder="John Doe"
                       />
                     </div>
@@ -199,7 +200,7 @@ export default function ContactPage() {
                         required
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[#2596be]/50 focus:ring-2 focus:ring-[#2596be] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[var(--color-brand)]/50 focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none"
                         placeholder="john@example.com"
                       />
                     </div>
@@ -219,7 +220,7 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[#2596be]/50 focus:ring-2 focus:ring-[#2596be] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[var(--color-brand)]/50 focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none"
                         placeholder="+91 1234567890"
                       />
                     </div>
@@ -237,7 +238,7 @@ export default function ContactPage() {
                         required
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[#2596be]/50 focus:ring-2 focus:ring-[#2596be] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none cursor-pointer"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[var(--color-brand)]/50 focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none cursor-pointer"
                       >
                         <option value="">Select a subject</option>
                         <option value="General Inquiry">General Inquiry</option>
@@ -272,7 +273,7 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={handleChange}
                       rows={6}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[#2596be]/50 focus:ring-2 focus:ring-[#2596be] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none resize-y min-h-[120px]"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[var(--color-brand)]/50 focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none resize-y min-h-[120px]"
                       placeholder="How can we help you?"
                     />
                   </div>
@@ -280,7 +281,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-[#2596be] text-white rounded-lg font-medium transition-all duration-300 hover:bg-[#1e7ca0] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed group"
+                    className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 bg-[var(--color-brand)] text-white rounded-lg font-medium transition-all duration-300 hover:bg-[var(--color-brand-hover)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:cursor-not-allowed group"
                   >
                     {isSubmitting ? (
                       <>

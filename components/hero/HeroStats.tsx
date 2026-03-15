@@ -23,13 +23,13 @@ export default function HeroStats({ darkMode }: { darkMode: boolean }) {
                 : "bg-white/80 border-gray-200"
             }`}
           >
-            <div className="flex items-center justify-center gap-2 text-[#2596be] mb-2">
+            <div className="flex items-center justify-center gap-2 text-[var(--color-brand)] mb-2">
               <Icon className="w-5 h-5" />
             </div>
 
             <div
               className={`text-3xl font-bold mb-1 ${
-                darkMode ? "text-white" : "text-[#2596be]"
+                darkMode ? "text-white" : "text-[var(--color-brand)]"
               }`}
             >
               {stat.value}

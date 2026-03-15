@@ -7,7 +7,9 @@
 
 @theme inline {
   --animate-spotlight: spotlight 2s ease 0.75s 1 forwards;
-  --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+  --animate-scroll: scroll var(--animation-duration, 40s)
+    var(--animation-direction, forwards) linear infinite;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -51,6 +53,14 @@
   --navbar-backdrop: rgba(255, 255, 255, 0.55);
   --navbar-border: rgba(0, 0, 0, 0.08);
   --radius: 0.625rem;
+
+  /* Brand Colors */
+  --color-brand: #2596be;
+  --color-brand-hover: #1e7ca0;
+  --color-brand-light: #60dfff;
+  --color-brand-accent: #4ea8de;
+  --color-dark-bg: #071219;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -161,4 +171,3 @@
   --exam-accent-bg: #3e8a4f1a; /* ~10% tint */
   --exam-accent-border: #3e8a4f33; /* ~20% for borders */
 }
-

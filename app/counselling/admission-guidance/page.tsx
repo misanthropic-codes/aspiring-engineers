@@ -20,6 +20,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { counsellingService } from "@/services/counselling.service";
+import { logger } from "@/lib/logger";
 
 const guidanceServices = [
   {
@@ -143,43 +144,54 @@ export default function AdmissionGuidancePage() {
         fullName: formData.fullName,
         email: formData.email,
         phone: formData.phone,
-        exam: formData.exam as "jee-main" | "jee-advanced" | "neet-ug" | "wbjee" | "other-state-exam",
+        exam: formData.exam as
+          | "jee-main"
+          | "jee-advanced"
+          | "neet-ug"
+          | "wbjee"
+          | "other-state-exam",
         rankScore: formData.rankScore || undefined,
-        category: formData.category as "general" | "obc-ncl" | "sc" | "st" | "ews" | "pwd",
+        category: formData.category as
+          | "general"
+          | "obc-ncl"
+          | "sc"
+          | "st"
+          | "ews"
+          | "pwd",
         homeState: formData.homeState,
         class12Status: formData.class12Status as "appearing" | "passed",
         tenthPercentage: formData.tenthPercentage,
-        twelfthPercentageExpected: formData.twelfthPercentageExpected || undefined,
+        twelfthPercentageExpected:
+          formData.twelfthPercentageExpected || undefined,
         collegeChoice: formData.collegeChoice,
         additionalMessage: formData.additionalMessage || undefined,
       });
 
-      console.log("Admission guidance submitted successfully:", result);
       setSubmitted(true);
 
-    // Reset form after showing success
-    setTimeout(() => {
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        exam: "",
-        rankScore: "",
-        category: "",
-        class12Status: "appearing",
-        tenthPercentage: "",
-        twelfthPercentageExpected: "",
-        homeState: "",
-        collegeChoice: "",
-        additionalMessage: "",
-      });
-      setSubmitted(false);
-    }, 5000);
+      // Reset form after showing success
+      setTimeout(() => {
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          exam: "",
+          rankScore: "",
+          category: "",
+          class12Status: "appearing",
+          tenthPercentage: "",
+          twelfthPercentageExpected: "",
+          homeState: "",
+          collegeChoice: "",
+          additionalMessage: "",
+        });
+        setSubmitted(false);
+      }, 5000);
     } catch (error: any) {
-      console.error("Failed to submit admission guidance:", error);
+      logger.error("Failed to submit admission guidance:", error);
       alert(
         error.response?.data?.message ||
-          "Failed to submit form. Please try again later."
+          "Failed to submit form. Please try again later.",
       );
     } finally {
       setIsSubmitting(false);
@@ -205,12 +217,14 @@ export default function AdmissionGuidancePage() {
           Free Consultation Available
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-          <span className="bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
             Expert Admission Guidance
           </span>
         </h1>
         <p className="text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-          Get personalized guidance for college admissions. Our expert counsellors help you navigate the complex admission process and secure your dream seat.
+          Get personalized guidance for college admissions. Our expert
+          counsellors help you navigate the complex admission process and secure
+          your dream seat.
         </p>
       </div>
 
@@ -220,7 +234,7 @@ export default function AdmissionGuidancePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Side - Content */}
             <div>
-              <h2 className="text-2xl font-bold mb-4 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold mb-4 bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
                 Why Choose Our Guidance?
               </h2>
 
@@ -238,8 +252,8 @@ export default function AdmissionGuidancePage() {
                     key={idx}
                     className="p-3 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-[#2596be]/10 flex items-center justify-center mb-2">
-                      <service.icon className="w-4 h-4 text-[#2596be]" />
+                    <div className="w-8 h-8 rounded-lg bg-[var(--color-brand)]/10 flex items-center justify-center mb-2">
+                      <service.icon className="w-4 h-4 text-[var(--color-brand)]" />
                     </div>
                     <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-1">
                       {service.title}
@@ -254,7 +268,7 @@ export default function AdmissionGuidancePage() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3 p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 dark:bg-white/5 backdrop-blur-xl mb-6">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#2596be]">
+                  <div className="text-2xl font-bold text-[var(--color-brand)]">
                     1,000+
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -262,13 +276,17 @@ export default function AdmissionGuidancePage() {
                   </div>
                 </div>
                 <div className="text-center border-x border-gray-200 dark:border-white/10">
-                  <div className="text-2xl font-bold text-[#2596be]">98%</div>
+                  <div className="text-2xl font-bold text-[var(--color-brand)]">
+                    98%
+                  </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Success Rate
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[#2596be]">100+</div>
+                  <div className="text-2xl font-bold text-[var(--color-brand)]">
+                    100+
+                  </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
                     Partner Colleges
                   </div>
@@ -276,8 +294,8 @@ export default function AdmissionGuidancePage() {
               </div>
 
               {/* Quick Contact */}
-              <div className="flex items-center gap-3 p-3 rounded-xl border border-[#2596be]/30 bg-[#2596be]/5">
-                <div className="w-10 h-10 rounded-full bg-[#2596be] flex items-center justify-center">
+              <div className="flex items-center gap-3 p-3 rounded-xl border border-[var(--color-brand)]/30 bg-[var(--color-brand)]/5">
+                <div className="w-10 h-10 rounded-full bg-[var(--color-brand)] flex items-center justify-center">
                   <Phone className="w-4 h-4 text-white" />
                 </div>
                 <div>
@@ -286,7 +304,7 @@ export default function AdmissionGuidancePage() {
                   </p>
                   <a
                     href="tel:+919002912888"
-                    className="text-lg font-bold text-[#2596be] hover:underline"
+                    className="text-lg font-bold text-[var(--color-brand)] hover:underline"
                   >
                     +91 9002912888
                   </a>
@@ -298,7 +316,7 @@ export default function AdmissionGuidancePage() {
             <div>
               <div className="sticky top-24 p-6 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 shadow-xl">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-linear-to-br from-[#2596be] to-[#4EA8DE] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-linear-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)] flex items-center justify-center">
                     <GraduationCap className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -339,7 +357,7 @@ export default function AdmissionGuidancePage() {
                         required
                         value={formData.fullName}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                         placeholder="Enter your full name"
                       />
                     </div>
@@ -359,7 +377,7 @@ export default function AdmissionGuidancePage() {
                           required
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                           placeholder="your@email.com"
                         />
                       </div>
@@ -378,7 +396,7 @@ export default function AdmissionGuidancePage() {
                           required
                           value={formData.phone}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                           placeholder="+91 9876543210"
                         />
                       </div>
@@ -398,7 +416,7 @@ export default function AdmissionGuidancePage() {
                           required
                           value={formData.exam}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                         >
                           {examOptions.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -421,7 +439,7 @@ export default function AdmissionGuidancePage() {
                           name="rankScore"
                           value={formData.rankScore}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                           placeholder="e.g., 5000 or 650"
                         />
                       </div>
@@ -441,7 +459,7 @@ export default function AdmissionGuidancePage() {
                           required
                           value={formData.category}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                         >
                           {categoryOptions.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -465,7 +483,7 @@ export default function AdmissionGuidancePage() {
                           required
                           value={formData.homeState}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                           placeholder="e.g., West Bengal"
                         />
                       </div>
@@ -483,7 +501,7 @@ export default function AdmissionGuidancePage() {
                             value="appearing"
                             checked={formData.class12Status === "appearing"}
                             onChange={handleChange}
-                            className="form-radio text-[#2596be] focus:ring-[#2596be]"
+                            className="form-radio text-[var(--color-brand)] focus:ring-[var(--color-brand)]"
                           />
                           <span className="ml-2 text-gray-700 dark:text-gray-300">
                             Appearing
@@ -496,7 +514,7 @@ export default function AdmissionGuidancePage() {
                             value="passed"
                             checked={formData.class12Status === "passed"}
                             onChange={handleChange}
-                            className="form-radio text-[#2596be] focus:ring-[#2596be]"
+                            className="form-radio text-[var(--color-brand)] focus:ring-[var(--color-brand)]"
                           />
                           <span className="ml-2 text-gray-700 dark:text-gray-300">
                             Passed
@@ -520,7 +538,7 @@ export default function AdmissionGuidancePage() {
                           required
                           value={formData.tenthPercentage}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                           placeholder="e.g., 85%"
                         />
                       </div>
@@ -530,7 +548,10 @@ export default function AdmissionGuidancePage() {
                           htmlFor="twelfthPercentageExpected"
                           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                         >
-                          12th Percentage {formData.class12Status === "appearing" ? "(Expected)" : "*"}
+                          12th Percentage{" "}
+                          {formData.class12Status === "appearing"
+                            ? "(Expected)"
+                            : "*"}
                         </label>
                         <input
                           type="text"
@@ -539,7 +560,7 @@ export default function AdmissionGuidancePage() {
                           required={formData.class12Status === "passed"}
                           value={formData.twelfthPercentageExpected}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                           placeholder="e.g., 80%"
                         />
                       </div>
@@ -550,7 +571,8 @@ export default function AdmissionGuidancePage() {
                         htmlFor="collegeChoice"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                       >
-                        Preferred College / Institute <span className="text-red-500">*</span>
+                        Preferred College / Institute{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -559,7 +581,7 @@ export default function AdmissionGuidancePage() {
                         required
                         value={formData.collegeChoice}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent"
                         placeholder="e.g., IIT Bombay, AIIMS Delhi"
                       />
                     </div>
@@ -577,7 +599,7 @@ export default function AdmissionGuidancePage() {
                         value={formData.additionalMessage}
                         onChange={handleChange}
                         rows={3}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#2596be] focus:border-transparent resize-none"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent resize-none"
                         placeholder="Any specific queries or preferences?"
                       />
                     </div>
@@ -585,7 +607,7 @@ export default function AdmissionGuidancePage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#2596be] text-white rounded-lg font-semibold hover:bg-[#1e7ca0] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--color-brand)] text-white rounded-lg font-semibold hover:bg-[var(--color-brand-hover)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <>
@@ -616,7 +638,7 @@ export default function AdmissionGuidancePage() {
       <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
               How It Works
             </h2>
             <p className="text-base text-gray-600 dark:text-gray-400">
@@ -628,7 +650,7 @@ export default function AdmissionGuidancePage() {
             {processSteps.map((item, idx) => (
               <div key={idx} className="relative">
                 <div className="p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 text-center">
-                  <div className="text-3xl font-bold text-[#2596be]/20 mb-3">
+                  <div className="text-3xl font-bold text-[var(--color-brand)]/20 mb-3">
                     {item.step}
                   </div>
                   <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">
@@ -640,7 +662,7 @@ export default function AdmissionGuidancePage() {
                 </div>
                 {idx < processSteps.length - 1 && (
                   <div className="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2">
-                    <ArrowRight className="w-6 h-6 text-[#2596be]/40" />
+                    <ArrowRight className="w-6 h-6 text-[var(--color-brand)]/40" />
                   </div>
                 )}
               </div>
@@ -653,7 +675,7 @@ export default function AdmissionGuidancePage() {
       <section className="py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[#2596be] to-[#60DFFF] bg-clip-text text-transparent">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-linear-to-r from-[var(--color-brand)] to-[var(--color-brand-light)] bg-clip-text text-transparent">
               Success Stories
             </h2>
             <p className="text-base text-gray-600 dark:text-gray-400">
@@ -683,7 +705,7 @@ export default function AdmissionGuidancePage() {
                   <div className="font-semibold text-gray-900 dark:text-white">
                     {testimonial.name}
                   </div>
-                  <div className="text-sm text-[#2596be]">
+                  <div className="text-sm text-[var(--color-brand)]">
                     {testimonial.rank}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -699,7 +721,7 @@ export default function AdmissionGuidancePage() {
       {/* CTA Section */}
       <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50/50 dark:bg-gray-900/20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="p-6 md:p-8 rounded-2xl bg-linear-to-br from-[#2596be] to-[#4EA8DE] text-white">
+          <div className="p-6 md:p-8 rounded-2xl bg-linear-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)] text-white">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3">
               Explore Colleges
             </h2>
@@ -709,7 +731,7 @@ export default function AdmissionGuidancePage() {
             </p>
             <Link
               href="/counselling/college-list"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white text-[#2596be] hover:bg-gray-100 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold bg-white text-[var(--color-brand)] hover:bg-gray-100 transition-colors"
             >
               View College List
               <ArrowRight className="w-5 h-5" />

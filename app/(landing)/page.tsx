@@ -1,13 +1,11 @@
+// Server component — Hero, Features, Exams, Navbar, Footer all SSR'd for LCP
 import Hero from "@/components/hero/Hero";
 import Navbar from "@/components/layout/Navbar";
-import Counselling from "@/components/sections/Counselling";
 import Exams from "@/components/sections/Exams";
 import Features from "@/components/sections/Features";
-import CTASection from "@/components/sections/CTAsection";
-import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/layout/Footer";
-import EducatorsShowcase from "@/components/sections/Educators";
 import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
+import BelowFoldSections from "@/components/sections/BelowFoldSections";
 
 export default function HomePage() {
   return (
@@ -16,10 +14,7 @@ export default function HomePage() {
       <Hero />
       <Features />
       <Exams />
-      <EducatorsShowcase />
-      <Counselling />
-      <FAQ />
-      <CTASection />
+      <BelowFoldSections />
       <Footer />
       <WhatsAppFloat />
     </>

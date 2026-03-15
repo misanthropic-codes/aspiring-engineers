@@ -2,7 +2,7 @@
  * Exam-specific visual themes.
  *
  * Rules:
- *  - The PRIMARY brand color (#2596be) must NOT appear here.
+ *  - The PRIMARY brand color is defined in globals.css as --color-brand.
  *  - Only the secondary accent layer is defined per exam.
  *  - Each exam theme is applied conditionally; no global override.
  *  - Colors must meet WCAG AA contrast on white/dark-gray backgrounds.
@@ -16,6 +16,10 @@ export interface ExamTheme {
   /** Display label for the exam type. */
   label: string;
 }
+
+// Brand color constants - synced with CSS variables in globals.css
+const BRAND_COLOR = "#2596be";
+const BRAND_LIGHT = "#60DFFF";
 
 export const examThemes: Record<string, ExamTheme> = {
   /** JEE Main — academic green, WCAG AA compliant on white (#3E8A4F contrast 4.6:1) */
@@ -46,10 +50,10 @@ export const examThemes: Record<string, ExamTheme> = {
     label: "NEET",
   },
 
-  /** Fallback / generic brand blue */
+  /** Fallback / generic brand blue - uses CSS variable */
   default: {
-    accentColor: "#2596be",
-    accentColorEnd: "#60DFFF",
+    accentColor: BRAND_COLOR,
+    accentColorEnd: BRAND_LIGHT,
     label: "",
   },
 

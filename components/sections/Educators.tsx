@@ -11,11 +11,12 @@ import {
   Youtube,
   X, // Added X icon for modal close
   Github, // Added Github icon
-  Twitter
+  Twitter,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { teamService } from "@/services/team.service";
+import { logger } from "@/lib/logger";
 import { TeamMember } from "@/types";
 
 const mockEducators = [
@@ -80,7 +81,9 @@ export default function EducatorsShowcase({
   );
   const [isLoading, setIsLoading] = useState(!initialEducators);
   const [hoveredId, setHoveredId] = useState<number | string | null>(null);
-  const [selectedEducator, setSelectedEducator] = useState<Educator | null>(null);
+  const [selectedEducator, setSelectedEducator] = useState<Educator | null>(
+    null,
+  );
   const [darkMode, setDarkMode] = useState(false);
 
   // Fetch team members from API
@@ -96,7 +99,7 @@ export default function EducatorsShowcase({
         }
         // If no team members from API, keep using mock data
       } catch (error) {
-        console.error("Failed to fetch team members, using mock data:", error);
+        logger.error("Failed to fetch team members, using mock data:", error);
         // Keep using mock data on error
       } finally {
         setIsLoading(false);
@@ -147,11 +150,11 @@ export default function EducatorsShowcase({
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div
           className={`absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#2596be]/10" : "bg-[#2596be]/20"}`}
+            ${darkMode ? "bg-[var(--color-brand)]/10" : "bg-[var(--color-brand)]/20"}`}
         />
         <div
           className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#4EA8DE]/15" : "bg-[#4EA8DE]/25"}`}
+            ${darkMode ? "bg-[var(--color-brand-accent)]/15" : "bg-[var(--color-brand-accent)]/25"}`}
         />
       </div>
 
@@ -163,7 +166,7 @@ export default function EducatorsShowcase({
         >
           The People Who Power Your Preparation
         </h2>
-        <div className="w-20 h-1 bg-gradient-to-r from-[#2596be] to-[#4EA8DE] mx-auto rounded-full" />
+        <div className="w-20 h-1 bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)] mx-auto rounded-full" />
         <p
           className={`mt-4 text-lg max-w-2xl mx-auto transition-colors
             ${darkMode ? "text-gray-300" : "text-gray-600"}`}
@@ -176,7 +179,7 @@ export default function EducatorsShowcase({
       {isLoading ? (
         <div className="max-w-7xl mx-auto flex justify-center py-12">
           <div className="flex flex-col items-center gap-4">
-            <div className="w-8 h-8 border-4 border-[#2596be]/30 border-t-[#2596be] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-[var(--color-brand)]/30 border-t-brand rounded-full animate-spin" />
             <p
               className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}
             >
@@ -214,9 +217,9 @@ export default function EducatorsShowcase({
                 }
                 ${
                   hoveredId === educator.id && darkMode
-                    ? "shadow-[#2596be]/30 border-[#2596be]/60 bg-gray-900/60"
+                    ? "shadow-[var(--color-brand)]/30 border-[var(--color-brand)]/60 bg-gray-900/60"
                     : hoveredId === educator.id
-                      ? "shadow-[#2596be]/20 border-[#4EA8DE]/60 bg-white/60"
+                      ? "shadow-[var(--color-brand)]/20 border-[var(--color-brand-accent)]/60 bg-white/60"
                       : ""
                 }
               `}
@@ -229,8 +232,8 @@ export default function EducatorsShowcase({
                         className={`absolute inset-0 rounded-2xl pointer-events-none
                         ${
                           darkMode
-                            ? "bg-gradient-to-br from-[#2596be]/5 to-[#4EA8DE]/5"
-                            : "bg-gradient-to-br from-[#2596be]/3 to-[#4EA8DE]/3"
+                            ? "bg-gradient-to-br from-[var(--color-brand)]/5 to-[var(--color-brand-accent)]/5"
+                            : "bg-gradient-to-br from-[var(--color-brand)]/3 to-[var(--color-brand-accent)]/3"
                         }`}
                       />
                     )}
@@ -243,8 +246,8 @@ export default function EducatorsShowcase({
                       ${
                         hoveredId === educator.id
                           ? darkMode
-                            ? "bg-gradient-to-br from-[#2596be]/30 to-[#4EA8DE]/30 scale-110 blur-md"
-                            : "bg-gradient-to-br from-[#2596be]/20 to-[#4EA8DE]/20 scale-110 blur-md"
+                            ? "bg-gradient-to-br from-[var(--color-brand)]/30 to-[var(--color-brand-accent)]/30 scale-110 blur-md"
+                            : "bg-gradient-to-br from-[var(--color-brand)]/20 to-[var(--color-brand-accent)]/20 scale-110 blur-md"
                           : "scale-100 opacity-0"
                       }
                     `}
@@ -252,7 +255,7 @@ export default function EducatorsShowcase({
                       {/* Gradient background */}
                       <div
                         className={`
-                      absolute inset-0 rounded-full bg-gradient-to-br from-[#2596be] to-[#4EA8DE]
+                      absolute inset-0 rounded-full bg-gradient-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)]
                       transition-all duration-300
                       ${hoveredId === educator.id ? "scale-105" : "scale-100"}
                     `}
@@ -275,9 +278,9 @@ export default function EducatorsShowcase({
                         className={`text-2xl font-bold mb-2 transition-colors
                         ${
                           hoveredId === educator.id && darkMode
-                            ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#60DFFF]"
+                            ? "text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-light)]"
                             : hoveredId === educator.id
-                              ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#4EA8DE]"
+                              ? "text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)]"
                               : darkMode
                                 ? "text-white"
                                 : "text-gray-900"
@@ -290,10 +293,10 @@ export default function EducatorsShowcase({
                         ${
                           darkMode
                             ? hoveredId === educator.id
-                              ? "text-[#60DFFF]/80"
+                              ? "text-[var(--color-brand-light)]/80"
                               : "text-gray-400"
                             : hoveredId === educator.id
-                              ? "text-[#2596be]"
+                              ? "text-[var(--color-brand)]"
                               : "text-gray-600"
                         }`}
                       >
@@ -308,10 +311,10 @@ export default function EducatorsShowcase({
                         ${
                           darkMode
                             ? hoveredId === educator.id
-                              ? "text-[#60DFFF]/70"
+                              ? "text-[var(--color-brand-light)]/70"
                               : "text-gray-400"
                             : hoveredId === educator.id
-                              ? "text-[#2596be]"
+                              ? "text-[var(--color-brand)]"
                               : "text-gray-500"
                         }`}
                       >
@@ -326,9 +329,9 @@ export default function EducatorsShowcase({
                             backdrop-blur-sm transition-all duration-300
                             ${
                               hoveredId === educator.id && darkMode
-                                ? "bg-[#2596be]/30 text-[#60DFFF] border border-[#2596be]/50"
+                                ? "bg-[var(--color-brand)]/30 text-[var(--color-brand-light)] border border-[var(--color-brand)]/50"
                                 : hoveredId === educator.id
-                                  ? "bg-[#2596be]/15 text-[#2596be] border border-[#2596be]/30"
+                                  ? "bg-[var(--color-brand)]/15 text-[var(--color-brand)] border border-[var(--color-brand)]/30"
                                   : darkMode
                                     ? "bg-gray-800/60 text-gray-300 border border-gray-700/50"
                                     : "bg-gray-100/60 text-gray-700 border border-gray-200/50"
@@ -355,7 +358,7 @@ export default function EducatorsShowcase({
                       transition-all duration-300
                       ${
                         hoveredId === educator.id
-                          ? "bg-gradient-to-r from-[#2596be] to-[#4EA8DE] text-white shadow-xl shadow-[#2596be]/40"
+                          ? "bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)] text-white shadow-xl shadow-[var(--color-brand)]/40"
                           : darkMode
                             ? "bg-gray-800/60 text-gray-300 hover:bg-gray-700/60 border border-gray-700/50"
                             : "bg-gray-100/60 text-gray-700 hover:bg-gray-200/60 border border-gray-200/50"
@@ -364,7 +367,7 @@ export default function EducatorsShowcase({
                     >
                       {hoveredId === educator.id && (
                         <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-[#60DFFF]/20 to-transparent"
+                          className="absolute inset-0 bg-gradient-to-r from-[var(--color-brand-light)]/20 to-transparent"
                           animate={{
                             x: ["-100%", "100%"],
                           }}
@@ -382,7 +385,7 @@ export default function EducatorsShowcase({
                   {/* Decorative accent */}
                   <div
                     className={`
-                  absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#2596be] to-[#4EA8DE]
+                  absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)]
                   transition-opacity duration-300
                   ${hoveredId === educator.id ? "opacity-100" : "opacity-0"}
                 `}
@@ -397,128 +400,162 @@ export default function EducatorsShowcase({
       {/* Profile Modal */}
       <AnimatePresence>
         {selectedEducator && (
-          <div 
-          id="profile-modal"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-        >
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedEducator(null)}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          />
+          <div
+            id="profile-modal"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+          >
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedEducator(null)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
 
-          {/* Modal Content */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className={`
+            {/* Modal Content */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className={`
               relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl z-10
               ${darkMode ? "bg-gray-900 border border-gray-800" : "bg-white border border-gray-100"}
             `}
-          >
-            {/* Close button */}
-            <button
-              onClick={() => setSelectedEducator(null)}
-              className={`
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setSelectedEducator(null)}
+                className={`
                 absolute top-4 right-4 p-2 rounded-full transition-colors z-20
-                focus:outline-none focus:ring-2 focus:ring-[#2596be]
+                focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]
                 ${darkMode ? "bg-gray-800/50 hover:bg-gray-700/50 text-gray-400" : "bg-gray-100 hover:bg-gray-200 text-gray-600"}
               `}
-              aria-label="Close profile modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
+                aria-label="Close profile modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-            <div className="p-8 sm:p-10 relative z-10">
-              {/* Profile Image & Essential Info */}
-              <div className="flex flex-col sm:flex-row gap-8 items-center sm:items-start">
-                <div className="relative w-32 h-32 sm:w-40 sm:h-40 shrink-0 mx-auto sm:mx-0">
-                  <div className={`absolute inset-0 rounded-full scale-105 bg-gradient-to-br from-[#2596be] to-[#4EA8DE] opacity-20`} />
-                  <img
-                    src={selectedEducator.image}
-                    alt={selectedEducator.name}
-                    className={`relative w-full h-full rounded-full object-cover ring-4 ${darkMode ? "ring-gray-800" : "ring-gray-100"}`}
-                  />
+              <div className="p-8 sm:p-10 relative z-10">
+                {/* Profile Image & Essential Info */}
+                <div className="flex flex-col sm:flex-row gap-8 items-center sm:items-start">
+                  <div className="relative w-32 h-32 sm:w-40 sm:h-40 shrink-0 mx-auto sm:mx-0">
+                    <div
+                      className={`absolute inset-0 rounded-full scale-105 bg-gradient-to-br from-[var(--color-brand)] to-[var(--color-brand-accent)] opacity-20`}
+                    />
+                    <img
+                      src={selectedEducator.image}
+                      alt={selectedEducator.name}
+                      className={`relative w-full h-full rounded-full object-cover ring-4 ${darkMode ? "ring-gray-800" : "ring-gray-100"}`}
+                    />
+                  </div>
+
+                  <div className="flex-1 text-center sm:text-left sm:mt-4">
+                    <h2
+                      id="modal-title"
+                      className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}
+                    >
+                      {selectedEducator.name}
+                    </h2>
+                    <p
+                      className={`text-xl font-medium ${darkMode ? "text-[var(--color-brand-light)]" : "text-[var(--color-brand)]"}`}
+                    >
+                      {selectedEducator.title}
+                    </p>
+                  </div>
                 </div>
-                
-                <div className="flex-1 text-center sm:text-left sm:mt-4">
-                  <h2 id="modal-title" className={`text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
-                    {selectedEducator.name}
-                  </h2>
-                  <p className={`text-xl font-medium ${darkMode ? "text-[#60DFFF]" : "text-[#2596be]"}`}>
-                    {selectedEducator.title}
+
+                {/* Bio Section */}
+                <div className="mt-8">
+                  <h3
+                    className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}
+                  >
+                    About
+                  </h3>
+                  <p
+                    className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}
+                  >
+                    {selectedEducator.bio ||
+                      `${selectedEducator.name} is a dedicated ${selectedEducator.title} with extensive experience helping students achieve their academic goals. They specialize in simplifying complex concepts and providing strategic guidance for competitive exams.`}
                   </p>
                 </div>
-              </div>
 
-              {/* Bio Section */}
-              <div className="mt-8">
-                <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                  About
-                </h3>
-                <p className={`leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-                  {selectedEducator.bio || `${selectedEducator.name} is a dedicated ${selectedEducator.title} with extensive experience helping students achieve their academic goals. They specialize in simplifying complex concepts and providing strategic guidance for competitive exams.`}
-                </p>
-              </div>
-
-              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {/* Expertise */}
-                <div>
-                  <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                    Areas of Expertise
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedEducator.expertise.map((skill, idx) => (
-                      <span
-                        key={idx}
-                        className={`
-                          inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                          ${darkMode ? "bg-gray-800 text-[#60DFFF]" : "bg-blue-50 text-[#2596be]"}
-                        `}
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Social Links (only if exist) */}
-                {selectedEducator.socialLinks && Object.values(selectedEducator.socialLinks).some(Boolean) && (
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  {/* Expertise */}
                   <div>
-                    <h3 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
-                      Connect
+                    <h3
+                      className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      Areas of Expertise
                     </h3>
-                    <div className="flex gap-3">
-                      {selectedEducator.socialLinks.linkedin && (
-                        <a href={selectedEducator.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}>
-                          <Linkedin className="w-5 h-5" />
-                        </a>
-                      )}
-                      {selectedEducator.socialLinks.twitter && (
-                        <a href={selectedEducator.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}>
-                          <Twitter className="w-5 h-5" />
-                        </a>
-                      )}
-                      {selectedEducator.socialLinks.github && (
-                        <a href={selectedEducator.socialLinks.github} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}>
-                          <Github className="w-5 h-5" />
-                        </a>
-                      )}
+                    <div className="flex flex-wrap gap-2">
+                      {selectedEducator.expertise.map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className={`
+                          inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                          ${darkMode ? "bg-gray-800 text-[var(--color-brand-light)]" : "bg-blue-50 text-[var(--color-brand)]"}
+                        `}
+                        >
+                          {skill}
+                        </span>
+                      ))}
                     </div>
                   </div>
-                )}
+
+                  {/* Social Links (only if exist) */}
+                  {selectedEducator.socialLinks &&
+                    Object.values(selectedEducator.socialLinks).some(
+                      Boolean,
+                    ) && (
+                      <div>
+                        <h3
+                          className={`text-sm font-semibold uppercase tracking-wider mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}
+                        >
+                          Connect
+                        </h3>
+                        <div className="flex gap-3">
+                          {selectedEducator.socialLinks.linkedin && (
+                            <a
+                              href={selectedEducator.socialLinks.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}
+                            >
+                              <Linkedin className="w-5 h-5" />
+                            </a>
+                          )}
+                          {selectedEducator.socialLinks.twitter && (
+                            <a
+                              href={selectedEducator.socialLinks.twitter}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}
+                            >
+                              <Twitter className="w-5 h-5" />
+                            </a>
+                          )}
+                          {selectedEducator.socialLinks.github && (
+                            <a
+                              href={selectedEducator.socialLinks.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`p-2 rounded-lg transition-colors ${darkMode ? "bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900"}`}
+                            >
+                              <Github className="w-5 h-5" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </section>

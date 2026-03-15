@@ -7,6 +7,7 @@ import HeroStats from "./HeroStats";
 import HeroBadge from "./HeroBadge";
 import HeroCarousel, { BannerItem } from "./HeroCarousel";
 import { getSiteSettings } from "@/services/siteSettings";
+import { logger } from "@/lib/logger";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -58,7 +59,7 @@ export default function Hero() {
           setItems(apiBanners);
         }
       } catch (error) {
-        console.error("Failed to fetch hero banners", error);
+        logger.error("Failed to fetch hero banners", error);
       }
     };
     fetchSettings();
@@ -84,11 +85,11 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div
           className={`absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl transition-all
-          ${darkMode ? "bg-[#2596be]/10" : "bg-[#2596be]/20"}`}
+          ${darkMode ? "bg-[var(--color-brand)]/10" : "bg-[var(--color-brand)]/20"}`}
         />
         <div
           className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl transition-all
-          ${darkMode ? "bg-[#4EA8DE]/15" : "bg-[#4EA8DE]/25"}`}
+          ${darkMode ? "bg-[var(--color-brand-accent)]/15" : "bg-[var(--color-brand-accent)]/25"}`}
         />
       </div>
 
@@ -102,10 +103,10 @@ export default function Hero() {
         <HeroBadge darkMode={darkMode} />
 
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
-          <span className="from-[#2596be] to-[#4EA8DE] bg-linear-to-b bg-clip-text text-transparent">
+          <span className="from-[var(--color-brand)] to-[var(--color-brand-accent)] bg-linear-to-b bg-clip-text text-transparent">
             Aspiring
           </span>{" "}
-          <span className="from-[#4EA8DE] to-[#60DFFF] bg-linear-to-b bg-clip-text text-transparent">
+          <span className="from-[var(--color-brand-accent)] to-[var(--color-brand-light)] bg-linear-to-b bg-clip-text text-transparent">
             Engineers
           </span>
         </h1>
@@ -134,16 +135,14 @@ export default function Hero() {
               size="lg"
               className="
                 h-10 px-8 text-lg font-medium 
-                bg-[#2596be] text-white shadow-xl
-                hover:bg-[#1e7ca0]
+                bg-[var(--color-brand)] text-white shadow-xl
+                hover:bg-[var(--color-brand-hover)]
                 transition
               "
             >
-              Start Exploring  <ChevronRight className="w-5 h-5" />
+              Start Exploring <ChevronRight className="w-5 h-5" />
             </Button>
           </Link>
-
-          
         </div>
 
         {/* HERO CAROUSEL */}

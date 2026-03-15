@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { getBoardsPyq, getSamplePapers, Paper } from "@/services/papers";
+import { Paper } from "@/services/papers";
+import { useBoardPapers } from "@/hooks/useBoardPapers";
 import { motion } from "framer-motion";
 import {
   BookOpen,
@@ -60,12 +61,16 @@ export default function BoardsPyqPage({
   classLevel,
   paperType,
 }: BoardsPyqPageProps) {
-  const [papers, setPapers] = useState<Paper[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedBoard, setSelectedBoard] = useState<string>("");
   const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const { papers, isLoading: loading } = useBoardPapers({
+    classLevel,
+    paperType,
+    board: selectedBoard || undefined,
+    subject: selectedSubject || undefined,
+  });
+  const [darkMode, setDarkMode] = useState(false);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const subjects = classLevel === "10" ? SUBJECTS_10 : SUBJECTS_12;
 
@@ -81,26 +86,6 @@ export default function BoardsPyqPage({
     });
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    const fetchPapers = async () => {
-      try {
-        const fetchFn = paperType === "pyq" ? getBoardsPyq : getSamplePapers;
-        const data = await fetchFn(
-          classLevel,
-          selectedBoard || undefined,
-          selectedSubject || undefined,
-        );
-        setPapers(data);
-      } catch (error) {
-        console.error("Failed to load papers", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPapers();
-  }, [classLevel, paperType, selectedBoard, selectedSubject]);
 
   // Calculate real stats from papers data
   const stats = useMemo(() => {

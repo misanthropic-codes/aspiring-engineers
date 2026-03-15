@@ -37,11 +37,11 @@ export default function Exams() {
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div
           className={`absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#2596be]/10" : "bg-[#2596be]/20"}`}
+            ${darkMode ? "bg-[var(--color-brand)]/10" : "bg-[var(--color-brand)]/20"}`}
         />
         <div
           className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl transition-all
-            ${darkMode ? "bg-[#4EA8DE]/15" : "bg-[#4EA8DE]/25"}`}
+            ${darkMode ? "bg-[var(--color-brand-accent)]/15" : "bg-[var(--color-brand-accent)]/25"}`}
         />
       </div>
 
@@ -49,7 +49,7 @@ export default function Exams() {
         <h2
           className={`
             text-4xl font-bold mb-4 tracking-tight
-            ${darkMode ? "text-white" : "text-[#2596be]"}
+            ${darkMode ? "text-white" : "text-[var(--color-brand)]"}
           `}
         >
           Exams We Cover
@@ -88,9 +88,9 @@ export default function Exams() {
                 }
                 ${
                   hoveredId === index && darkMode
-                    ? "shadow-[#2596be]/30 border-[#2596be]/60 bg-white/10"
+                    ? "shadow-[var(--color-brand)]/30 border-[var(--color-brand)]/60 bg-white/10"
                     : hoveredId === index
-                      ? "shadow-[#2596be]/20 border-[#4EA8DE]/60 bg-white"
+                      ? "shadow-[var(--color-brand)]/20 border-[var(--color-brand-accent)]/60 bg-white"
                       : ""
                 }
               `}
@@ -101,8 +101,8 @@ export default function Exams() {
                   className={`absolute inset-0 rounded-2xl pointer-events-none
                     ${
                       darkMode
-                        ? "bg-gradient-to-br from-[#2596be]/5 to-[#4EA8DE]/5"
-                        : "bg-gradient-to-br from-[#2596be]/3 to-[#4EA8DE]/3"
+                        ? "bg-gradient-to-br from-[var(--color-brand)]/5 to-[var(--color-brand-accent)]/5"
+                        : "bg-gradient-to-br from-[var(--color-brand)]/3 to-[var(--color-brand-accent)]/3"
                     }`}
                 />
               )}
@@ -110,7 +110,7 @@ export default function Exams() {
               {/* Top accent line on hover */}
               <div
                 className={`
-                  absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#2596be] to-[#4EA8DE]
+                  absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)]
                   transition-opacity duration-300
                   ${hoveredId === index ? "opacity-100" : "opacity-0"}
                 `}
@@ -142,12 +142,12 @@ export default function Exams() {
                   relative z-10 text-xl font-bold tracking-tight transition-colors
                   ${
                     hoveredId === index && darkMode
-                      ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#60DFFF]"
+                      ? "text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-light)]"
                       : hoveredId === index
-                        ? "text-transparent bg-clip-text bg-gradient-to-r from-[#2596be] to-[#4EA8DE]"
+                        ? "text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-brand)] to-[var(--color-brand-accent)]"
                         : darkMode
                           ? "text-white"
-                          : "text-[#2596be]"
+                          : "text-[var(--color-brand)]"
                   }
                 `}
               >

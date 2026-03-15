@@ -2,14 +2,15 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { useTheme } from "next-themes";
 import apiClient from "@/lib/api-client";
+import { logger } from "@/lib/logger";
 
 interface OTPModalProps {
   isOpen: boolean;
   onClose: () => void;
   onVerifySuccess: () => void;
   email: string;
-  darkMode?: boolean;
 }
 
 export default function OTPModal({
@@ -17,8 +18,9 @@ export default function OTPModal({
   onClose,
   onVerifySuccess,
   email,
-  darkMode = false,
 }: OTPModalProps) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,6 +29,12 @@ export default function OTPModal({
   const [resendLoading, setResendLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const darkMode = mounted && resolvedTheme === "dark";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Reset state when modal opens
   useEffect(() => {
@@ -47,7 +55,7 @@ export default function OTPModal({
     if (resendCooldown > 0) {
       const timer = setTimeout(
         () => setResendCooldown(resendCooldown - 1),
-        1000
+        1000,
       );
       return () => clearTimeout(timer);
     }
@@ -86,7 +94,7 @@ export default function OTPModal({
         }
       }
     },
-    [otp]
+    [otp],
   );
 
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
@@ -136,7 +144,7 @@ export default function OTPModal({
         setSuccess(true);
         setSuccessMessage(
           response.data.message ||
-            "Email verified successfully! Redirecting to login..."
+            "Email verified successfully! Redirecting to login...",
         );
 
         // Wait 2 seconds to show success message, then redirect
@@ -145,7 +153,7 @@ export default function OTPModal({
         }, 2000);
       }
     } catch (err: any) {
-      console.error("OTP verification error:", err);
+      logger.error("OTP verification error:", err);
 
       // Extract error message from various response formats
       let errorMessage = "Invalid OTP. Please try again.";
@@ -185,7 +193,7 @@ export default function OTPModal({
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
     } catch (err: any) {
-      console.error("Resend OTP error:", err);
+      logger.error("Resend OTP error:", err);
 
       let errorMessage = "Failed to resend OTP. Please try again.";
       if (err?.response?.data?.message) {
@@ -211,7 +219,7 @@ export default function OTPModal({
     >
       <div
         className={`w-full max-w-md p-6 sm:p-8 rounded-2xl border shadow-2xl transform transition-all ${
-          darkMode ? "bg-[#071219] border-white/10" : "bg-white border-gray-200"
+          darkMode ? "bg-[var(--color-dark-bg)] border-white/10" : "bg-white border-gray-200"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -219,7 +227,7 @@ export default function OTPModal({
         <div className="flex items-center justify-between mb-6">
           <h2
             className={`text-2xl font-bold ${
-              darkMode ? "text-white" : "text-[#2596be]"
+              darkMode ? "text-white" : "text-[var(--color-brand)]"
             }`}
           >
             Verify Your Email
@@ -324,13 +332,13 @@ export default function OTPModal({
               disabled={loading || success}
               className={`w-full h-14 text-center text-2xl font-bold rounded-xl border-2 transition-all outline-none ${
                 darkMode
-                  ? "bg-white/5 border-white/20 text-white focus:border-[#2596be] focus:bg-white/10 disabled:opacity-50"
-                  : "bg-white border-gray-200 text-gray-900 focus:border-[#2596be] focus:bg-blue-50/50 disabled:opacity-50"
+                  ? "bg-white/5 border-white/20 text-white focus:border-[var(--color-brand)] focus:bg-white/10 disabled:opacity-50"
+                  : "bg-white border-gray-200 text-gray-900 focus:border-[var(--color-brand)] focus:bg-blue-50/50 disabled:opacity-50"
               } ${
                 digit
                   ? darkMode
-                    ? "border-[#2596be]/50"
-                    : "border-[#2596be]/30"
+                    ? "border-[var(--color-brand)]/50"
+                    : "border-[var(--color-brand)]/30"
                   : ""
               }`}
               aria-label={`Digit ${index + 1}`}
@@ -345,7 +353,7 @@ export default function OTPModal({
           className={`w-full py-3.5 px-4 font-semibold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 ${
             success
               ? "bg-green-500 text-white cursor-default"
-              : "bg-[#2596be] text-white hover:bg-[#1e7ca0] disabled:opacity-50 disabled:cursor-not-allowed"
+              : "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hover)] disabled:opacity-50 disabled:cursor-not-allowed"
           }`}
         >
           {loading ? (
@@ -378,15 +386,15 @@ export default function OTPModal({
               disabled={resendLoading || resendCooldown > 0}
               className={`text-sm font-semibold transition-colors disabled:opacity-50 ${
                 darkMode
-                  ? "text-[#60DFFF] hover:text-[#2596be]"
-                  : "text-[#2596be] hover:text-[#1e7ca0]"
+                  ? "text-[var(--color-brand-light)] hover:text-[var(--color-brand)]"
+                  : "text-[var(--color-brand)] hover:text-[var(--color-brand-hover)]"
               }`}
             >
               {resendLoading
                 ? "Sending..."
                 : resendCooldown > 0
-                ? `Resend in ${resendCooldown}s`
-                : "Resend Code"}
+                  ? `Resend in ${resendCooldown}s`
+                  : "Resend Code"}
             </button>
           </div>
         )}

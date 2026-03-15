@@ -12,7 +12,7 @@ export default function ThemeToggle({ darkMode, setDarkMode }: Props) {
       onClick={() => setDarkMode(!darkMode)}
       className={`p-2 rounded-lg transition ${
         darkMode
-          ? "bg-[#2596be]/20 text-[#2596be]"
+          ? "bg-[var(--color-brand)]/20 text-[var(--color-brand)]"
           : "bg-gray-100 text-gray-900"
       } hover:scale-110`}
     >
