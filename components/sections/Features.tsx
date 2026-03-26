@@ -224,7 +224,7 @@ export default function Features() {
           return (
             <motion.div
               key={stage.stage}
-              style={{ y: cardY, willChange: "transform" }}
+              style={{ y: cardY, willChange: "transform, opacity" }}
               initial={{ opacity: 0, x: isEven ? -50 : 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
@@ -309,24 +309,25 @@ export default function Features() {
                   {/* Decorative Gradient Blob */}
                   <motion.div
                     animate={{
-                      scale: [1, 1.1, 1],
-                      rotate: [0, 5, 0],
+                      scale: [1, 1.05, 1],
+                      opacity: [0.15, 0.25, 0.15],
                     }}
                     transition={{
-                      duration: 8,
+                      duration: 10,
                       repeat: Infinity,
-                      ease: "easeInOut",
+                      ease: "linear",
                     }}
-                    className={`absolute -inset-8 bg-linear-to-r ${stage.color} opacity-20 blur-3xl rounded-full`}
+                    className={`absolute -inset-8 bg-linear-to-r ${stage.color} blur-3xl rounded-full`}
                   />
 
                   {/* Main Card */}
                   <div
-                    className={`relative rounded-3xl border backdrop-blur-xl p-8 shadow-2xl ${
+                    className={`relative rounded-3xl border backdrop-blur-md p-8 shadow-2xl transition-all duration-500 ${
                       darkMode
                         ? "bg-white/5 border-white/10"
                         : "bg-white/90 border-gray-200"
                     }`}
+                    style={{ willChange: "transform, opacity" }}
                   >
                     {/* Icon */}
                     <div
