@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FileText, Loader2, Pencil, Search, UserCircle } from "lucide-react";
+import { ExternalLink, FileText, Loader2, Pencil, Search, Upload, UserCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import freelanceService from "@/services/freelance.service";
 import {
@@ -167,6 +167,8 @@ export default function FreelanceSection() {
     useState<CreateFreelanceProfilePayload>(emptyForm);
   const [applySkillsInput, setApplySkillsInput] = useState("");
   const [applyCvName, setApplyCvName] = useState("");
+  const [applyCvPreviewUrl, setApplyCvPreviewUrl] = useState("");
+  const [applyCvUploading, setApplyCvUploading] = useState(false);
   const [applyLoading, setApplyLoading] = useState(false);
   const [applySuccess, setApplySuccess] = useState("");
   const [applyError, setApplyError] = useState("");
@@ -183,12 +185,17 @@ export default function FreelanceSection() {
   );
   const [editSkillsInput, setEditSkillsInput] = useState("");
   const [editCvName, setEditCvName] = useState("");
+  const [editCvPreviewUrl, setEditCvPreviewUrl] = useState("");
+  const [editCvUploading, setEditCvUploading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [editSuccess, setEditSuccess] = useState("");
   const [editError, setEditError] = useState("");
   const [editValidationErrors, setEditValidationErrors] = useState<string[]>(
     [],
   );
+
+  const applyCvInputRef = useRef<HTMLInputElement | null>(null);
+  const editCvInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const update = () => {
@@ -312,23 +319,32 @@ export default function FreelanceSection() {
     }
 
     try {
+      if (mode === "apply") setApplyCvUploading(true);
+      if (mode === "edit") setEditCvUploading(true);
+
       const base64 = await fileToBase64(file);
+      const previewUrl = `data:application/pdf;base64,${base64}`;
 
       if (mode === "apply") {
         setApplyCvName(file.name);
         setApplyForm((prev) => ({ ...prev, cvFileBase64: base64 }));
+        setApplyCvPreviewUrl(previewUrl);
         setApplyError("");
       }
 
       if (mode === "edit") {
         setEditCvName(file.name);
         setEditForm((prev) => ({ ...prev, cvFileBase64: base64 }));
+        setEditCvPreviewUrl(previewUrl);
         setEditError("");
       }
     } catch (error) {
       const message = toErrorMessage(error);
       if (mode === "apply") setApplyError(message);
       if (mode === "edit") setEditError(message);
+    } finally {
+      if (mode === "apply") setApplyCvUploading(false);
+      if (mode === "edit") setEditCvUploading(false);
     }
   };
 
@@ -367,6 +383,7 @@ export default function FreelanceSection() {
       setApplyForm(emptyForm);
       setApplySkillsInput("");
       setApplyCvName("");
+      setApplyCvPreviewUrl("");
     } catch (error) {
       setApplyError(toErrorMessage(error));
     } finally {
@@ -578,15 +595,58 @@ export default function FreelanceSection() {
                   CV PDF Upload
                 </label>
                 <input
+                  ref={applyCvInputRef}
                   type="file"
                   accept="application/pdf"
                   onChange={(event) => onCvSelected(event, "apply")}
-                  className="block w-full text-sm"
+                  className="hidden"
                 />
+                <button
+                  type="button"
+                  onClick={() => applyCvInputRef.current?.click()}
+                  disabled={applyCvUploading}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-60"
+                >
+                  {applyCvUploading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Uploading CV...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4" />
+                      Choose CV PDF
+                    </>
+                  )}
+                </button>
                 {applyCvName && (
                   <p className="text-xs text-emerald-600 dark:text-emerald-300">
                     Selected: {applyCvName}
                   </p>
+                )}
+
+                {applyCvPreviewUrl && (
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden mt-3">
+                    <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-white/10">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        CV Preview
+                      </p>
+                      <a
+                        href={applyCvPreviewUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-(--color-brand)"
+                      >
+                        Open
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                    <iframe
+                      title="Apply CV Preview"
+                      src={applyCvPreviewUrl}
+                      className="w-full h-72 bg-white"
+                    />
+                  </div>
                 )}
               </div>
 
@@ -806,15 +866,58 @@ export default function FreelanceSection() {
                   CV PDF Upload (required for update)
                 </label>
                 <input
+                  ref={editCvInputRef}
                   type="file"
                   accept="application/pdf"
                   onChange={(event) => onCvSelected(event, "edit")}
-                  className="block w-full text-sm"
+                  className="hidden"
                 />
+                <button
+                  type="button"
+                  onClick={() => editCvInputRef.current?.click()}
+                  disabled={editCvUploading}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-60"
+                >
+                  {editCvUploading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Uploading CV...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4" />
+                      Choose CV PDF
+                    </>
+                  )}
+                </button>
                 {editCvName && (
                   <p className="text-xs text-emerald-600 dark:text-emerald-300">
                     Selected: {editCvName}
                   </p>
+                )}
+
+                {editCvPreviewUrl && (
+                  <div className="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden mt-3">
+                    <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-white/10">
+                      <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                        CV Preview
+                      </p>
+                      <a
+                        href={editCvPreviewUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-(--color-brand)"
+                      >
+                        Open
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                    <iframe
+                      title="Edit CV Preview"
+                      src={editCvPreviewUrl}
+                      className="w-full h-72 bg-white"
+                    />
+                  </div>
                 )}
               </div>
 
