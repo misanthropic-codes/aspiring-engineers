@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { isValidEmail, isValidPassword } from "@/lib/utils/validators";
@@ -15,7 +15,6 @@ import { parsePhoneNumber, isValidPhoneNumber } from "libphonenumber-js";
 export default function RegisterPage() {
   const { register } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { resolvedTheme } = useTheme();
   const [formData, setFormData] = useState({
     name: "",
@@ -41,14 +40,15 @@ export default function RegisterPage() {
   }, []);
 
   useEffect(() => {
-    const refFromQuery = searchParams.get("ref") || searchParams.get("referralCode");
+    const params = new URLSearchParams(window.location.search);
+    const refFromQuery = params.get("ref") || params.get("referralCode");
     if (refFromQuery) {
       setFormData((prev) => ({
         ...prev,
         referralCode: refFromQuery.trim().toUpperCase(),
       }));
     }
-  }, [searchParams]);
+  }, []);
 
   const darkMode = mounted && resolvedTheme === "dark";
 
