@@ -8,7 +8,7 @@ import { logger } from "./logger";
 
 if (!process.env.NEXT_PUBLIC_API_URL) {
   logger.warn(
-    "⚠️ NEXT_PUBLIC_API_URL is not set. Please configure it in your .env file."
+    " NEXT_PUBLIC_API_URL is not set. Please configure it in your .env file."
   );
 }
 

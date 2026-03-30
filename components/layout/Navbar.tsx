@@ -16,11 +16,20 @@ import {
   ChevronDown,
   User,
   LogIn,
+  LayoutDashboard,
+  LogOut,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { tokenManager } from "@/lib/utils/tokenManager";
 import { logger } from "@/lib/logger";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -704,39 +713,71 @@ export default function Navbar(): JSX.Element {
           {/* Auth Buttons */}
           {isAuthenticated ? (
             <div className="hidden sm:flex items-center gap-2">
-              <button
-                onClick={() => {
-                  // Cross-domain SSO to test-portal-client profile
-                  const token = tokenManager.getAuthToken();
-                  const refreshToken = tokenManager.getRefreshToken();
-                  const testPortalUrl =
-                    process.env.NEXT_PUBLIC_TEST_PORTAL_URL || "";
-                  if (!testPortalUrl) {
-                    logger.error(
-                      "NEXT_PUBLIC_TEST_PORTAL_URL is not configured",
-                    );
-                    return;
-                  }
-                  const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(
-                    token || "",
-                  )}&refreshToken=${encodeURIComponent(
-                    refreshToken || "",
-                  )}&redirect=/profile`;
-                  window.location.href = ssoUrl;
-                }}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md text-sm font-medium cursor-pointer"
-              >
-                <User size={16} />
-                <span className="truncate max-w-25">
-                  {user?.name?.split(" ")[0] || "Profile"}
-                </span>
-              </button>
-              <button
-                onClick={() => logout()}
-                className="px-3 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
-              >
-                Logout
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md text-sm font-medium cursor-pointer hover:bg-backdrop/80 transition-colors">
+                    <User size={16} />
+                    <span className="truncate max-w-25">
+                      {user?.name?.split(" ")[0] || "Profile"}
+                    </span>
+                    <ChevronDown size={14} />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
+                      <LayoutDashboard size={16} />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      // Cross-domain SSO to test-portal-client profile
+                      const token = tokenManager.getAuthToken();
+                      const refreshToken = tokenManager.getRefreshToken();
+                      const testPortalUrl =
+                        process.env.NEXT_PUBLIC_TEST_PORTAL_URL || "";
+                      if (!testPortalUrl) {
+                        logger.error(
+                          "NEXT_PUBLIC_TEST_PORTAL_URL is not configured",
+                        );
+                        return;
+                      }
+                      const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(
+                        token || "",
+                      )}&refreshToken=${encodeURIComponent(
+                        refreshToken || "",
+                      )}&redirect=/profile`;
+                      window.location.href = ssoUrl;
+                    }}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="1"></circle>
+                      <path d="M12 1v6m6.16-1.86-4.24 4.24m6 6L14.16 14.16M23 12h-6m1.86 6.16-4.24-4.24m-6 6L9.86 14.16M1 12h6M7.86 7.86l4.24 4.24"></path>
+                    </svg>
+                    <span>Test Portal</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => logout()}
+                    className="flex items-center gap-2 cursor-pointer text-red-500 focus:text-red-500"
+                  >
+                    <LogOut size={16} />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
             <div className="hidden sm:flex items-center gap-2">
@@ -865,15 +906,65 @@ export default function Navbar(): JSX.Element {
           </div>
           <div className="mt-4 border-t border-bg-700 pt-6 px-3">
             {isAuthenticated ? (
-              <button
-                onClick={() => {
-                  setMobileOpen(false);
-                  logout();
-                }}
-                className="w-full px-4 py-3 rounded-xl border border-bg-700 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-2"
-              >
-                Logout
-              </button>
+              <div className="flex flex-col gap-3">
+                <Link
+                  href="/profile"
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-center text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-2"
+                >
+                  <LayoutDashboard size={16} />
+                  <span>Dashboard</span>
+                </Link>
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    // Cross-domain SSO to test-portal-client profile
+                    const token = tokenManager.getAuthToken();
+                    const refreshToken = tokenManager.getRefreshToken();
+                    const testPortalUrl =
+                      process.env.NEXT_PUBLIC_TEST_PORTAL_URL || "";
+                    if (!testPortalUrl) {
+                      logger.error(
+                        "NEXT_PUBLIC_TEST_PORTAL_URL is not configured",
+                      );
+                      return;
+                    }
+                    const ssoUrl = `${testPortalUrl}/auth/sso?token=${encodeURIComponent(
+                      token || "",
+                    )}&refreshToken=${encodeURIComponent(
+                      refreshToken || "",
+                    )}&redirect=/profile`;
+                    window.location.href = ssoUrl;
+                  }}
+                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <path d="M12 1v6m6.16-1.86-4.24 4.24m6 6L14.16 14.16M23 12h-6m1.86 6.16-4.24-4.24m-6 6L9.86 14.16M1 12h6M7.86 7.86l4.24 4.24"></path>
+                  </svg>
+                  <span>Test Portal</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileOpen(false);
+                    logout();
+                  }}
+                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-sm font-medium text-red-500 hover:text-red-600 transition-colors flex items-center justify-center gap-2"
+                >
+                  <LogOut size={16} />
+                  <span>Logout</span>
+                </button>
+              </div>
             ) : (
               <div className="flex flex-col gap-3">
                 <Link

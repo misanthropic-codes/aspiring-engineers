@@ -1,0 +1,754 @@
+================================================================================
+REFERRAL SYSTEM - COMPLETE DOCUMENTATION
+================================================================================
+
+BASE URL: http://localhost:3000/api/v1
+AUTHENTICATION: Bearer JWT Token (Required unless marked @Public)
+VERSION: 1.0 (MVP - Production Ready User-Side)
+LAST UPDATED: March 30, 2026
+
+================================================================================
+SYSTEM OVERVIEW
+================================================================================
+
+The Refer & Earn system allows users to:
+1. Share unique referral codes with friends
+2. Earn "points" when friends signup using their code
+3. Earn bonus points when referred friends make their first purchase
+4. View referral history and points transactions
+5. Redeem points for discounts (future integration with checkout)
+
+BUSINESS RULES:
+- Referred user gets 10 pts immediately on signup
+- Referrer gets 50 pts when referred user makes first successful payment
+- Self-referral is not allowed
+- One referral code per user (auto-generated on first login)
+- Referrals become "rewarded" only after first successful payment
+- Admins can disqualify referrals for fraud with point recovery
+
+================================================================================
+AUTHENTICATION & REGISTRATION FLOW  
+================================================================================
+
+1. USER SIGNUP WITH REFERRAL CODE
+   =================================
+   POST /auth/register
+   
+   Request:
+   {
+     "email": "newuser@example.com",
+     "password": "SecurePass123!",
+     "name": "John Doe",
+     "phone": "+919876543210",
+     "dateOfBirth": "1995-05-15",
+     "examTargets": ["NEET", "JEE"],
+     "targetYear": 2025,
+     "referralCode": "AEAB12CD"  ← OPTIONAL - referrer's code
+   }
+   
+   Response (201 Created):
+   {
+     "success": true,
+     "message": "Registration successful! Please check your email for the 6-digit verification code.",
+     "data": {
+       "email": "newuser@example.com",
+       "name": "John Doe"
+     }
+   }
+   
+   FLOW:
+   1. New user signs up with email, password, and optional referralCode
+   2. System validates the referralCode if provided
+   3. If valid, creates a PENDING referral record linking:
+      - Referred user ID
+      - Referrer user ID
+      - Referral code used
+   4. New user is awarded 10 pts immediately (referred_bonus)
+   5. Referred user must verify email (6-digit OTP) to complete registration
+   
+   ERRORS:
+   - 400: referralCode not found → "Invalid referral code"
+   - 400: Self-referral → "Self referral is not allowed"
+   - 400: Already has referrer → "Referral already linked for this user"
+
+
+USER ENDPOINTS DOCUMENTATION
+
+================================================================================
+0. POST /referrals/me/generate-code (FIX IF CODE IS NULL)
+================================================================================
+DESCRIPTION: Generate or regenerate referral code if it's missing or null
+
+METHOD: POST
+HEADERS:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+REQUEST BODY: None (empty)
+
+RESPONSE (200 OK):
+{
+  "success": true,
+  "message": "Referral code generated successfully",
+  "data": {
+    "referralCode": "AEAB12CD"
+  }
+}
+
+USE CASE:
+  - If GET /referrals/me/summary returns referralCode: null
+  - Call this endpoint to auto-generate the missing code
+  - Typically happens if signup was interrupted or user existed before referral system
+
+ERRORS:
+  - 500: "Failed to generate unique referral code" after 8 retries (extremely rare)
+
+
+================================================================================
+1. GET /referrals/me/summary
+================================================================================
+DESCRIPTION: Get current user's referral summary including points balance and counts
+
+METHOD: GET
+HEADERS:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+REQUEST BODY: None
+
+RESPONSE (200 OK):
+{
+  "referralCode": "AEAB12CD",
+  "pointsBalance": 150,
+  "lifetimePointsEarned": 200,
+  "totalPointsRedeemed": 50,
+  "successfulReferralsCount": 3,
+  "pendingReferrals": 2,
+  "rewardedReferrals": 3,
+  "referredByUserId": "507f1f77bcf86cd799439011"
+}
+
+FIELD DESCRIPTIONS:
+  - referralCode: Unique code user can share to refer others
+  - pointsBalance: Current available points
+  - lifetimePointsEarned: Total points earned from referrals
+  - totalPointsRedeemed: Total points spent on redemptions
+  - successfulReferralsCount: Number of successful first purchases by referred users
+  - pendingReferrals: Users referred but haven't made first purchase
+  - rewardedReferrals: Referrals where user earned points
+  - referredByUserId: UserId of the person who referred this user (null if not referred)
+
+
+================================================================================
+2. GET /referrals/me/events
+================================================================================
+DESCRIPTION: Get complete list of all users referred by current user with details
+
+METHOD: GET
+HEADERS:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+REQUEST BODY: None
+
+QUERY PARAMETERS (Optional):
+  None currently, but can add filters in future
+
+RESPONSE (200 OK):
+[
+  {
+    "_id": "507f1f77bcf86cd799439012",
+    "referredUser": {
+      "userId": "507f1f77bcf86cd799439013",
+      "name": "Amrita Sharma",
+      "email": "amrita@example.com",
+      "phone": "+91 9876543210",
+      "profilePicture": "https://cdn.example.com/profile/amrita.jpg",
+      "examTargets": ["NEET", "JEE"],
+      "targetYear": 2025
+    },
+    "status": "rewarded",
+    "referralCodeUsed": "AEAB12CD",
+    "firstSuccessfulPaymentId": "507f1f77bcf86cd799439014",
+    "qualifiedAt": "2024-03-26T12:00:00Z",
+    "rewardedAt": "2024-03-26T15:45:00Z",
+    "createdAt": "2024-03-25T10:00:00Z",
+    "updatedAt": "2024-03-26T15:45:00Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439015",
+    "referredUser": {
+      "userId": "507f1f77bcf86cd799439016",
+      "name": "Rajesh Kumar",
+      "email": "rajesh@example.com",
+      "phone": "+91 9876543211",
+      "profilePicture": "https://cdn.example.com/profile/rajesh.jpg",
+      "examTargets": ["JEE"],
+      "targetYear": 2026
+    },
+    "status": "pending",
+    "referralCodeUsed": "AEAB12CD",
+    "firstSuccessfulPaymentId": null,
+    "qualifiedAt": null,
+    "rewardedAt": null,
+    "createdAt": "2024-03-24T08:30:00Z",
+    "updatedAt": "2024-03-24T08:30:00Z"
+  }
+]
+
+FIELD DESCRIPTIONS:
+  - _id: Referral tracking record ID
+  - referredUser: Complete user details who was referred
+    - userId: Referred user's ID
+    - name: User's full name
+    - email: User's email address
+    - phone: User's phone number
+    - profilePicture: User's profile picture URL
+    - examTargets: Array of exams user is preparing for
+    - targetYear: Year user targets to appear in exams
+  - status: One of [pending, rewarded, disqualified]
+    - pending: User registered but hasn't made first purchase
+    - rewarded: User made first purchase and points awarded
+    - disqualified: Referral invalidated (fraud/abuse)
+  - referralCodeUsed: Exact referral code that was used
+  - firstSuccessfulPaymentId: Payment ID of first successful purchase (null if pending)
+  - qualifiedAt: Timestamp when referral qualified for reward
+  - rewardedAt: Timestamp when reward was given
+  - createdAt: When referral was created
+  - updatedAt: Last update timestamp
+
+
+================================================================================
+3. GET /referrals/me/transactions
+================================================================================
+DESCRIPTION: Get complete history of points transactions (earned and redeemed)
+
+METHOD: GET
+HEADERS:
+  Authorization: Bearer <jwt_token>
+  Content-Type: application/json
+
+REQUEST BODY: None
+
+RESPONSE (200 OK):
+[
+  {
+    "_id": "507f1f77bcf86cd799439020",
+    "userId": "507f1f77bcf86cd799439010",
+    "type": "referrer_bonus",
+    "points": 50,
+    "balanceAfter": 150,
+    "idempotencyKey": "referrer_bonus:507f1f77bcf86cd799439012:507f1f77bcf86cd799439010",
+    "referenceType": "referral_tracking",
+    "referenceId": "507f1f77bcf86cd799439012",
+    "metadata": {
+      "referenceType": "referral_tracking",
+      "referenceId": "507f1f77bcf86cd799439012",
+      "referredUserId": "507f1f77bcf86cd799439013"
+    },
+    "createdAt": "2024-03-26T12:00:00Z",
+    "updatedAt": "2024-03-26T12:00:00Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439021",
+    "userId": "507f1f77bcf86cd799439010",
+    "type": "referred_bonus",
+    "points": 10,
+    "balanceAfter": 160,
+    "idempotencyKey": "referred_bonus:507f1f77bcf86cd799439012:507f1f77bcf86cd799439010",
+    "referenceType": "referral_tracking",
+    "referenceId": "507f1f77bcf86cd799439012",
+    "metadata": {
+      "referenceType": "referral_tracking",
+      "referenceId": "507f1f77bcf86cd799439012",
+      "referrerUserId": "507f1f77bcf86cd799439010"
+    },
+    "createdAt": "2024-03-26T12:00:00Z",
+    "updatedAt": "2024-03-26T12:00:00Z"
+  },
+  {
+    "_id": "507f1f77bcf86cd799439022",
+    "userId": "507f1f77bcf86cd799439010",
+    "type": "redemption_debit",
+    "points": -10,
+    "balanceAfter": 150,
+    "idempotencyKey": "redemption:507f1f77bcf86cd799439010:1711430400000",
+    "referenceType": "course_discount",
+    "referenceId": "507f1f77bcf86cd799439030",
+    "metadata": {
+      "reason": "Redeemed for 100 rupees discount",
+      "discountCode": "REFER_DISCOUNT_100"
+    },
+    "createdAt": "2024-03-26T15:00:00Z",
+    "updatedAt": "2024-03-26T15:00:00Z"
+  }
+]
+
+FIELD DESCRIPTIONS:
+  - _id: Transaction ID
+  - userId: User who owns the transaction
+  - type: Transaction type [referrer_bonus, referred_bonus, redemption_debit, admin_adjustment]
+    - referrer_bonus: Points earned from referring someone (50 pts)
+    - referred_bonus: Points earned for being referred (10 pts)
+    - redemption_debit: Points spent on redemption (negative)
+    - admin_adjustment: Admin manual adjustment
+  - points: Number of points (positive/negative)
+  - balanceAfter: User's points balance after transaction
+  - idempotencyKey: Unique key to prevent duplicate transactions
+  - referenceType: What this transaction references
+  - referenceId: ID of referenced entity
+  - metadata: Additional context (discount code, reason, etc.)
+  - createdAt: Transaction timestamp
+  - updatedAt: Last update timestamp
+
+NOTES:
+  - Sorted by createdAt DESC (newest first)
+  - Only includes transactions for authenticated user
+  - Idempotency keys prevent double-crediting on retries
+
+
+================================================================================
+ERROR RESPONSES
+================================================================================
+
+401 UNAUTHORIZED:
+{
+  "statusCode": 401,
+  "message": "Unauthorized",
+  "error": "Unauthorized"
+}
+Cause: Missing or invalid JWT token
+
+403 FORBIDDEN:
+{
+  "statusCode": 403,
+  "message": "Forbidden resource",
+  "error": "Forbidden"
+}
+Cause: Attempting to access another user's referral data
+
+404 NOT FOUND:
+{
+  "statusCode": 404,
+  "message": "User not found",
+  "error": "Not Found"
+}
+Cause: User record doesn't exist in database
+
+500 INTERNAL SERVER ERROR:
+{
+  "statusCode": 500,
+  "message": "Internal server error",
+  "error": "Internal Server Error"
+}
+Cause: Server-side error occurred
+
+
+================================================================================
+EXAMPLE USE CASES
+================================================================================
+
+1. USER WANTS TO SHARE REFERRAL CODE:
+   - Call GET /referrals/me/summary
+   - Extract "referralCode" field
+   - Share with friends: "Use code AEAB12CD to get 10 bonus points!"
+
+2. USER WANTS TO SEE WHO THEY REFERRED:
+   - Call GET /referrals/me/events
+   - Shows list of all referred users with their status
+   - Can see which referrals are pending vs. rewarded
+
+3. USER WANTS TO CHECK POINTS BALANCE:
+   - Call GET /referrals/me/summary
+   - Check "pointsBalance" field
+   - Check "lifetimePointsEarned" to see total earned
+
+4. USER WANTS TO VIEW POINTS HISTORY:
+   - Call GET /referrals/me/transactions
+   - See all referral bonuses, redemptions, admin adjustments
+   - Each transaction shows points change and resulting balance
+
+
+================================================================================
+DATABASE SCHEMAS & STRUCTURE
+================================================================================
+
+USER SCHEMA ADDITIONS:
+  referralCode: String (unique, sparse, uppercase, 8 chars format: AE + 6 random alphanumeric)
+  referredByUserId: String (ObjectId of user who referred this user)
+  pointsBalance: Number (current available points, default: 0)
+  lifetimePointsEarned: Number (total points earned ever, default: 0)
+  totalPointsRedeemed: Number (total points spent/redeemed, default: 0)
+  successfulReferralsCount: Number (count of referrals with first payment, default: 0)
+
+
+TROUBLESHOOTING: WHY IS REFERRAL CODE NULL?
+==============================================
+
+Symptom: GET /referrals/me/summary returns referralCode: null
+
+Root Causes:
+  1. NEW USER BEFORE REFERRAL SYSTEM
+     - User registered before referral module was deployed
+     - Database records don't have referralCode field set
+     
+  2. REGISTRATION FLOW INTERRUPTED
+     - Email verification failed during signup
+     - User created but ensureUserReferralCode() didn't complete
+     - Network error after user creation but before code generation
+     
+  3. OLD DATABASE FROM PRODUCTION
+     - Migrated database has users without referral codes
+     - Not initialized during original signup flow
+
+Solution:
+  - Call POST /referrals/me/generate-code (as the user)
+  - System will auto-generate unique 8-char code
+  - Code stored and available in next GET /referrals/me/summary
+
+Example:
+  POST /referrals/me/generate-code (with valid JWT)
+  →
+  {
+    "success": true,
+    "message": "Referral code generated successfully",
+    "data": {
+      "referralCode": "AEAB12CD"
+    }
+  }
+
+
+REFERRAL TRACKING SCHEMA:
+  referrerUserId: String (ObjectId, required, indexed)
+  referredUserId: String (ObjectId, required, indexed, unique)
+  referralCodeUsed: String (uppercase normalized code, required)
+  status: Enum [pending, rewarded, disqualified]
+  firstSuccessfulPaymentId: String (ObjectId of payment, optional)
+  qualifiedAt: Date (when referral qualified for reward)
+  rewardedAt: Date (when points were awarded)
+  disqualifiedAt: Date (when referral was disqualified)
+  disqualifyReason: String (reason for disqualification)
+  metadata: Object (additional context, timestamps, flags)
+  createdAt: Date (auto)
+  updatedAt: Date (auto)
+
+
+POINTS TRANSACTION SCHEMA:
+  userId: String (ObjectId, required, indexed)
+  type: Enum [referrer_bonus, referred_bonus, redemption_debit, admin_adjustment]
+  points: Number (amount, can be negative)
+  balanceAfter: Number (user's balance after transaction)
+  idempotencyKey: String (unique, prevents duplicates)
+  referenceType: String (referral_tracking, course_discount, etc.)
+  referenceId: String (linked entity ID)
+  metadata: Object (reason, discount code, referrer info, etc.)
+  createdAt: Date (auto)
+  updatedAt: Date (auto)
+
+
+================================================================================
+POINTS ALLOCATION RULES
+================================================================================
+
+REFERRAL INITIATION:
+  - Trigger: User signs up with valid referralCode
+  - Referred user: +10 pts (type: referred_bonus)
+  - Referrer: Stays pending until first purchase
+  - Status: PENDING
+
+FIRST SUCCESSFUL PAYMENT:
+  - Trigger: Payment webhook from Cashfree with PaymentStatus.SUCCESS
+  - Referred user: Already has +10 pts (no additional)
+  - Referrer: +50 pts (type: referrer_bonus)
+  - ReferralTracking.status: Changed to REWARDED
+  - Idempotency: Prevents double-crediting via unique idempotencyKey
+  
+  Idempotency format:
+    - Referrer bonus: "referrer_bonus:{trackingId}:{referrerUserId}"
+    - Referred bonus: "referred_bonus:{trackingId}:{referredUserId}"
+
+POINTS DEDUCTION:
+  - Type: redemption_debit (usually -10, -50, etc.)
+  - Trigger: User redeem points for discount/product
+  - Impact: pointsBalance decreased, totalPointsRedeemed increased
+
+ADMIN ADJUSTMENTS:
+  - Type: admin_adjustment
+  - Referrer can get +50 pts recovered if referral disqualified
+  - Idempotency: "admin_disqualify_recovery:{referralId}:{referrerUserId}"
+
+
+================================================================================
+IMPLEMENTATION DETAILS
+================================================================================
+
+1. SIGNUP FLOW WITH REFERRAL CODE
+   ================================
+   a) User calls POST /auth/register with optional referralCode
+   b) Auth service validates email/phone not already registered
+   c) If referralCode provided:
+      - ReferralsService.validateReferralCode() checks code exists
+      - Throws error if code not found or is user's own code
+   d) User created in database with email verification code
+   e) Verification email sent to user
+   f) Referral code auto-generated for new user
+   g) If valid referralCode provided:
+      - ReferralsService.createPendingReferral() called
+      - ReferralTracking created with status=PENDING
+      - Referred user gets +10 pts immediately
+   h) Return success message (tokens not given until email verified)
+
+   KEY: Referral happens BEFORE email verification completes
+
+
+2. PAYMENT SUCCESS HOOK
+   ====================
+   a) User makes payment via Cashfree payment gateway
+   b) Payment status = SUCCESS
+   c) Webhook/Payment processing calls paymentService.handlePaymentSuccess()
+   d) paymentService calls referralsService.handleSuccessfulPurchase(userId, paymentId)
+   e) ReferralsService checks:
+      - Is there a PENDING referral for this userId?
+      - Has user made their first payment? (check payment count)
+   f) If yes:
+      - ReferralTracking.status = REWARDED
+      - Referrer gets +50 pts
+      - Referred user gets +10 pts (if not already awarded)
+      - Both transactions created with idempotency keys
+   g) If referral already processed: Skip (idempotency check)
+
+
+3. REFERRAL CODE GENERATION
+   =========================
+   - Format: 8 characters (2 prefix: "AE" + 6 random)
+   - Alphabet: ABCDEFGHJKLMNPQRSTUVWXYZ23456789 (no I, O, L, 0, 1 to avoid confusion)
+   - Example: AEAB12CD
+   - Uniqueness: Ensured by MongoDB unique index
+   - Auto-generated: On first login (ensureUserReferralCode)
+   - Non-transferable: One code per user lifetime
+
+
+================================================================================
+IDEMPOTENCY & DOUBLE-SPEND PREVENTION
+================================================================================
+
+Problem: Payment webhook can be retried multiple times
+        User might accidentally make duplicate requests
+        
+Solution: idempotencyKey field in PointsTransaction schema
+
+Flow:
+  1. System generates unique idempotencyKey for each transaction
+  2. Before crediting points, check if idempotencyKey already exists
+  3. If EXISTS: Skip (already processed)
+  4. If NOT EXISTS: Create transaction and credit points
+
+Idempotency Key Formats:
+  - referrer_bonus: "referrer_bonus:{trackingId}:{referrerUserId}"
+  - referred_bonus: "referred_bonus:{trackingId}:{referredUserId}"
+  - admin_adjust: "admin_adjust:{userId}:{timestamp}"
+  - disqualify_recovery: "admin_disqualify_recovery:{referralId}:{referrerUserId}"
+
+
+================================================================================
+SECURITY CONSIDERATIONS
+================================================================================
+
+1. SELF-REFERRAL PREVENTION
+   - System checks: referrerUserId !== referredUserId
+   - Error: "Self referral is not allowed"
+
+2. DUPLICATE REFERRAL PREVENTION
+   - Each user can only be referred once
+   - DB unique index on referredUserId in ReferralTracking
+   - Error: "Referral already linked for this user"
+
+3. POINTS CANNOT BE NEGATIVE
+   - Update operations use idempotency to prevent overwrites
+   - Redemption validates sufficient balance before debit
+   - Admin adjustments explicitly validate amounts
+
+4. JWT PROTECTION
+   - All user endpoints require valid JWT token
+   - Token contains userId for authorization
+   - Endpoints only return data for authenticated user
+
+5. FRAUD DETECTION (ADMIN ONLY)
+   - Suspicious pattern detection
+   - Email/phone matching between referrer and referred
+   - Fast conversion detection (< 6 hours)
+   - Risk scoring and recommendations
+   - Manual disqualification with point recovery
+
+
+================================================================================
+API RESPONSE CODES
+================================================================================
+
+SUCCESS:
+  200 OK           - Endpoint called successfully
+  201 Created      - Resource created (user registration)
+
+CLIENT ERRORS:
+  400 Bad Request  - Invalid referral code / Self-referral / Validation error
+  401 Unauthorized - Invalid or missing JWT token
+  403 Forbidden    - Accessing another user's data
+  404 Not Found    - User/Resource does not exist
+
+SERVER ERRORS:
+  500 Internal Server Error - Unexpected error occurred
+
+
+================================================================================
+TESTING THE REFERRAL SYSTEM
+================================================================================
+
+STEP 1: Create Admin User
+  npm run seed:admin
+
+STEP 2: Get Admin Access Token
+  POST /auth/login
+  {
+    "identifier": "engineers_admin_is_me",
+    "password": "StrongP@ssw0rd!990"
+  }
+
+STEP 3: Create First User (Referrer)
+  POST /auth/register
+  {
+    "email": "referrer@example.com",
+    "password": "Pass123!",
+    "name": "Referrer",
+    "phone": "+919876543210",
+    "dateOfBirth": "1995-01-01",
+    "examTargets": ["NEET"],
+    "targetYear": 2025
+  }
+  
+  Response includes registration success message
+  
+  → Verify email first (Step 5 below)
+  
+  → Then extract referralCode from GET /referrals/me/summary
+  → If null, call POST /referrals/me/generate-code
+
+STEP 4: Create Second User (Referred) Using Referral Code
+  POST /auth/register
+  {
+    "email": "referred@example.com",
+    "password": "Pass123!",
+    "name": "Referred User",
+    "phone": "+919876543211",
+    "dateOfBirth": "1995-02-01",
+    "examTargets": ["JEE"],
+    "targetYear": 2026,
+    "referralCode": "AEAB12CD"  ← From referrer
+  }
+
+STEP 5: Verify Email
+  POST /auth/verify-email
+  {
+    "email": "referred@example.com",
+    "verificationCode": "123456"  ← From email
+  }
+
+STEP 6: Check Referred User Points
+  GET /referrals/me/summary (as referred user)
+  
+  Expected:
+  - pointsBalance: 10
+  - lifetimePointsEarned: 10
+  - referredByUserId: <referrer_id>
+
+STEP 7: Process Payment (Referred User)
+  POST /payments/initiate-payment
+  {
+    "packageId": "<package_id>",
+    "amount": 1000
+  }
+  
+  → Complete payment in Cashfree
+
+STEP 8: Check Referrer Points After Payment
+  GET /referrals/me/summary (as referrer)
+  
+  Expected:
+  - pointsBalance: 50
+  - lifetimePointsEarned: 50
+  - rewardedReferrals: 1
+
+STEP 9: View Referral Details
+  GET /referrals/me/events (as referrer)
+  → Status: "rewarded"
+  
+  GET /referrals/me/transactions
+  → Shows referrer_bonus of 50 pts
+
+
+================================================================================
+INTEGRATION CHECKLIST FOR MVP
+================================================================================
+
+✅ Referral code generation
+✅ Signup with referral code validation
+✅ Manual code generation endpoint (POST /referrals/me/generate-code)
+✅ Points allocation on signup (10 pts)
+✅ Referral status tracking (PENDING → REWARDED)
+✅ Points allocation on first payment (50 pts)
+✅ Idempotency prevention (no double-crediting)
+✅ User endpoints (summary, events, transactions, generate-code)
+✅ Error handling and validation
+✅ Database schemas and indexing
+✅ Payment webhook integration
+✅ Email verification flow
+✅ JWT authentication
+✅ Admin endpoints for referral management
+✅ Fraud detection algorithms
+✅ Point disqualification and recovery
+✅ Transaction history
+✅ Swagger API documentation
+✅ Null referral code troubleshooting
+
+
+================================================================================
+FUTURE ENHANCEMENTS
+================================================================================
+
+1. POINTS REDEMPTION FLOW
+   - User can redeem points for discounts
+   - Integration with checkout
+   - Discount code generation
+   - Redemption validation
+
+2. LEADERBOARD
+   - Top referrers by points earned
+   - Top referrers by referral count
+   - Monthly/quarterly rankings
+   - Badges and achievements
+
+3. REFERRAL ANALYTICS
+   - Referral conversion rates
+   - Average time to first purchase
+   - Revenue from referrals
+   - Cost per acquisition
+
+4. TIERED REWARDS
+   - Increased points for multiple referrals
+   - Bonus tiers (5 referrals = 100pt bonus, etc.)
+   - Seasonal campaigns with bonus multipliers
+
+5. REFERRAL SHARING
+   - Shareable referral link generation
+   - Whatsapp/Email direct share integration
+   - QR code generation for referral code
+   - Social media share buttons
+
+6. ADMIN FEATURES
+   - Bulk referral disqualification
+   - Campaign-based bonus points
+   - Manual referral creation
+   - Referral suspension/unsuspension
+   - Referral system analytics dashboard
+
+
+================================================================================

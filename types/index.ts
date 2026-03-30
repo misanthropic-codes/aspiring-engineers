@@ -48,6 +48,7 @@ export interface RegisterData {
   dateOfBirth: string;
   examTargets: ExamType[];
   targetYear: number;
+  referralCode?: string;
 }
 
 export interface AuthResponse {

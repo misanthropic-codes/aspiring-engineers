@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { isValidEmail, isValidPassword } from "@/lib/utils/validators";
@@ -15,6 +15,7 @@ import { parsePhoneNumber, isValidPhoneNumber } from "libphonenumber-js";
 export default function RegisterPage() {
   const { register } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { resolvedTheme } = useTheme();
   const [formData, setFormData] = useState({
     name: "",
@@ -24,6 +25,7 @@ export default function RegisterPage() {
     phone: "",
     dateOfBirth: "",
     targetYear: new Date().getFullYear() + 1,
+    referralCode: "",
   });
   const [examTargets, setExamTargets] = useState<ExamType[]>([]);
   const [error, setError] = useState("");
@@ -37,6 +39,16 @@ export default function RegisterPage() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    const refFromQuery = searchParams.get("ref") || searchParams.get("referralCode");
+    if (refFromQuery) {
+      setFormData((prev) => ({
+        ...prev,
+        referralCode: refFromQuery.trim().toUpperCase(),
+      }));
+    }
+  }, [searchParams]);
 
   const darkMode = mounted && resolvedTheme === "dark";
 
@@ -94,10 +106,12 @@ export default function RegisterPage() {
       const normalizedPhone = phoneNumber.format("E.164");
 
       const { confirmPassword, ...registrationData } = formData;
+      const referralCode = registrationData.referralCode.trim().toUpperCase();
       await register({
         ...registrationData,
         phone: normalizedPhone, // Use normalized phone number
         examTargets,
+        ...(referralCode ? { referralCode } : {}),
       });
       analytics.event("signup_success", "conversion", "user_signup");
       // Registration successful - show OTP modal for email verification
@@ -478,6 +492,33 @@ export default function RegisterPage() {
                   placeholder="Enter Target Year"
                 />
               </div>
+            </div>
+
+            <div>
+              <label
+                className={`block text-sm font-medium mb-2 ${
+                  darkMode ? "text-gray-300" : "text-gray-700"
+                }`}
+              >
+                Referral Code (Optional)
+              </label>
+              <input
+                type="text"
+                value={formData.referralCode}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    referralCode: e.target.value.toUpperCase(),
+                  })
+                }
+                className={`w-full px-4 py-3 rounded-lg border transition-colors uppercase ${
+                  darkMode
+                    ? "bg-white/5 border-white/10 text-white placeholder-gray-500 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400 focus:border-[var(--color-brand)] focus:ring-1 focus:ring-[var(--color-brand)]"
+                }`}
+                placeholder="AEAB12CD"
+                maxLength={16}
+              />
             </div>
 
             <div>
