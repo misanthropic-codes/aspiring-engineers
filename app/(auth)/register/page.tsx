@@ -250,7 +250,7 @@ export default function RegisterPage() {
                     darkMode ? "text-gray-300" : "text-gray-700"
                   }`}
                 >
-                  Email Address *
+                  Email *
                 </label>
                 <input
                   type="email"

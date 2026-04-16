@@ -28,7 +28,9 @@ interface AdmissionGuidanceFormProps {
   prefilledCollege?: string;
 }
 
-export default function AdmissionGuidanceForm({ prefilledCollege }: AdmissionGuidanceFormProps) {
+export default function AdmissionGuidanceForm({
+  prefilledCollege,
+}: AdmissionGuidanceFormProps) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -62,7 +64,8 @@ export default function AdmissionGuidanceForm({ prefilledCollege }: AdmissionGui
         homeState: formData.homeState,
         class12Status: formData.class12Status as any,
         tenthPercentage: formData.tenthPercentage,
-        twelfthPercentageExpected: formData.twelfthPercentageExpected || undefined,
+        twelfthPercentageExpected:
+          formData.twelfthPercentageExpected || undefined,
         collegeChoice: formData.collegeChoice,
         additionalMessage: formData.additionalMessage || undefined,
       });
@@ -88,13 +91,20 @@ export default function AdmissionGuidanceForm({ prefilledCollege }: AdmissionGui
       }, 5000);
     } catch (error: any) {
       logger.error("Failed to submit admission guidance:", error);
-      alert(error.response?.data?.message || "Failed to submit form. Please try again later.");
+      alert(
+        error.response?.data?.message ||
+          "Failed to submit form. Please try again later.",
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -160,7 +170,7 @@ export default function AdmissionGuidanceForm({ prefilledCollege }: AdmissionGui
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Phone *
+                Phone Number *
               </label>
               <input
                 type="tel"
@@ -169,7 +179,7 @@ export default function AdmissionGuidanceForm({ prefilledCollege }: AdmissionGui
                 value={formData.phone}
                 onChange={handleChange}
                 className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
-                placeholder="+91 9876543210"
+                placeholder=""
               />
             </div>
           </div>
@@ -210,96 +220,103 @@ export default function AdmissionGuidanceForm({ prefilledCollege }: AdmissionGui
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                 Category *
-               </label>
-               <select
-                 name="category"
-                 required
-                 value={formData.category}
-                 onChange={handleChange}
-                 className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
-               >
-                 {categoryOptions.map((opt) => (
-                   <option key={opt.value} value={opt.value}>{opt.label}</option>
-                 ))}
-               </select>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Category *
+              </label>
+              <select
+                name="category"
+                required
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
+              >
+                {categoryOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
-               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                 Home State *
-               </label>
-               <input
-                 type="text"
-                 name="homeState"
-                 required
-                 value={formData.homeState}
-                 onChange={handleChange}
-                 className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
-                 placeholder="e.g., West Bengal"
-               />
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Home State *
+              </label>
+              <input
+                type="text"
+                name="homeState"
+                required
+                value={formData.homeState}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
+                placeholder="e.g., West Bengal"
+              />
             </div>
           </div>
 
           <div>
-             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-               Class 12th Status *
-             </label>
-             <div className="flex gap-4">
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    name="class12Status"
-                    value="appearing"
-                    checked={formData.class12Status === "appearing"}
-                    onChange={handleChange}
-                    className="form-radio text-[var(--color-brand)] focus:ring-[var(--color-brand)]"
-                  />
-                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Appearing</span>
-                </label>
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    name="class12Status"
-                    value="passed"
-                    checked={formData.class12Status === "passed"}
-                    onChange={handleChange}
-                    className="form-radio text-[var(--color-brand)] focus:ring-[var(--color-brand)]"
-                  />
-                  <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Passed</span>
-                </label>
-             </div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Class 12th Status *
+            </label>
+            <div className="flex gap-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="class12Status"
+                  value="appearing"
+                  checked={formData.class12Status === "appearing"}
+                  onChange={handleChange}
+                  className="form-radio text-[var(--color-brand)] focus:ring-[var(--color-brand)]"
+                />
+                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  Appearing
+                </span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="class12Status"
+                  value="passed"
+                  checked={formData.class12Status === "passed"}
+                  onChange={handleChange}
+                  className="form-radio text-[var(--color-brand)] focus:ring-[var(--color-brand)]"
+                />
+                <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                  Passed
+                </span>
+              </label>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-             <div>
-               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                 10th Percentage *
-               </label>
-               <input
-                 type="text"
-                 name="tenthPercentage"
-                 required
-                 value={formData.tenthPercentage}
-                 onChange={handleChange}
-                 className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
-                 placeholder="e.g., 85%"
-               />
-             </div>
-             <div>
-               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                 12th Percentage {formData.class12Status === "appearing" ? "(Expected)" : "*"}
-               </label>
-               <input
-                 type="text"
-                 name="twelfthPercentageExpected"
-                 required={formData.class12Status === "passed"}
-                 value={formData.twelfthPercentageExpected}
-                 onChange={handleChange}
-                 className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
-                 placeholder="e.g., 80%"
-               />
-             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                10th Percentage *
+              </label>
+              <input
+                type="text"
+                name="tenthPercentage"
+                required
+                value={formData.tenthPercentage}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
+                placeholder="e.g., 85%"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                12th Percentage{" "}
+                {formData.class12Status === "appearing" ? "(Expected)" : "*"}
+              </label>
+              <input
+                type="text"
+                name="twelfthPercentageExpected"
+                required={formData.class12Status === "passed"}
+                value={formData.twelfthPercentageExpected}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:bg-white text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors"
+                placeholder="e.g., 80%"
+              />
+            </div>
           </div>
 
           <div>
@@ -313,7 +330,7 @@ export default function AdmissionGuidanceForm({ prefilledCollege }: AdmissionGui
               readOnly={!!prefilledCollege}
               value={formData.collegeChoice}
               onChange={handleChange}
-              className={`w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors ${prefilledCollege ? 'opacity-80 cursor-not-allowed' : 'focus:bg-white'}`}
+              className={`w-full px-4 py-2.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent transition-colors ${prefilledCollege ? "opacity-80 cursor-not-allowed" : "focus:bg-white"}`}
               placeholder="e.g., IIT Bombay, AIIMS Delhi"
             />
           </div>

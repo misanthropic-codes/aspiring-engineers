@@ -72,7 +72,7 @@ export default function TestSeriesPage() {
         }
 
         const response = await apiClient.get<PackagesResponse>(
-          `/packages?${params.toString()}`
+          `/packages?${params.toString()}`,
         );
 
         if (response.data.success) {
@@ -146,7 +146,7 @@ export default function TestSeriesPage() {
               />
             </div>
 
-            <button className="px-6 py-3 bg-[var(--color-brand)] text-white rounded-xl">
+            <button className="px-6 py-3 bg-[var(--color-brand)] text-white rounded-xl cursor-pointer">
               Search
             </button>
           </form>
@@ -161,12 +161,12 @@ export default function TestSeriesPage() {
                   setSelectedExam(exam.value);
                   setCurrentPage(1);
                 }}
-                className={`px-4 py-2 rounded-full text-sm font-medium ${
+                className={`px-4 py-2 rounded-full text-sm font-medium cursor-pointer ${
                   selectedExam === exam.value
                     ? "bg-[var(--color-brand)] text-white"
                     : darkMode
-                    ? "bg-white/5 text-gray-400"
-                    : "bg-gray-100 text-gray-600"
+                      ? "bg-white/5 text-gray-400"
+                      : "bg-gray-100 text-gray-600"
                 }`}
               >
                 {exam.label}
@@ -235,9 +235,7 @@ function TestSeriesCard({
   return (
     <div
       className={`rounded-2xl border overflow-hidden ${
-        darkMode
-          ? "bg-white/5 border-white/10"
-          : "bg-white border-gray-200"
+        darkMode ? "bg-white/5 border-white/10" : "bg-white border-gray-200"
       }`}
     >
       <div className="relative h-48 overflow-hidden bg-gray-100">

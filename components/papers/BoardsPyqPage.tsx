@@ -63,16 +63,23 @@ export default function BoardsPyqPage({
 }: BoardsPyqPageProps) {
   const [selectedBoard, setSelectedBoard] = useState<string>("");
   const [selectedSubject, setSelectedSubject] = useState<string>("");
-  const { papers, isLoading: loading } = useBoardPapers({
+  const [currentPage, setCurrentPage] = useState(1);
+  const { papers, pagination, isLoading: loading } = useBoardPapers({
     classLevel,
     paperType,
     board: selectedBoard || undefined,
     subject: selectedSubject ? selectedSubject.toLowerCase() : undefined,
+    page: currentPage,
+    limit: 12,
   });
   const [darkMode, setDarkMode] = useState(false);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const subjects = classLevel === "10" ? SUBJECTS_10 : SUBJECTS_12;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedBoard, selectedSubject, classLevel, paperType]);
 
   useEffect(() => {
     const update = () => {
@@ -104,12 +111,15 @@ export default function BoardsPyqPage({
     ];
 
     return {
-      totalPapers: papers.length,
+      totalPapers: pagination.total || papers.length,
       yearsRange: minYear && maxYear ? `${minYear} - ${maxYear}` : "N/A",
       boards: uniqueBoards.length,
       subjects: uniqueSubjects.length,
     };
   }, [papers]);
+
+  const hasNextPage = currentPage < pagination.totalPages;
+  const hasPreviousPage = currentPage > 1;
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-950" : "bg-gray-50"}`}>
@@ -276,7 +286,7 @@ export default function BoardsPyqPage({
             </div>
             <div className="flex flex-wrap gap-4">
               {/* Board Filter */}
-              <div className="flex-1 min-w-[200px]">
+              <div className="flex-1 min-w-50">
                 <label
                   className={`block text-sm mb-1 ${
                     darkMode ? "text-gray-400" : "text-gray-600"
@@ -287,7 +297,7 @@ export default function BoardsPyqPage({
                 <select
                   value={selectedBoard}
                   onChange={(e) => setSelectedBoard(e.target.value)}
-                  className={`w-full px-3 py-2 rounded-lg border ${
+                  className={`w-full px-3 py-2 rounded-lg border cursor-pointer ${
                     darkMode
                       ? "bg-gray-800 border-gray-700 text-white"
                       : "bg-white border-gray-300 text-gray-900"
@@ -303,7 +313,7 @@ export default function BoardsPyqPage({
               </div>
 
               {/* Subject Filter */}
-              <div className="flex-1 min-w-[200px]">
+              <div className="flex-1 min-w-50">
                 <label
                   className={`block text-sm mb-1 ${
                     darkMode ? "text-gray-400" : "text-gray-600"
@@ -314,7 +324,7 @@ export default function BoardsPyqPage({
                 <select
                   value={selectedSubject}
                   onChange={(e) => setSelectedSubject(e.target.value)}
-                  className={`w-full px-3 py-2 rounded-lg border ${
+                  className={`w-full px-3 py-2 rounded-lg border cursor-pointer ${
                     darkMode
                       ? "bg-gray-800 border-gray-700 text-white"
                       : "bg-white border-gray-300 text-gray-900"
@@ -472,7 +482,7 @@ export default function BoardsPyqPage({
                         href={paper.paperDriveLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium text-white transition-colors cursor-pointer"
                         style={{ backgroundColor: accentColor }}
                       >
                         <Download className="w-4 h-4" />
@@ -483,7 +493,7 @@ export default function BoardsPyqPage({
                           href={paper.solutionDriveLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium border transition-colors cursor-pointer ${
                             darkMode
                               ? "border-gray-700 text-gray-300 hover:bg-gray-800"
                               : "border-gray-300 text-gray-700 hover:bg-gray-50"
@@ -500,7 +510,7 @@ export default function BoardsPyqPage({
                         href={paper.videoSolutionLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-2 w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors"
+                        className="mt-2 w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors cursor-pointer"
                       >
                         <PlayCircle className="w-4 h-4" />
                         Video Solution
@@ -509,6 +519,38 @@ export default function BoardsPyqPage({
                   </div>
                 </motion.div>
               ))}
+            </div>
+
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+                Page {currentPage} of {pagination.totalPages || 1}
+              </p>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                  disabled={!hasPreviousPage}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                    darkMode
+                      ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                      : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  Previous Page
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrentPage((page) => page + 1)}
+                  disabled={!hasNextPage}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                    darkMode
+                      ? "bg-(--color-brand) text-white hover:bg-(--color-brand)/90"
+                      : "bg-(--color-brand) text-white hover:bg-(--color-brand-hover)"
+                  }`}
+                >
+                  Next Page
+                </button>
+              </div>
             </div>
           )}
         </div>

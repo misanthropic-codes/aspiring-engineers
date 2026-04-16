@@ -122,6 +122,7 @@ const MENU: MenuItem[] = [
   {
     id: "boards",
     label: "Boards",
+    href: "/boards",
     children: [
       {
         id: "class10",
@@ -481,7 +482,7 @@ export default function Navbar(): JSX.Element {
           <li key={item.id} className="relative">
             <Link
               href={item.href || "#"}
-              className={`flex items-center gap-2 px-2 py-1 rounded-md whitespace-nowrap ${
+              className={`flex items-center gap-2 px-2 py-1 rounded-md whitespace-nowrap cursor-pointer ${
                 pathname === item.href
                   ? "font-semibold text-text-primary"
                   : "text-text-secondary"
@@ -517,7 +518,7 @@ export default function Navbar(): JSX.Element {
           {item.href ? (
             <Link
               href={item.href}
-              className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary whitespace-nowrap`}
+              className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary whitespace-nowrap cursor-pointer`}
             >
               <span className="relative inline-flex overflow-hidden group">
                 <div className="translate-y-0 transform-gpu transition-transform duration-300 group-hover:-translate-y-[110%]">
@@ -531,7 +532,7 @@ export default function Navbar(): JSX.Element {
             </Link>
           ) : (
             <button
-              className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary whitespace-nowrap`}
+              className={`flex items-center gap-2 px-2 py-1 rounded-md text-text-secondary whitespace-nowrap cursor-pointer`}
               aria-haspopup="true"
             >
               <span className="relative inline-flex overflow-hidden group">
@@ -562,7 +563,7 @@ export default function Navbar(): JSX.Element {
                   <li key={child.id}>
                     <Link
                       href={child.href || "#"}
-                      className="block hover:underline py-1 hover:text-(--color-brand) transition-colors"
+                      className="block w-full rounded-md px-2 py-1.5 hover:text-(--color-brand) transition-colors cursor-pointer"
                     >
                       {child.label}
                     </Link>
@@ -571,10 +572,15 @@ export default function Navbar(): JSX.Element {
               </ul>
             ) : (
               // Nested children - grid layout with sections
-              <div className="grid grid-cols-2 gap-4">
+              <div
+                className="grid gap-5"
+                style={{
+                  gridTemplateColumns: `repeat(${item.children!.length}, minmax(0, 1fr))`,
+                }}
+              >
                 {item.children!.map((section) => (
-                  <div key={section.id}>
-                    <h4 className="font-semibold text-sm mb-2">
+                  <div key={section.id} className="min-w-0">
+                    <h4 className="font-semibold text-sm mb-2 whitespace-nowrap">
                       {section.label}
                     </h4>
                     <ul className="flex flex-col gap-2 text-sm">
@@ -588,7 +594,7 @@ export default function Navbar(): JSX.Element {
                                   <li key={leaf.id}>
                                     <Link
                                       href={leaf.href || "#"}
-                                      className="block hover:underline py-1 text-sm"
+                                      className="block w-full rounded-md px-2 py-1.5 text-sm cursor-pointer hover:text-(--color-brand) transition-colors"
                                     >
                                       {leaf.label}
                                     </Link>
@@ -599,7 +605,7 @@ export default function Navbar(): JSX.Element {
                           ) : (
                             <Link
                               href={sub.href || "#"}
-                              className="block hover:underline py-1"
+                              className="block w-full rounded-md px-2 py-1.5 cursor-pointer hover:text-(--color-brand) transition-colors"
                             >
                               {sub.label}
                             </Link>
@@ -632,7 +638,7 @@ export default function Navbar(): JSX.Element {
       >
         {/* Brand */}
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center cursor-pointer">
             <Image
               src="/favicon.svg"
               alt="Aspiring Engineers"
@@ -653,7 +659,7 @@ export default function Navbar(): JSX.Element {
           <button
             ref={themeRef}
             onClick={toggleSwitchTheme}
-            className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md"
+            className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-bg-700 bg-backdrop/70 backdrop-blur-md cursor-pointer"
             aria-label="Toggle theme"
             suppressHydrationWarning
           >
@@ -725,7 +731,10 @@ export default function Navbar(): JSX.Element {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem asChild>
-                    <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
                       <LayoutDashboard size={16} />
                       <span>Dashboard</span>
                     </Link>
@@ -783,13 +792,13 @@ export default function Navbar(): JSX.Element {
             <div className="hidden sm:flex items-center gap-2">
               <Link
                 href="/login"
-                className="px-4 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors whitespace-nowrap"
+                className="px-4 py-2 rounded-full text-sm font-medium text-text-secondary hover:text-text-primary transition-colors whitespace-nowrap cursor-pointer"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-2 rounded-full bg-(--color-brand) text-white text-sm font-semibold hover:bg-(--color-brand-hover) transition-colors whitespace-nowrap"
+                className="px-4 py-2 rounded-full bg-(--color-brand) text-white text-sm font-semibold hover:bg-(--color-brand-hover) transition-colors whitespace-nowrap cursor-pointer"
               >
                 Sign Up
               </Link>
@@ -801,7 +810,7 @@ export default function Navbar(): JSX.Element {
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu-panel"
-            className="sm:hidden inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/70"
+            className="sm:hidden inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/70 cursor-pointer"
           >
             {mobileOpen ? <XIcon size={18} /> : <MenuIcon size={18} />}
           </button>
@@ -821,7 +830,7 @@ export default function Navbar(): JSX.Element {
           <Link
             href="/"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center"
+            className="flex items-center cursor-pointer"
           >
             <Image
               src="/favicon.svg"
@@ -835,7 +844,7 @@ export default function Navbar(): JSX.Element {
           <div className="flex items-center gap-3">
             <button
               onClick={toggleSwitchTheme}
-              className="inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/60"
+              className="inline-flex items-center justify-center rounded-full p-2 border border-bg-700 bg-backdrop/60 cursor-pointer"
               suppressHydrationWarning
             >
               {mounted && isDarkMode ? (
@@ -893,7 +902,7 @@ export default function Navbar(): JSX.Element {
             <button
               onClick={() => setMobileOpen(false)}
               aria-label="Close menu"
-              className="inline-flex items-center justify-center rounded-full p-2"
+              className="inline-flex items-center justify-center rounded-full p-2 cursor-pointer"
             >
               <XIcon size={18} />
             </button>
@@ -910,7 +919,7 @@ export default function Navbar(): JSX.Element {
                 <Link
                   href="/profile"
                   onClick={() => setMobileOpen(false)}
-                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-center text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-2"
+                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-center text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <LayoutDashboard size={16} />
                   <span>Dashboard</span>
@@ -936,7 +945,7 @@ export default function Navbar(): JSX.Element {
                     )}&redirect=/profile`;
                     window.location.href = ssoUrl;
                   }}
-                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-2"
+                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -959,7 +968,7 @@ export default function Navbar(): JSX.Element {
                     setMobileOpen(false);
                     logout();
                   }}
-                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-sm font-medium text-red-500 hover:text-red-600 transition-colors flex items-center justify-center gap-2"
+                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-sm font-medium text-red-500 hover:text-red-600 transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <LogOut size={16} />
                   <span>Logout</span>
@@ -970,14 +979,14 @@ export default function Navbar(): JSX.Element {
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-center text-sm font-medium text-text-secondary hover:text-text-primary transition-colors"
+                  className="w-full px-4 py-3 rounded-xl border border-bg-700 text-center text-sm font-medium text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileOpen(false)}
-                  className="w-full px-4 py-3 rounded-xl bg-(--color-brand) text-center text-white text-sm font-semibold hover:bg-(--color-brand-hover) transition-colors"
+                  className="w-full px-4 py-3 rounded-xl bg-(--color-brand) text-center text-white text-sm font-semibold hover:bg-(--color-brand-hover) transition-colors cursor-pointer"
                 >
                   Sign Up
                 </Link>

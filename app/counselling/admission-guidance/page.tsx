@@ -15,16 +15,17 @@ import {
   BookOpen,
   Send,
   Phone,
-  Clock,
+                        Phone Number *
   Star,
   ArrowRight,
 } from "lucide-react";
 import { counsellingService } from "@/services/counselling.service";
 import { logger } from "@/lib/logger";
+                        required
 
 const guidanceServices = [
   {
-    title: "College Selection Strategy",
+                        placeholder=""
     description:
       "Get personalized recommendations based on your rank, category, preferences, and career goals.",
     icon: Target,

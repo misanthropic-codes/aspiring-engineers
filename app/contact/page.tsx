@@ -191,7 +191,7 @@ export default function ContactPage() {
                         htmlFor="email"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                       >
-                        Email Address <span className="text-red-500">*</span>
+                        Email <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="email"
@@ -212,12 +212,13 @@ export default function ContactPage() {
                         htmlFor="phone"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                       >
-                        Phone Number
+                        Phone Number <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
+                        required
                         value={formData.phone}
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-all duration-300 hover:border-[var(--color-brand)]/50 focus:ring-2 focus:ring-[var(--color-brand)] focus:border-transparent focus:shadow-[0_0_15px_rgba(37,150,190,0.15)] outline-none"
