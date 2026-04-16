@@ -64,7 +64,11 @@ export default function BoardsPyqPage({
   const [selectedBoard, setSelectedBoard] = useState<string>("");
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const { papers, pagination, isLoading: loading } = useBoardPapers({
+  const {
+    papers,
+    pagination,
+    isLoading: loading,
+  } = useBoardPapers({
     classLevel,
     paperType,
     board: selectedBoard || undefined,
@@ -378,84 +382,94 @@ export default function BoardsPyqPage({
           ) : (
             <>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {papers.map((paper, index) => (
-                <motion.div
-                  key={paper._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onMouseEnter={() => setHoveredId(paper._id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  className={`relative rounded-2xl overflow-hidden border transition-all duration-300 ${
-                    darkMode
-                      ? "bg-gray-900/50 border-gray-800 hover:border-gray-700"
-                      : "bg-white border-gray-200 hover:border-gray-300"
-                  } ${hoveredId === paper._id ? "shadow-xl" : "shadow-sm"}`}
-                  style={{
-                    boxShadow:
-                      hoveredId === paper._id
-                        ? `0 20px 40px -12px ${accentColor}30`
-                        : undefined,
-                  }}
-                >
-                  {/* Thumbnail or Gradient */}
-                  <div
-                    className="h-32 relative"
+                {papers.map((paper, index) => (
+                  <motion.div
+                    key={paper._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onMouseEnter={() => setHoveredId(paper._id)}
+                    onMouseLeave={() => setHoveredId(null)}
+                    className={`relative rounded-2xl overflow-hidden border transition-all duration-300 ${
+                      darkMode
+                        ? "bg-gray-900/50 border-gray-800 hover:border-gray-700"
+                        : "bg-white border-gray-200 hover:border-gray-300"
+                    } ${hoveredId === paper._id ? "shadow-xl" : "shadow-sm"}`}
                     style={{
-                      background: paper.thumbnailUrl
-                        ? undefined
-                        : `linear-gradient(135deg, ${accentColor}40, ${accentColor}20)`,
+                      boxShadow:
+                        hoveredId === paper._id
+                          ? `0 20px 40px -12px ${accentColor}30`
+                          : undefined,
                     }}
                   >
-                    {paper.thumbnailUrl ? (
-                      <Image
-                        src={paper.thumbnailUrl}
-                        alt={paper.title}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <FileText
-                          className="w-12 h-12"
-                          style={{ color: accentColor }}
-                        />
-                      </div>
-                    )}
-                    {/* Year Badge */}
+                    {/* Thumbnail or Gradient */}
                     <div
-                      className="absolute top-3 right-3 px-3 py-1 rounded-full text-sm font-medium text-white"
-                      style={{ backgroundColor: accentColor }}
+                      className="h-32 relative"
+                      style={{
+                        background: paper.thumbnailUrl
+                          ? undefined
+                          : `linear-gradient(135deg, ${accentColor}40, ${accentColor}20)`,
+                      }}
                     >
-                      {paper.year}
-                    </div>
-                    {/* Board Badge */}
-                    {paper.board && (
+                      {paper.thumbnailUrl ? (
+                        <Image
+                          src={paper.thumbnailUrl}
+                          alt={paper.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <FileText
+                            className="w-12 h-12"
+                            style={{ color: accentColor }}
+                          />
+                        </div>
+                      )}
+                      {/* Year Badge */}
                       <div
-                        className={`absolute top-3 left-3 px-3 py-1 rounded-full text-sm font-medium ${
-                          darkMode
-                            ? "bg-gray-800/90 text-white"
-                            : "bg-white/90 text-gray-900"
+                        className="absolute top-3 right-3 px-3 py-1 rounded-full text-sm font-medium text-white"
+                        style={{ backgroundColor: accentColor }}
+                      >
+                        {paper.year}
+                      </div>
+                      {/* Board Badge */}
+                      {paper.board && (
+                        <div
+                          className={`absolute top-3 left-3 px-3 py-1 rounded-full text-sm font-medium ${
+                            darkMode
+                              ? "bg-gray-800/90 text-white"
+                              : "bg-white/90 text-gray-900"
+                          }`}
+                        >
+                          {paper.board}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-5">
+                      <h3
+                        className={`font-semibold text-lg mb-2 line-clamp-2 ${
+                          darkMode ? "text-white" : "text-gray-900"
                         }`}
                       >
-                        {paper.board}
-                      </div>
-                    )}
-                  </div>
+                        {paper.title}
+                      </h3>
 
-                  {/* Content */}
-                  <div className="p-5">
-                    <h3
-                      className={`font-semibold text-lg mb-2 line-clamp-2 ${
-                        darkMode ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {paper.title}
-                    </h3>
-
-                    {/* Meta Info */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {paper.subject && (
+                      {/* Meta Info */}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {paper.subject && (
+                          <span
+                            className={`px-2 py-1 rounded-md text-xs font-medium ${
+                              darkMode
+                                ? "bg-gray-800 text-gray-300"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {paper.subject}
+                          </span>
+                        )}
                         <span
                           className={`px-2 py-1 rounded-md text-xs font-medium ${
                             darkMode
@@ -463,95 +477,89 @@ export default function BoardsPyqPage({
                               : "bg-gray-100 text-gray-600"
                           }`}
                         >
-                          {paper.subject}
+                          {paper.type}
                         </span>
-                      )}
-                      <span
-                        className={`px-2 py-1 rounded-md text-xs font-medium ${
-                          darkMode
-                            ? "bg-gray-800 text-gray-300"
-                            : "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {paper.type}
-                      </span>
-                    </div>
+                      </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-2">
-                      <a
-                        href={paper.paperDriveLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium text-white transition-colors cursor-pointer"
-                        style={{ backgroundColor: accentColor }}
-                      >
-                        <Download className="w-4 h-4" />
-                        Paper
-                      </a>
-                      {paper.solutionDriveLink && (
+                      {/* Action Buttons */}
+                      <div className="flex gap-2">
                         <a
-                          href={paper.solutionDriveLink}
+                          href={paper.paperDriveLink}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium border transition-colors cursor-pointer ${
-                            darkMode
-                              ? "border-gray-700 text-gray-300 hover:bg-gray-800"
-                              : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                          }`}
+                          className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium text-white transition-colors cursor-pointer"
+                          style={{ backgroundColor: accentColor }}
                         >
-                          <ExternalLink className="w-4 h-4" />
-                          Solution
+                          <Download className="w-4 h-4" />
+                          Paper
+                        </a>
+                        {paper.solutionDriveLink && (
+                          <a
+                            href={paper.solutionDriveLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium border transition-colors cursor-pointer ${
+                              darkMode
+                                ? "border-gray-700 text-gray-300 hover:bg-gray-800"
+                                : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                            }`}
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Solution
+                          </a>
+                        )}
+                      </div>
+
+                      {paper.videoSolutionLink && (
+                        <a
+                          href={paper.videoSolutionLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors cursor-pointer"
+                        >
+                          <PlayCircle className="w-4 h-4" />
+                          Video Solution
                         </a>
                       )}
                     </div>
-
-                    {paper.videoSolutionLink && (
-                      <a
-                        href={paper.videoSolutionLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-2 w-full flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium bg-red-500/10 text-red-500 hover:bg-red-500/20 transition-colors cursor-pointer"
-                      >
-                        <PlayCircle className="w-4 h-4" />
-                        Video Solution
-                      </a>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
               </div>
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                Page {currentPage} of {pagination.totalPages || 1}
-              </p>
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-                  disabled={!hasPreviousPage}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
-                    darkMode
-                      ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
-                      : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
-                  }`}
+                <p
+                  className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}
                 >
-                  Previous Page
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((page) => page + 1)}
-                  disabled={!hasNextPage}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
-                    darkMode
-                      ? "bg-(--color-brand) text-white hover:bg-(--color-brand)/90"
-                      : "bg-(--color-brand) text-white hover:bg-(--color-brand-hover)"
-                  }`}
-                >
-                  Next Page
-                </button>
-              </div>
+                  Page {currentPage} of {pagination.totalPages || 1}
+                </p>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCurrentPage((page) => Math.max(1, page - 1))
+                    }
+                    disabled={!hasPreviousPage}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                      darkMode
+                        ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                        : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                    }`}
+                  >
+                    Previous Page
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((page) => page + 1)}
+                    disabled={!hasNextPage}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
+                      darkMode
+                        ? "bg-(--color-brand) text-white hover:bg-(--color-brand)/90"
+                        : "bg-(--color-brand) text-white hover:bg-(--color-brand-hover)"
+                    }`}
+                  >
+                    Next Page
+                  </button>
+                </div>
               </div>
             </>
           )}
