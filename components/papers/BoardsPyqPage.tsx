@@ -376,7 +376,8 @@ export default function BoardsPyqPage({
               </p>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {papers.map((paper, index) => (
                 <motion.div
                   key={paper._id}
@@ -519,9 +520,9 @@ export default function BoardsPyqPage({
                   </div>
                 </motion.div>
               ))}
-            </div>
+              </div>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
               <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
                 Page {currentPage} of {pagination.totalPages || 1}
               </p>
@@ -551,7 +552,8 @@ export default function BoardsPyqPage({
                   Next Page
                 </button>
               </div>
-            </div>
+              </div>
+            </>
           )}
         </div>
       </section>
