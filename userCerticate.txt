@@ -1,0 +1,141 @@
+# User Certificate Endpoints Documentation
+
+This document contains all the necessary endpoints for the frontend to implement the user-facing certificate functionality.
+
+## 1. Request a Certificate
+Allows a user to request a certificate for a specific domain/track.
+
+- **URL:** `POST /certificates/request`
+- **Headers:** 
+  - `Authorization: Bearer <jwt_token>`
+  - `Content-Type: application/json`
+- **Request Body:**
+```json
+{
+  "domain": "web-dev" 
+  // Allowed values: "web-dev", "app-dev", "cloud", "devops"
+}
+```
+- **Success Response (201 Created):**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "60d5ecb8b392d7001f...",
+    "userId": "60d5ecb8b392d7001e...",
+    "domain": "web-dev",
+    "status": "pending",
+    "createdAt": "2026-04-30T10:00:00.000Z",
+    "updatedAt": "2026-04-30T10:00:00.000Z"
+  },
+  "message": "Certificate request submitted successfully. Pending admin review."
+}
+```
+- **Error Responses:** 
+  - `409 Conflict`: "You already have a certificate for this domain." OR "You already have a pending certificate request for this domain."
+
+---
+
+## 2. Get My Issued Certificates
+Retrieves all approved and generated certificates for the logged-in user. The frontend can use the `fileUrl` from this response to display and allow the user to download the certificate image.
+
+- **URL:** `GET /certificates/my`
+- **Headers:** 
+  - `Authorization: Bearer <jwt_token>`
+- **Success Response (200 OK):**
+```json
+{
+  "success": true,
+  "message": "Certificates retrieved successfully",
+  "data": [
+    {
+      "_id": "60d5ecb8b392d7002a...",
+      "userId": "60d5ecb8b392d7001e...",
+      "domain": "web-dev",
+      "domainCode": "WEB",
+      "certificateId": "TAE-AB3XY7QZLM4N",
+      "certificateNumber": "TAE-WEB-2026-000001",
+      "fileUrl": "https://<your-storage-url>/certificates/cert-TAE-AB3XY7QZLM4N.png",
+      "qrUrl": "https://api.yourdomain.com/archive/TAE-AB3XY7QZLM4N",
+      "issuedAt": "2026-04-30T12:00:00.000Z",
+      "createdAt": "2026-04-30T12:00:00.000Z",
+      "updatedAt": "2026-04-30T12:00:00.000Z"
+    }
+  ]
+}
+```
+*Note: To download, you can use the `fileUrl` with a frontend `<a href="..." download>` tag or just open it in a new tab.*
+
+---
+
+## 3. Get My Certificate Requests
+Retrieves the status of all requests made by the logged-in user (pending, approved, or rejected).
+
+- **URL:** `GET /certificates/my/requests`
+- **Headers:** 
+  - `Authorization: Bearer <jwt_token>`
+- **Success Response (200 OK):**
+```json
+{
+  "success": true,
+  "message": "Certificate requests retrieved successfully",
+  "data": [
+    {
+      "_id": "60d5ecb8b392d7001f...",
+      "userId": "60d5ecb8b392d7001e...",
+      "domain": "web-dev",
+      "status": "pending", // Statuses can be: "pending", "approved", or "rejected"
+      "rejectionReason": null, // Will contain a string if status is "rejected"
+      "createdAt": "2026-04-30T10:00:00.000Z",
+      "updatedAt": "2026-04-30T10:00:00.000Z"
+    }
+  ]
+}
+```
+
+---
+
+## 4. Verify Certificate (Public / Archive)
+A public endpoint that requires no authentication. This is used when someone scans the QR code on the certificate or visits the archive page to verify authenticity.
+
+- **URL:** `GET /archive/:certificateId` (e.g., `/archive/TAE-AB3XY7QZLM4N`)
+- **Headers:** *None Required*
+- **Success Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "status": "valid",
+    "name": "John Doe",
+    "domain": "web-dev",
+    "certificateNumber": "TAE-WEB-2026-000001",
+    "issuedAt": "2026-04-30T12:00:00.000Z"
+  }
+}
+```
+- **Invalid Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "status": "invalid",
+    "message": "No certificate found with this ID."
+  }
+}
+```
+
+---
+
+## 5. Frontend Implementation Note: QR Code Verification Page
+
+Yes, you **must create a new public page on your frontend** to handle the QR code scans.
+
+**How it works:**
+1. When the backend generates the certificate, it creates a QR code containing a URL that points to your frontend archive page (e.g., `https://your-frontend.com/archive/TAE-AB3XY7QZLM4N`).
+2. You need to create a route on your frontend for `/archive/[certificateId]` (or `/archive/:certificateId` depending on your framework).
+3. When a user scans the QR code, they are taken to this frontend page.
+4. The page should extract the `certificateId` from the URL parameters.
+5. The page then makes a request to the backend endpoint documented above: `GET /archive/:certificateId`.
+6. Based on the response, your frontend should display:
+   - A success message with the user's name, domain, and issue date (if `"status": "valid"`).
+   - An error/invalid message (if `"status": "invalid"`).

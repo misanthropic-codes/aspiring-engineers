@@ -16,6 +16,7 @@ import {
   Copy,
   Check,
 } from "lucide-react";
+import CertificatesPanel from "@/components/profile/CertificatesPanel";
 
 interface ReferralSummary {
   referralCode: string | null;
@@ -281,6 +282,11 @@ export default function ProfileDashboard() {
               <Users className="text-brand opacity-0.5" size={32} />
             </div>
           </div>
+        </div>
+
+        {/* Certificates Module */}
+        <div className="mb-8">
+          <CertificatesPanel />
         </div>
 
         <div className="space-y-6">
