@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import apiClient from "@/lib/api-client";
-import { Loader2, Check, X } from "lucide-react";
+import { Loader2, Check, X, ExternalLink } from "lucide-react";
 
 interface ArchiveResponse {
   status: "valid" | "invalid";
@@ -13,6 +13,11 @@ interface ArchiveResponse {
   domain?: string;
   certificateNumber?: string;
   issuedAt?: string;
+  dateOfBirth?: string;
+  universityRollNumber?: string;
+  collegeName?: string;
+  branch?: string;
+  certificateImageUrl?: string;
   message?: string;
 }
 
@@ -72,7 +77,7 @@ export default function ArchivePage() {
 
               <div>
                 <p className="text-sm text-text-secondary">Domain</p>
-                <p className="font-medium text-text-primary">{data.domain}</p>
+                <p className="font-medium text-text-primary capitalize">{data.domain}</p>
               </div>
 
               <div>
@@ -80,10 +85,51 @@ export default function ArchivePage() {
                 <p className="font-medium text-text-primary">{data.certificateNumber}</p>
               </div>
 
+              {data.dateOfBirth && (
+                <div>
+                  <p className="text-sm text-text-secondary">Date of Birth</p>
+                  <p className="font-medium text-text-primary">{new Date(data.dateOfBirth).toLocaleDateString()}</p>
+                </div>
+              )}
+
+              {data.universityRollNumber && (
+                <div>
+                  <p className="text-sm text-text-secondary">University Roll Number</p>
+                  <p className="font-medium text-text-primary">{data.universityRollNumber}</p>
+                </div>
+              )}
+
+              {data.collegeName && (
+                <div>
+                  <p className="text-sm text-text-secondary">College Name</p>
+                  <p className="font-medium text-text-primary">{data.collegeName}</p>
+                </div>
+              )}
+
+              {data.branch && (
+                <div>
+                  <p className="text-sm text-text-secondary">Branch</p>
+                  <p className="font-medium text-text-primary">{data.branch}</p>
+                </div>
+              )}
+
               {data.issuedAt && (
                 <div>
                   <p className="text-sm text-text-secondary">Issued At</p>
                   <p className="font-medium text-text-primary">{new Date(data.issuedAt).toLocaleString()}</p>
+                </div>
+              )}
+
+              {data.certificateImageUrl && (
+                <div className="pt-2">
+                  <a
+                    href={data.certificateImageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-brand hover:underline font-medium"
+                  >
+                    View Certificate <ExternalLink className="w-4 h-4" />
+                  </a>
                 </div>
               )}
             </div>
