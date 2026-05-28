@@ -121,14 +121,24 @@ export default function ArchivePage() {
               )}
 
               {data.certificateImageUrl && (
-                <div className="pt-2">
+                <div className="pt-4 space-y-3">
+                  <p className="text-sm text-text-secondary">Certificate</p>
+                  <div className="rounded-lg overflow-hidden border border-bg-700">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={data.certificateImageUrl}
+                      alt={`Certificate for ${data.name}`}
+                      className="w-full h-auto object-contain"
+                    />
+                  </div>
                   <a
                     href={data.certificateImageUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-brand hover:underline font-medium"
+                    download
+                    className="inline-flex items-center gap-2 text-brand hover:underline font-medium text-sm"
                   >
-                    View Certificate <ExternalLink className="w-4 h-4" />
+                    Download Certificate <ExternalLink className="w-4 h-4" />
                   </a>
                 </div>
               )}
