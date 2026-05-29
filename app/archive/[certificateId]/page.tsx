@@ -49,26 +49,6 @@ export default function ArchivePage() {
     fetchData();
   }, [certificateId]);
 
-  const handleDelete = async () => {
-    if (!certificateId) return;
-
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this certificate? This action cannot be undone."
-    );
-    if (!confirmed) return;
-
-    try {
-      setDeleting(true);
-      setError(null);
-      await apiClient.delete(`/admin/certificates/${certificateId}`);
-      setDeleted(true);
-    } catch (err: any) {
-      setError("Failed to delete certificate. Please try again.");
-    } finally {
-      setDeleting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-linear-to-b from-bg-900 to-bg-800">
       <Navbar />
@@ -161,7 +141,7 @@ export default function ArchivePage() {
 
               {data.certificateImageUrl && (
                 <div className="pt-4 space-y-3">
-                  <p className="text-sm text-text-secondary">Certificate</p>
+                  {/* <p className="text-sm text-text-secondary">Certificate</p> */}
                   {/* <div className="rounded-lg overflow-hidden border border-bg-700">
                     <img
                       src={data.certificateImageUrl}
@@ -169,7 +149,7 @@ export default function ArchivePage() {
                       className="w-full h-auto object-contain"
                     />
                   </div> */}
-                  <a
+                  {/* <a
                     href={data.certificateImageUrl}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -177,30 +157,9 @@ export default function ArchivePage() {
                     className="inline-flex items-center gap-2 text-brand hover:underline font-medium text-sm"
                   >
                     Download Certificate <ExternalLink className="w-4 h-4" />
-                  </a>
+                  </a> */}
                 </div>
               )}
-
-              {/* Delete Certificate */}
-              <div className="pt-6 border-t border-bg-700">
-                <button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-red-600 text-white font-medium text-sm hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {deleting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Deleting...
-                    </>
-                  ) : (
-                    <>
-                      <Trash2 className="w-4 h-4" />
-                      Delete Certificate
-                    </>
-                  )}
-                </button>
-              </div>
             </div>
           ) : (
             <div className="space-y-3">
