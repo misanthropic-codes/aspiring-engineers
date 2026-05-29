@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import apiClient from "@/lib/api-client";
-import { Loader2, Check, X, ExternalLink } from "lucide-react";
+import { Loader2, Check, X, ExternalLink, Trash2 } from "lucide-react";
 
 interface ArchiveResponse {
-  status: "valid" | "invalid";
+  status: "valid" | "invalid" ;
   name?: string;
   domain?: string;
   certificateNumber?: string;
@@ -23,9 +23,12 @@ interface ArchiveResponse {
 
 export default function ArchivePage() {
   const { certificateId } = useParams() as { certificateId?: string };
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ArchiveResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +49,26 @@ export default function ArchivePage() {
     fetchData();
   }, [certificateId]);
 
+  const handleDelete = async () => {
+    if (!certificateId) return;
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this certificate? This action cannot be undone."
+    );
+    if (!confirmed) return;
+
+    try {
+      setDeleting(true);
+      setError(null);
+      await apiClient.delete(`/admin/certificates/${certificateId}`);
+      setDeleted(true);
+    } catch (err: any) {
+      setError("Failed to delete certificate. Please try again.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-linear-to-b from-bg-900 to-bg-800">
       <Navbar />
@@ -54,7 +77,23 @@ export default function ArchivePage() {
         <div className="p-6 rounded-lg border border-bg-700 bg-bg-800/50">
           <h1 className="text-2xl font-bold text-text-primary mb-4">Certificate Verification</h1>
 
-          {loading ? (
+          {deleted ? (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Check className="text-green-500" />
+                <h2 className="text-lg font-semibold text-text-primary">Certificate Deleted</h2>
+              </div>
+              <p className="text-text-secondary">
+                The certificate has been successfully deleted.
+              </p>
+              <button
+                onClick={() => router.push("/archive")}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-brand text-white font-medium text-sm hover:opacity-90 transition-opacity"
+              >
+                Back to Archive
+              </button>
+            </div>
+          ) : loading ? (
             <div className="flex items-center gap-3">
               <Loader2 className="animate-spin text-brand" />
               <span className="text-text-secondary">Verifying certificate...</span>
@@ -142,6 +181,27 @@ export default function ArchivePage() {
                   </a>
                 </div>
               )}
+
+              {/* Delete Certificate */}
+              <div className="pt-6 border-t border-bg-700">
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-red-600 text-white font-medium text-sm hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {deleting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="w-4 h-4" />
+                      Delete Certificate
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           ) : (
             <div className="space-y-3">
@@ -159,3 +219,4 @@ export default function ArchivePage() {
     </div>
   );
 }
+
