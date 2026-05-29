@@ -8,7 +8,7 @@ import apiClient from "@/lib/api-client";
 import { Loader2, Check, X, ExternalLink, Trash2 } from "lucide-react";
 
 interface ArchiveResponse {
-  status: "valid" | "invalid" ;
+  status: "valid" | "invalid";
   name?: string;
   domain?: string;
   certificateNumber?: string;
@@ -162,14 +162,13 @@ export default function ArchivePage() {
               {data.certificateImageUrl && (
                 <div className="pt-4 space-y-3">
                   <p className="text-sm text-text-secondary">Certificate</p>
-                  <div className="rounded-lg overflow-hidden border border-bg-700">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                  {/* <div className="rounded-lg overflow-hidden border border-bg-700">
                     <img
                       src={data.certificateImageUrl}
                       alt={`Certificate for ${data.name}`}
                       className="w-full h-auto object-contain"
                     />
-                  </div>
+                  </div> */}
                   <a
                     href={data.certificateImageUrl}
                     target="_blank"
